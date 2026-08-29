@@ -18,7 +18,7 @@ Do not edit each other's folders. Merge to `main` often. The contract between tr
 
 ---
 
-## Ketoransile — Engine
+## Amir — Engine
 
 **Own:** `src/engine/checks/`, `src/engine/eligibility.ts`, then plug them into `src/engine/assess.ts`
 
@@ -39,7 +39,7 @@ Do not edit each other's folders. Merge to `main` often. The contract between tr
 
 ---
 
-## Amir — Reviewer UI
+## Ketoransile — Reviewer UI
 
 **Own:** `src/app/`, `src/components/`
 

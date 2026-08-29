@@ -417,8 +417,8 @@ Types, fixtures, official grid scorer, and 7a/7b track selection are done.
 
 Split is in `TEAM-PLAN.md`. Short version:
 
-**Ketoransile — engine:** eligibility + contradiction checks, wire into `assess.ts`.  
-**Amir — UI:** batch view, company detail, citation click-through, findings panel.
+**Amir — engine:** eligibility + contradiction checks, wire into `assess.ts`.  
+**Ketoransile — UI:** batch view, company detail, citation click-through, findings panel.
 
 Do not edit each other's folders. `assessBatch()` is the join point.
 
