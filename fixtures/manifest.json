@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-08-29T09:09:35.343Z",
+  "notes": "Oracle for engine tests and demo numbers. expectedChecks lists eligibility + contradiction ids the fixture must trigger.",
+  "fixtures": [
+    {
+      "id": "01-alem-leather",
+      "file": "01-alem-leather.json",
+      "role": "Clean, strong applicant, no findings",
+      "expectedChecks": []
+    },
+    {
+      "id": "02-newbloom-cafe",
+      "file": "02-newbloom-cafe.json",
+      "role": "Fails AGE_OVER_2Y",
+      "expectedChecks": [
+        "AGE_OVER_2Y"
+      ]
+    },
+    {
+      "id": "03-awash-textile-sc",
+      "file": "03-awash-textile-sc.json",
+      "role": "Share Company → eligibility unestablished",
+      "expectedChecks": [
+        "PRIVATELY_OWNED"
+      ]
+    },
+    {
+      "id": "04-misrak-foods",
+      "file": "04-misrak-foods.json",
+      "role": "OWNERSHIP_SUM violation",
+      "expectedChecks": [
+        "OWNERSHIP_SUM"
+      ]
+    },
+    {
+      "id": "05-abyssinia-metal",
+      "file": "05-abyssinia-metal.json",
+      "role": "YEARS_VS_HISTORY — demo closer",
+      "expectedChecks": [
+        "YEARS_VS_HISTORY"
+      ],
+      "demoCloser": true
+    },
+    {
+      "id": "06-rift-soaps",
+      "file": "06-rift-soaps.json",
+      "role": "UNIQUENESS_UNSUPPORTED",
+      "expectedChecks": [
+        "UNIQUENESS_UNSUPPORTED"
+      ]
+    },
+    {
+      "id": "07-hilcoe-print",
+      "file": "07-hilcoe-print.json",
+      "role": "JOBS_NARRATIVE_VS_TABLE mismatch",
+      "expectedChecks": [
+        "JOBS_NARRATIVE_VS_TABLE"
+      ]
+    },
+    {
+      "id": "08-kality-furniture",
+      "file": "08-kality-furniture.json",
+      "role": "EQUIPMENT_OVER_CAP",
+      "expectedChecks": [
+        "EQUIPMENT_OVER_CAP"
+      ]
+    },
+    {
+      "id": "09-dire-garments",
+      "file": "09-dire-garments.json",
+      "role": "FEMALE_GT_TOTAL",
+      "expectedChecks": [
+        "FEMALE_GT_TOTAL"
+      ]
+    },
+    {
+      "id": "10-sheger-honey",
+      "file": "10-sheger-honey.json",
+      "role": "PRIORITY_AREAS_COUNT + ORGANOGRAM_MISSING",
+      "expectedChecks": [
+        "PRIORITY_AREAS_COUNT",
+        "ORGANOGRAM_MISSING"
+      ]
+    },
+    {
+      "id": "11-sparse-workshop",
+      "file": "11-sparse-workshop.json",
+      "role": "Sparse application → several criteria unestablished",
+      "expectedChecks": [
+        "REQUIRED_FIELD_MISSING"
+      ]
+    },
+    {
+      "id": "12-harar-coffee",
+      "file": "12-harar-coffee.json",
+      "role": "SALES_JUMP flag, otherwise sound",
+      "expectedChecks": [
+        "SALES_JUMP"
+      ]
+    }
+  ]
+}

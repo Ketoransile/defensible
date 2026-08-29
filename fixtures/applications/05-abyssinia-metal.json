@@ -1,0 +1,135 @@
+{
+  "id": "05-abyssinia-metal",
+  "companyName": "Abyssinia Metalworks PLC",
+  "businessRegistrationNumber": "ET-AA-441902",
+  "businessLicenseNumber": "BL-03-1188",
+  "address": "Bole Sub-City, Woreda 03, Addis Ababa",
+  "cityRegion": "Addis Ababa",
+  "mobileNumber": "+251911223344",
+  "email": "05-abyssinia-metal@example.et",
+  "businessOrgForm": "private_limited_company",
+  "yearsInOperation": 3,
+  "businessType": "Metal fabrication",
+  "ownershipWomenPct": 30,
+  "ownershipMenPct": 70,
+  "companyOverview": "Fabricates agricultural implements for Oromia cooperatives. Claims three years of operation after a 2023 licence, while the growth table still carries 2022 turnover from the prior licence era.",
+  "growth": {
+    "2022": {
+      "salesEtb": 12400000,
+      "totalEmployees": 28,
+      "femaleEmployees": 6,
+      "youthEmployees": 5
+    },
+    "2023": {
+      "salesEtb": 14100000,
+      "totalEmployees": 34,
+      "femaleEmployees": 8,
+      "youthEmployees": 7
+    },
+    "2024": {
+      "salesEtb": 16800000,
+      "totalEmployees": 41,
+      "femaleEmployees": 11,
+      "youthEmployees": 9
+    },
+    "2025_proj": {
+      "salesEtb": 19500000,
+      "totalEmployees": 50,
+      "femaleEmployees": 14,
+      "youthEmployees": 12
+    },
+    "2026_proj": {
+      "salesEtb": 23000000,
+      "totalEmployees": 71,
+      "femaleEmployees": 20,
+      "youthEmployees": 17
+    }
+  },
+  "motivation": "Need coaching and a splitting machine to raise quality and hire operators.",
+  "businessGoals": "Double export volume by 2027 and add a finishing line in Addis.",
+  "marketOverview": "Domestic hotels and two East African buyers. Main challenge is finishing quality versus imported goods.",
+  "products": [
+    {
+      "productService": "Finished leather bags",
+      "marketServed": "Addis hotels and Nairobi boutiques",
+      "distributionChannels": "Direct B2B and one distributor in Kenya"
+    },
+    {
+      "productService": "Belt and small leather goods",
+      "marketServed": "Domestic retail",
+      "distributionChannels": "Own shop and Merkato wholesalers"
+    }
+  ],
+  "uniqueness": "not_new_but_unique_features",
+  "uniqueFeatures": "Modular plough heads that swap without replacing the full frame, designed for highland soils.",
+  "localRawMaterialPct": 55,
+  "keyRawMaterials": "Local scrap steel, imported cutting blades",
+  "managementTeam": [
+    {
+      "name": "Hanna Bekele",
+      "position": "Managing Director",
+      "gender": "female"
+    },
+    {
+      "name": "Yonas Tadesse",
+      "position": "Production Manager",
+      "gender": "male"
+    },
+    {
+      "name": "Marta Alemu",
+      "position": "Finance Lead",
+      "gender": "female"
+    }
+  ],
+  "organogramFile": "organogram.pdf",
+  "problemsToAddress": "CNC capacity bottleneck and inconsistent weld quality on export orders.",
+  "equipmentRequests": [
+    {
+      "description": "CNC plasma cutter",
+      "quantity": 1,
+      "estimatedTotalPriceEtb": 1450000,
+      "purpose": "Repeatable parts for plough heads"
+    }
+  ],
+  "consultantRequests": [
+    {
+      "problemDescription": "Export documentation and rules of origin",
+      "technicalExpertiseRequest": "Trade compliance advisor"
+    },
+    {
+      "problemDescription": "Finishing quality variation",
+      "technicalExpertiseRequest": "Leather finishing technician"
+    },
+    {
+      "problemDescription": "Costing for export orders",
+      "technicalExpertiseRequest": "Industrial costing specialist"
+    }
+  ],
+  "expectedResults": [
+    "production_capacity",
+    "quality",
+    "new_markets"
+  ],
+  "priorityAreasExplanation": "The splitter and finishing expert raise quality; the trade advisor opens Kenya volume.",
+  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months across CNC, welding, and field service.",
+  "jobPositions": [
+    {
+      "position": "CNC operators",
+      "newJobs": 6
+    },
+    {
+      "position": "Welders",
+      "newJobs": 8
+    },
+    {
+      "position": "Quality inspectors",
+      "newJobs": 3
+    },
+    {
+      "position": "Field service technicians",
+      "newJobs": 4
+    }
+  ],
+  "socialEnvironmentalImpact": "Chrome-free tanning waste is collected; 40% of shop-floor staff are women from the woreda.",
+  "oshCommitment": "PPE at every station, first-aid kit, monthly risk assessment, and paid sick leave."
+}

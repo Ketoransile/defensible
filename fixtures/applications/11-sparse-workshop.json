@@ -1,0 +1,67 @@
+{
+  "id": "11-sparse-workshop",
+  "companyName": "Sparse Workshop",
+  "businessRegistrationNumber": null,
+  "businessLicenseNumber": null,
+  "address": null,
+  "cityRegion": "Hawassa",
+  "mobileNumber": null,
+  "email": null,
+  "businessOrgForm": "other",
+  "yearsInOperation": 5,
+  "businessType": "Metal",
+  "ownershipWomenPct": null,
+  "ownershipMenPct": null,
+  "companyOverview": null,
+  "growth": {
+    "2022": {
+      "salesEtb": null,
+      "totalEmployees": null,
+      "femaleEmployees": null,
+      "youthEmployees": null
+    },
+    "2023": {
+      "salesEtb": null,
+      "totalEmployees": null,
+      "femaleEmployees": null,
+      "youthEmployees": null
+    },
+    "2024": {
+      "salesEtb": null,
+      "totalEmployees": null,
+      "femaleEmployees": null,
+      "youthEmployees": null
+    },
+    "2025_proj": {
+      "salesEtb": null,
+      "totalEmployees": null,
+      "femaleEmployees": null,
+      "youthEmployees": null
+    },
+    "2026_proj": {
+      "salesEtb": null,
+      "totalEmployees": null,
+      "femaleEmployees": null,
+      "youthEmployees": null
+    }
+  },
+  "motivation": null,
+  "businessGoals": null,
+  "marketOverview": null,
+  "products": [],
+  "uniqueness": null,
+  "uniqueFeatures": null,
+  "localRawMaterialPct": null,
+  "keyRawMaterials": null,
+  "managementTeam": [],
+  "organogramFile": null,
+  "problemsToAddress": null,
+  "equipmentRequests": [],
+  "consultantRequests": [],
+  "expectedResults": [],
+  "priorityAreasExplanation": null,
+  "jobCreationNarrative": null,
+  "jobPositions": [],
+  "socialEnvironmentalImpact": null,
+  "oshCommitment": null
+}

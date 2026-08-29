@@ -1,0 +1,139 @@
+{
+  "id": "03-awash-textile-sc",
+  "companyName": "Awash Textile Share Company",
+  "businessRegistrationNumber": "ET-AA-184392",
+  "businessLicenseNumber": "BL-07-2291",
+  "address": "Bole Sub-City, Woreda 03, Addis Ababa",
+  "cityRegion": "Addis Ababa",
+  "mobileNumber": "+251911223344",
+  "email": "03-awash-textile-sc@example.et",
+  "businessOrgForm": "share_company",
+  "yearsInOperation": 12,
+  "businessType": "Textile",
+  "ownershipWomenPct": 40,
+  "ownershipMenPct": 60,
+  "companyOverview": "Started as a workshop supplying local retailers. Now exports finished leather goods to Kenya and Djibouti while serving hotels in Addis.",
+  "growth": {
+    "2022": {
+      "salesEtb": 4800000,
+      "totalEmployees": 18,
+      "femaleEmployees": 7,
+      "youthEmployees": 4
+    },
+    "2023": {
+      "salesEtb": 6200000,
+      "totalEmployees": 24,
+      "femaleEmployees": 10,
+      "youthEmployees": 6
+    },
+    "2024": {
+      "salesEtb": 8100000,
+      "totalEmployees": 31,
+      "femaleEmployees": 13,
+      "youthEmployees": 8
+    },
+    "2025_proj": {
+      "salesEtb": 10400000,
+      "totalEmployees": 40,
+      "femaleEmployees": 17,
+      "youthEmployees": 11
+    },
+    "2026_proj": {
+      "salesEtb": 13000000,
+      "totalEmployees": 61,
+      "femaleEmployees": 26,
+      "youthEmployees": 16
+    }
+  },
+  "motivation": "Need coaching and a splitting machine to raise quality and hire operators.",
+  "businessGoals": "Double export volume by 2027 and add a finishing line in Addis.",
+  "marketOverview": "Domestic hotels and two East African buyers. Main challenge is finishing quality versus imported goods.",
+  "products": [
+    {
+      "productService": "Finished leather bags",
+      "marketServed": "Addis hotels and Nairobi boutiques",
+      "distributionChannels": "Direct B2B and one distributor in Kenya"
+    },
+    {
+      "productService": "Belt and small leather goods",
+      "marketServed": "Domestic retail",
+      "distributionChannels": "Own shop and Merkato wholesalers"
+    }
+  ],
+  "uniqueness": "no_unique_features",
+  "uniqueFeatures": null,
+  "localRawMaterialPct": 70,
+  "keyRawMaterials": "Ethiopian cattle hides, local cotton lining, vegetable tannins",
+  "managementTeam": [
+    {
+      "name": "Hanna Bekele",
+      "position": "Managing Director",
+      "gender": "female"
+    },
+    {
+      "name": "Yonas Tadesse",
+      "position": "Production Manager",
+      "gender": "male"
+    },
+    {
+      "name": "Marta Alemu",
+      "position": "Finance Lead",
+      "gender": "female"
+    }
+  ],
+  "organogramFile": "organogram.pdf",
+  "problemsToAddress": "Inconsistent finishing quality, limited splitting capacity, and weak export documentation.",
+  "equipmentRequests": [
+    {
+      "description": "Leather splitting machine",
+      "quantity": 1,
+      "estimatedTotalPriceEtb": 980000,
+      "purpose": "Even thickness before finishing"
+    }
+  ],
+  "consultantRequests": [
+    {
+      "problemDescription": "Export documentation and rules of origin",
+      "technicalExpertiseRequest": "Trade compliance advisor"
+    },
+    {
+      "problemDescription": "Finishing quality variation",
+      "technicalExpertiseRequest": "Leather finishing technician"
+    },
+    {
+      "problemDescription": "Costing for export orders",
+      "technicalExpertiseRequest": "Industrial costing specialist"
+    }
+  ],
+  "expectedResults": [
+    "quality",
+    "production_capacity",
+    "new_markets"
+  ],
+  "priorityAreasExplanation": "The splitter and finishing expert raise quality; the trade advisor opens Kenya volume.",
+  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
+  "jobPositions": [
+    {
+      "position": "Splitting machine operators",
+      "newJobs": 8
+    },
+    {
+      "position": "Quality controllers",
+      "newJobs": 2
+    },
+    {
+      "position": "Finishing technicians",
+      "newJobs": 6
+    },
+    {
+      "position": "Export sales",
+      "newJobs": 2
+    },
+    {
+      "position": "Store keepers",
+      "newJobs": 3
+    }
+  ],
+  "socialEnvironmentalImpact": "Chrome-free tanning waste is collected; 40% of shop-floor staff are women from the woreda.",
+  "oshCommitment": "PPE at every station, first-aid kit, monthly risk assessment, and paid sick leave."
+}
