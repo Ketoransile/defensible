@@ -1,41 +1,16 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme/ThemeProvider";
+import { HeroDemoReel } from "./HeroDemoReel";
 
 export function LandingPage() {
   return (
     <div className="landing-root min-h-dvh overflow-x-hidden bg-background text-foreground">
       <div className="landing-atmosphere" aria-hidden />
       <div className="landing-grid" aria-hidden />
-      {/* Full-bleed product plane */}
+      {/* Full-bleed product “video” plane */}
       <div className="landing-hero-plane" aria-hidden>
         <div className="landing-hero-glow" />
-        <div className="landing-hero-sheet">
-          <div className="landing-hero-sheet-inner">
-            <div className="landing-hero-rule" />
-            {[
-              { rank: "01", name: "Alem Leather Works PLC", pts: "84", flag: null },
-              { rank: "02", name: "Harar Highland Coffee", pts: "79", flag: null },
-              { rank: "03", name: "Dire Garments PLC", pts: "75", flag: null },
-              {
-                rank: "08",
-                name: "Abyssinia Metalworks",
-                pts: "73",
-                flag: "YEARS_VS_HISTORY",
-              },
-            ].map((row, i) => (
-              <div
-                key={row.rank}
-                className="landing-hero-row"
-                style={{ animationDelay: `${0.45 + i * 0.14}s` }}
-              >
-                <span>{row.rank}</span>
-                <span>{row.name}</span>
-                <span>{row.pts}</span>
-                {row.flag ? <em>{row.flag}</em> : <span />}
-              </div>
-            ))}
-          </div>
-        </div>
+        <HeroDemoReel />
       </div>
 
       <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
