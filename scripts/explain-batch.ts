@@ -1,7 +1,9 @@
 import { assessBatch } from "../src/engine/assess";
 import { explainBatch, geminiApiKey } from "../src/engine/explain";
+import { getApplications } from "../src/lib/applicationsRepo";
 
-const batch = await explainBatch(assessBatch());
+const apps = await getApplications();
+const batch = await explainBatch(assessBatch(apps));
 const gemini = batch.assessments.filter((a) => a.brief.source === "gemini").length;
 
 console.log(

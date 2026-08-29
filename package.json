@@ -11,10 +11,13 @@
     "test:watch": "vitest",
     "fixtures:dump": "npx vite-node scripts/dump-fixtures.ts",
     "explain": "node --env-file=.env.local node_modules/vite-node/dist/cli.mjs --config vitest.config.mts scripts/explain-batch.ts",
-    "explain:ping": "node --env-file=.env.local --experimental-strip-types scripts/ping-gemini.ts"
+    "explain:ping": "node --env-file=.env.local --experimental-strip-types scripts/ping-gemini.ts",
+    "db:up": "docker compose up -d mongo",
+    "db:seed": "node --env-file=.env.local node_modules/vite-node/dist/cli.mjs --config vitest.config.mts scripts/seed-mongo.ts"
   },
   "dependencies": {
     "@google/genai": "^2.19.0",
+    "mongodb": "^7.6.0",
     "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8"

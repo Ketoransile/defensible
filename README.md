@@ -8,14 +8,6 @@ Hackathon Challenge 1 — ranked, cited shortlist for the sequa gGmbH SME Suppor
 
 ```bash
 npm install
-npm test
-npm run dev
-```
-
-No database. Applications are JSON in `fixtures/`. Scoring is deterministic TypeScript against the official bands. 7a and 7b are alternative tracks, never added together.
-
-```bash
-npm install
 cp .env.example .env.local   # paste GEMINI_API_KEY; DEMO_ACCESS_CODE defaults to defensible
 npm test
 npm run dev
@@ -23,10 +15,23 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) for the landing page, then sign in with access code `defensible` to reach `/review`.
 
-Reviewer copy (headline / why this rank / expand paragraph) is Gemini, cached under `cache/llm/`. Scores never come from the model.
+Scoring is deterministic TypeScript against the official sequa bands. 7a and 7b are alternative tracks, never added together. Reviewer copy is Gemini, cached under `cache/llm/`.
+
+## MongoDB (sample applications)
+
+Applications live in MongoDB when `MONGODB_URI` is set. If Mongo is empty or unreachable, the app falls back to `fixtures/applications/*.json`.
 
 ```bash
-npm run explain              # refresh cached briefs for the offline demo
+# Local Mongo (Docker Desktop)
+npm run db:up
+
+# Or use MongoDB Atlas — paste the URI into .env.local as MONGODB_URI
+
+npm run db:seed    # upserts all 12 fixture applications
+```
+
+```bash
+npm run explain    # refresh cached briefs for the offline demo
 ```
 
 ## Deploy (Vercel)
@@ -38,6 +43,9 @@ npm run explain              # refresh cached briefs for the offline demo
    - `GEMINI_MODEL=gemini-3.6-flash` (optional)
    - `DEMO_ACCESS_CODE` (judges’ login code)
    - `AUTH_SECRET` (random string for signed session cookies)
-4. Deploy. `/` is the landing page; `/review` requires sign-in.
+   - `MONGODB_URI` (Atlas connection string)
+   - `MONGODB_DB=defensible` (optional)
+4. Run `npm run db:seed` once against Atlas (from your machine with the Atlas URI in `.env.local`).
+5. Deploy. `/` is the landing page; `/review` requires sign-in.
 
 Do **not** commit `.env.local`.
