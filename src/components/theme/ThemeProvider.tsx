@@ -36,6 +36,33 @@ function readStoredTheme(): Theme {
   }
 }
 
+function SunIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.75" />
+      <path
+        d="M12 2v2.5M12 19.5V22M4.93 4.93l1.77 1.77M17.3 17.3l1.77 1.77M2 12h2.5M19.5 12H22M4.93 19.07l1.77-1.77M17.3 6.7l1.77-1.77"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 7 7 0 1 0 20.5 14.2Z"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(readStoredTheme);
 
@@ -77,12 +104,13 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       type="button"
       onClick={toggleTheme}
       className={[
-        "rounded-md border border-border bg-surface px-3 py-1.5 text-[12px] text-muted transition hover:border-accent/40 hover:text-foreground",
+        "inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-muted transition hover:border-accent/40 hover:text-foreground",
         className,
       ].join(" ")}
-      aria-label="Toggle color theme"
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      title={theme === "dark" ? "Light mode" : "Dark mode"}
     >
-      {theme === "dark" ? "Light mode" : "Dark mode"}
+      {theme === "dark" ? <SunIcon /> : <MoonIcon />}
     </button>
   );
 }

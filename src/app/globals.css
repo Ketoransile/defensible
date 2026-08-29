@@ -87,10 +87,102 @@ body {
   color: var(--foreground);
 }
 
-/* ── Landing atmosphere ── */
+/* ── Landing atmosphere / hero plane ── */
 
 .landing-root {
   position: relative;
+}
+
+.landing-hero-plane {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.landing-hero-glow {
+  position: absolute;
+  inset: -20% -10% auto auto;
+  width: min(70vw, 52rem);
+  height: min(70vw, 52rem);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 22%, transparent),
+    transparent 68%
+  );
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+.landing-hero-sheet {
+  position: absolute;
+  top: 12%;
+  right: -4%;
+  width: min(58vw, 40rem);
+  height: min(72vh, 36rem);
+  transform: rotate(-6deg) translateZ(0);
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  box-shadow:
+    0 30px 80px color-mix(in srgb, var(--foreground) 8%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--background) 40%, transparent);
+  backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to bottom, black 55%, transparent 95%);
+}
+
+.landing-hero-sheet-inner {
+  padding: 1.25rem 1.35rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+.landing-hero-rule {
+  height: 1px;
+  margin-bottom: 0.85rem;
+  background: var(--border);
+}
+
+.landing-hero-row {
+  display: grid;
+  grid-template-columns: 2rem 1fr 2.5rem minmax(0, 7rem);
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--background) 55%, transparent);
+  font-size: 11px;
+  opacity: 0;
+  animation: fade-up 0.7s ease forwards;
+}
+
+.landing-hero-row span:nth-child(1),
+.landing-hero-row span:nth-child(3) {
+  color: var(--muted);
+}
+
+.landing-hero-row span:nth-child(3) {
+  color: var(--accent);
+  text-align: right;
+}
+
+.landing-hero-row em {
+  font-style: normal;
+  color: var(--warn);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .landing-hero-sheet {
+    opacity: 0.35;
+    right: -28%;
+    top: 8%;
+  }
 }
 
 .landing-atmosphere {
@@ -114,13 +206,13 @@ body {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  opacity: 0.4;
+  opacity: 0.28;
   background-image:
     linear-gradient(to right, rgba(183, 196, 186, 0.55) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(183, 196, 186, 0.55) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
-  animation: grid-drift 28s linear infinite;
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 75% 65% at 60% 35%, black, transparent);
+  animation: grid-drift 32s linear infinite;
 }
 
 .dark .landing-grid {

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import type { Application, BatchResult } from "@/types";
 import { logoutAction } from "@/app/actions/auth";
@@ -51,9 +52,12 @@ export function ReviewerApp({
       <header className="sticky top-0 z-20 border-b border-border/80 bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
           <div className="flex items-baseline gap-3">
-            <h1 className="font-[family-name:var(--font-display)] text-[18px] font-semibold tracking-tight">
+            <Link
+              href="/"
+              className="font-[family-name:var(--font-display)] text-[18px] font-semibold tracking-tight transition hover:text-accent"
+            >
               Defensible
-            </h1>
+            </Link>
             <span className="hidden font-mono text-[10px] tracking-[0.14em] text-muted uppercase sm:inline">
               sequa reviewer
             </span>

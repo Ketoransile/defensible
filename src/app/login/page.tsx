@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/auth/LoginForm";
@@ -19,7 +20,13 @@ export default async function LoginPage() {
       <div className="landing-atmosphere" aria-hidden />
       <div className="landing-grid" aria-hidden />
 
-      <div className="relative z-10 flex justify-end px-6 pt-5">
+      <div className="relative z-10 mx-auto flex w-full max-w-lg items-center justify-between px-6 pt-5">
+        <Link
+          href="/"
+          className="font-[family-name:var(--font-display)] text-lg tracking-tight transition hover:text-accent"
+        >
+          Defensible
+        </Link>
         <ThemeToggle />
       </div>
 
