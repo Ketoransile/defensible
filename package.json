@@ -9,9 +9,12 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "fixtures:dump": "npx vite-node scripts/dump-fixtures.ts"
+    "fixtures:dump": "npx vite-node scripts/dump-fixtures.ts",
+    "explain": "node --env-file=.env.local node_modules/vite-node/dist/cli.mjs --config vitest.config.mts scripts/explain-batch.ts",
+    "explain:ping": "node --env-file=.env.local --experimental-strip-types scripts/ping-gemini.ts"
   },
   "dependencies": {
+    "@google/genai": "^2.19.0",
     "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8"
@@ -25,6 +28,7 @@
     "eslint-config-next": "16.3.3",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "vite-node": "^6.0.0",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.11"
   }

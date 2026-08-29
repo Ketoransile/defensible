@@ -1,0 +1,16 @@
+{
+  "headline": "Dire Garments PLC ranks 7th with 75 points on the investment readiness track, constrained by low sales growth and a data contradiction.",
+  "whyThisRank": "Dire Garments PLC placed 7th out of the batch with 75 points, trailing Awash Textile Share Company by 1 point. While it scored maximum points in market reach, women ownership, intervention results, and green impact, its rank was limited by zero points in sales growth and lower scores in headcount and job creation.",
+  "justification": "Dire Garments PLC is an eligible 8-year-old private limited company evaluated under the investment readiness track due to equipment requests. The application demonstrated strong performance in market reach, expected results, 40% female ownership, and positive environmental impact, alongside a 70% local raw material share. However, sales growth was limited to 21.1% (yielding 0 of 5 points) and job creation was scored at 15 of 25 points for 21 planned jobs. Additionally, a data contradiction was noted where 2024 female staff (25) exceeds total reported staff (20).",
+  "strengths": [
+    "Achieved maximum points for international/export market reach and positive social/environmental impact.",
+    "Earned full points for expected intervention results (20/20) and business ownership by women (40%).",
+    "Sources 70% of raw materials locally."
+  ],
+  "watchouts": [
+    "Data contradiction detected: reported 25 female employees against 20 total employees for 2024.",
+    "Scored 0 out of 5 points for sales growth (21.1% growth).",
+    "Scored 15 out of 25 points for job creation potential (21 projected new jobs)."
+  ],
+  "source": "gemini"
+}

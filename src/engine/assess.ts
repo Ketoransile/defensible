@@ -9,6 +9,7 @@ import {
 } from "@/types";
 import { runChecks } from "./checks";
 import { evaluateEligibility } from "./eligibility";
+import { attachTemplateBriefs } from "./explain";
 import { scoreApplication, selectJobCreationTrack } from "./score";
 
 function totals(criteria: CriterionScore[]): {
@@ -54,10 +55,12 @@ export function assessApplication(app: Application): Assessment {
   ];
 
   const trackLabel = jobCreationTrack.id.replaceAll("_", " ");
+  const justification = `${app.companyName ?? app.id} scores ${totalPoints} of ${maxAvailablePoints} established points (${trackLabel} track). Eligibility: ${eligibility.verdict}. ${findings.length} finding(s).`;
 
   return {
     applicationId: app.id,
     companyName: app.companyName,
+    rank: 0,
     eligibility,
     findings,
     jobCreationTrack,
@@ -65,13 +68,23 @@ export function assessApplication(app: Application): Assessment {
     totalPoints,
     maxAvailablePoints,
     confidence,
-    justification: `${app.companyName ?? app.id} scores ${totalPoints} of ${maxAvailablePoints} established points (${trackLabel} track). Eligibility: ${eligibility.verdict}. ${findings.length} finding(s).`,
+    brief: {
+      headline: justification,
+      whyThisRank: justification,
+      justification,
+      strengths: [],
+      watchouts: [],
+      source: "template",
+    },
+    justification,
     openQuestions,
   };
 }
 
 export function assessBatch(apps: Application[] = loadApplications()): BatchResult {
-  const assessments = apps.map(assessApplication).sort(rankAssessments);
+  const assessments = attachTemplateBriefs(
+    apps.map(assessApplication).sort(rankAssessments),
+  );
 
   return {
     assessments,

@@ -192,9 +192,22 @@ export interface JobCreationTrack {
   fields: FieldPath[];
 }
 
+export interface ReviewerBrief {
+  /** One line for the ranked table. */
+  headline: string;
+  /** Why this row sits at this rank versus the rest of the batch. */
+  whyThisRank: string;
+  /** Expand-panel paragraph. Must not invent scores or fields. */
+  justification: string;
+  strengths: string[];
+  watchouts: string[];
+  source: "template" | "gemini";
+}
+
 export interface Assessment {
   applicationId: string;
   companyName: string | null;
+  rank: number;
   eligibility: EligibilityResult;
   findings: Finding[];
   jobCreationTrack: JobCreationTrack;
@@ -202,6 +215,7 @@ export interface Assessment {
   totalPoints: number;
   maxAvailablePoints: number;
   confidence: number; // maxAvailablePoints / GRID_MAX_POINTS — not a model self-report
+  brief: ReviewerBrief;
   justification: string;
   openQuestions: string[];
 }

@@ -23,6 +23,8 @@ describe("assessBatch", () => {
     for (const a of batch.assessments) {
       expect(a.criteria).toHaveLength(12);
       expect(a.jobCreationTrack.criterionId).toBeTruthy();
+      expect(a.rank).toBeGreaterThan(0);
+      expect(a.brief.headline.length).toBeGreaterThan(0);
     }
   });
 

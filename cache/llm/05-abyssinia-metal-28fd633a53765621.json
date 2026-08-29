@@ -1,0 +1,16 @@
+{
+  "headline": "Abyssinia Metalworks PLC ranks 8th with 73 points, showing strong expected intervention results alongside a trading history timeline inconsistency.",
+  "whyThisRank": "Abyssinia Metalworks PLC placed 8th with 73 points, trailing Dire Garments PLC (75 points). While scoring maximum points in expected results and environmental impact, it was held back by zero points in sales growth and a data contradiction in its operational history.",
+  "justification": "Abyssinia Metalworks PLC qualified as an eligible applicant under the investment readiness track, securing 73 out of 100 total points. The firm achieved full scores for expected intervention results (20/20), green impact (10/10), international market reach (5/5), and female ownership (5/5). However, scoring was constrained by 19.1% sales growth (0/5) and a job creation projection yielding 15 out of 25 points. A flagged inconsistency notes reported 2022 financial and employment records despite stating three years of operation.",
+  "strengths": [
+    "Full points achieved for expected results from the intervention (20/20) and positive social/environmental impact (10/10)",
+    "Maximum points awarded for international market reach, company headcount (41 employees), and 30% female ownership",
+    "Projected creation of 21 new jobs under the investment readiness track"
+  ],
+  "watchouts": [
+    "Contradiction between stated 3 years in operation and reported 2022 sales and employment data",
+    "Zero points awarded for sales growth due to 2023–2024 performance (19.1%)",
+    "Below-maximum scores for female workforce share (26.8%) and youth workforce share (22.0%)"
+  ],
+  "source": "gemini"
+}

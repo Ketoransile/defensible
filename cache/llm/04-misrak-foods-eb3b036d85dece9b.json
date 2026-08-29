@@ -1,0 +1,16 @@
+{
+  "headline": "Misrak Foods PLC ranked #2 with 78/100 points on investment-readiness track; ownership breakdown shows a 20% discrepancy.",
+  "whyThisRank": "Misrak Foods PLC ranks 2nd with 78 points on the investment-readiness track, tying Alem Leather Works PLC on total points. It sits behind rank 1 due to a data contradiction finding regarding ownership percentages.",
+  "justification": "Misrak Foods PLC is an eligible private limited company operating for 8 years, evaluated under the investment-readiness track following an equipment request. The applicant achieved 78 out of 100 available points, supported by maximum marks in expected intervention results (20/20), international market reach (5/5), employment headcount (5/5), women ownership (5/5), and green/environmental impact (10/10). Performance was also reinforced by 30.6% sales growth, 41.9% female employment, and 21 projected new jobs. However, a data finding notes that reported ownership percentages sum to 80% (40% women, 40% men), leaving 20% unassigned.",
+  "strengths": [
+    "Maximum points earned for expected intervention results (20/20) and social/environmental impact (10/10).",
+    "International and export market reach achieved (5/5 points).",
+    "Established workforce of 31 employees with strong female participation at 41.9%."
+  ],
+  "watchouts": [
+    "Ownership share contradiction: women (40%) and men (40%) sum to 80%, leaving 20% unestablished.",
+    "Low youth employment share at 25.8% (2/5 points).",
+    "Job creation potential scored 15/25 points based on 21 projected new jobs."
+  ],
+  "source": "gemini"
+}

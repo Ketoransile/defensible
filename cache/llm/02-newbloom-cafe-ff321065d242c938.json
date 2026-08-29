@@ -1,0 +1,17 @@
+{
+  "headline": "Excluded due to operational age (1 yr vs >2 yrs required); scored 56/95 with historical data contradiction.",
+  "whyThisRank": "NewBloom Cafe is ranked 12th because it is disqualified on eligibility rules regarding minimum operational age, placing it at the bottom despite holding 56 evaluation points. It ranks below Sparse Workshop solely due to this formal exclusion status.",
+  "justification": "NewBloom Cafe achieved 56 out of 95 points on the investment readiness track, securing maximum scores in women ownership, female employment ratio, expected results, and green sector impact. However, the applicant is marked as excluded because its single year in operation fails the scheme requirement of more than two years. Additionally, a data contradiction was identified where reported 2024 sales and staffing predated the allowable operational timeframe, while sales growth remains unestablished due to incomplete 2023 baseline figures. As a result of the eligibility failure, the application is non-compliant regardless of grid performance.",
+  "strengths": [
+    "Achieved maximum points for 100% female business ownership and high female employee representation (66.7%).",
+    "Full points scored for expected intervention results (20/20) and green sector/environmental impact (10/10).",
+    "Serves an international or export destination market."
+  ],
+  "watchouts": [
+    "Ineligible under mandatory age criteria (1 year in operation reported against a >2-year requirement).",
+    "Contradiction identified between stated operational start and reported 2024 sales and employee records.",
+    "Sales growth (criterion 1.1) is unestablished due to missing or zero 2023 financial figures.",
+    "Zero points scored for job creation potential under the investment readiness track."
+  ],
+  "source": "gemini"
+}

@@ -1,0 +1,16 @@
+{
+  "headline": "Rift Valley Soaps PLC ranks 3rd with 78 pts on the investment readiness track; flagged for missing USP detail.",
+  "whyThisRank": "Rift Valley Soaps PLC occupies rank 3 with 78 total points on the investment readiness track, tied on points with Misrak Foods PLC (rank 2). It is placed below rank 2 due to an unverified uniqueness claim finding.",
+  "justification": "Rift Valley Soaps PLC is eligible for the scheme and was evaluated under the investment readiness track due to equipment requests. The company scored full points in export market reach, women ownership, expected intervention results, and green sector impact. However, job creation potential yielded 15 of 25 points based on 21 projected new positions, alongside lower scores for youth employment and sales growth. Evaluation also flagged a contradiction where unique features were declared without supporting descriptive text.",
+  "strengths": [
+    "Achieved maximum points for international/export market reach (5/5) and green sector impact (10/10).",
+    "Strong gender representation with 40% female ownership (5/5) and 41.9% female staff.",
+    "Secured maximum score (20/20) for expected results across three intervention areas."
+  ],
+  "watchouts": [
+    "Data contradiction: unique product features were claimed but the description field is empty.",
+    "Moderate score of 15/25 for job creation potential based on 21 planned new jobs.",
+    "Low youth employee representation at 25.8% of total headcount (2/5 points)."
+  ],
+  "source": "gemini"
+}

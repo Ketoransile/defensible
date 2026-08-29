@@ -1,0 +1,16 @@
+{
+  "headline": "Hilcoe Print House PLC scores 63 pts (Rank 10); job creation potential narrative contradicts table data.",
+  "whyThisRank": "Hilcoe Print House PLC places 10th with 63 points on the investment-readiness track, trailing Sheger Honey PLC (Rank 9, 73 pts) by 10 points. A 0/25 score on job creation potential suppresses its final position despite high scores in environmental impact and expected results.",
+  "justification": "Hilcoe Print House PLC meets all basic eligibility checks and achieves a total score of 63 out of 100 points on the investment-readiness track. The company secured maximum scores for expected results from intervention (20/20), green sector impact (10/10), total employment headcount (5/5), and international market access (5/5). However, criterion 7b yielded 0 out of 25 points due to a finding where the job-creation narrative claims 40 new jobs while the positions table sums to only 12. Additional contributing scores include 40% female ownership (5/5), 41.9% female staffing (4/5), and 30.6% sales growth (3/5).",
+  "strengths": [
+    "Full points awarded for expected results from the intervention (20/20) and green sector impact (10/10)",
+    "Demonstrated international or export market reach (5/5)",
+    "Strong female participation with 40% ownership (5/5) and 41.9% female staff (4/5)",
+    "Local raw material sourcing accounts for 70% of supply chain (3/5)"
+  ],
+  "watchouts": [
+    "Scored 0/25 on job creation potential (7b) due to a contradiction between narrative (40 jobs) and table data (12 jobs)",
+    "Youth employment is relatively low at 25.8% of total headcount (2/5)"
+  ],
+  "source": "gemini"
+}

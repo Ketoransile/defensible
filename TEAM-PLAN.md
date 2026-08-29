@@ -45,7 +45,10 @@ Do not edit each other's folders. Merge to `main` often. The contract between tr
 
 **Do not touch:** `src/engine/checks/`, `src/engine/eligibility.ts`
 
-Import **only** `assessBatch` / `assessApplication` from `@/engine`. Read applications with `loadApplication(id)` when a citation is clicked.
+Import `assessBatch` and `explainBatch` from `@/engine`. `await explainBatch(assessBatch())` fills Gemini (or template) copy. Read applications with `loadApplication(id)` when a citation is clicked.
+
+Table row: `rank`, `brief.headline`, points, confidence, eligibility, finding badges.  
+Expand: `brief.whyThisRank`, `brief.justification`, `brief.strengths`, `brief.watchouts`, then criteria + findings.
 
 ### Build order
 

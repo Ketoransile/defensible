@@ -1,0 +1,16 @@
+{
+  "headline": "Sparse Workshop (Rank 11): Eligibility unestablished due to legal form 'other'; 0 points scored across all criteria due to missing required fields.",
+  "whyThisRank": "Sparse Workshop ranks 11th because its overall eligibility and all scoring criteria remain unestablished due to incomplete application data, placing it below Hilcoe Print House PLC (rank 10, 63 pts).",
+  "justification": "Sparse Workshop satisfies the operating age requirement with 5 years in business, but its eligibility remains unestablished because its legal form is listed as 'other' and private ownership is not confirmed. The application was evaluated under the employability track (7a), but earned 0 points as all 12 scoring criteria are unestablished due to missing information. Notable defects include 17 blank required fields, zero selected priority areas against the three required, and a missing organogram. Consequently, essential criteria including financial growth, management structure, and job creation potential cannot be assessed without additional documentation.",
+  "strengths": [
+    "Years in operation is 5, satisfying the requirement of being over two years operating age."
+  ],
+  "watchouts": [
+    "Private ownership is unestablished because the legal form is recorded as 'other'.",
+    "Seventeen required form fields are missing or null.",
+    "Required organisational structure (organogram) file was not uploaded.",
+    "Zero priority areas selected, failing the requirement of exactly three.",
+    "All evaluation criteria (1.1 through 9) remain unestablished due to missing baseline data."
+  ],
+  "source": "gemini"
+}

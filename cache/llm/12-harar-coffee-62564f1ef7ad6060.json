@@ -1,0 +1,16 @@
+{
+  "headline": "Rank 5 (78/100 pts) on investment readiness track; tied on points but flagged for a 3.8x sales jump.",
+  "whyThisRank": "Harar Highland Coffee PLC ranks 5th with 78/100 points on the investment readiness track, tying on points with Kality Furniture PLC at rank 4. A 3.8x sales jump audit flag differentiates its placement within the batch.",
+  "justification": "Harar Highland Coffee PLC is eligible with 8 years of operations and scores 78 out of 100 points on the investment readiness track. The company secured maximum points for green sector impact, expected intervention results, sales growth, and international market reach. It also demonstrates strong gender inclusion with 40% female ownership and 44.4% female workforce. However, job creation potential yields 15 out of 25 points based on 21 planned jobs, and youth employment remains at 27.8%. A notable operational flag is the 3.8x sales surge from 2.6M to 9.8M ETB between 2023 and 2024.",
+  "strengths": [
+    "Achieved maximum points for green sector impact (10/10) and expected results from intervention (20/20).",
+    "Serves international export markets with strong gender metrics (40% female ownership, 44.4% female employees).",
+    "Maximized points for sales growth with a 276.9% increase from 2023 to 2024."
+  ],
+  "watchouts": [
+    "Sales jump flag: 2023 to 2024 sales grew 3.8x (2.6M to 9.8M ETB), exceeding the 3x threshold.",
+    "Youth employment share is relatively low at 27.8% (2/5 points).",
+    "Job creation potential scored 15/25 points based on 21 projected positions."
+  ],
+  "source": "gemini"
+}
