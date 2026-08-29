@@ -1,7 +1,6 @@
 import type {
   Assessment,
   EligibilityVerdict,
-  Finding,
   Severity,
 } from "@/types";
 
@@ -73,11 +72,4 @@ export function findingTone(severity: Severity): string {
     case "flag":
       return "bg-muted/20 text-muted border-border-strong";
   }
-}
-
-export function groupFindingsBySeverity(findings: Finding[]): Finding[] {
-  const order: Severity[] = ["fail", "contradiction", "defect", "flag"];
-  return [...findings].sort(
-    (a, b) => order.indexOf(a.severity) - order.indexOf(b.severity),
-  );
 }

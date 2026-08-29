@@ -8,7 +8,12 @@ import type {
   FieldPath,
 } from "@/types";
 import { isScoredCriterion, isUnestablishedCriterion } from "@/types";
-import { trackTitle } from "./format";
+import {
+  eligibilityLabel,
+  findingTone,
+  formatPct,
+  trackTitle,
+} from "./format";
 
 interface CompanyDetailProps {
   assessment: Assessment;
@@ -71,71 +76,51 @@ export function CompanyDetail({
   const brief = assessment.brief;
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden">
-      <header className="shrink-0 border-b border-border px-4 py-3">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden bg-background">
+      <header className="shrink-0 space-y-2 border-b border-border px-4 py-3">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="font-mono text-[10px] tracking-[0.18em] text-muted uppercase">
-              Company detail · rank {assessment.rank}
+            <p className="font-mono text-[10px] tracking-[0.16em] text-muted uppercase">
+              Rank {assessment.rank} · {eligibilityLabel(assessment.eligibility.verdict)}
             </p>
-            <h2 className="mt-0.5 truncate text-lg font-semibold tracking-tight">
+            <h2 className="mt-0.5 text-lg font-semibold tracking-tight">
               {assessment.companyName ?? assessment.applicationId}
             </h2>
-            <p className="mt-1 max-w-2xl text-[12px] leading-5 text-foreground/90">
-              {brief.headline}
-            </p>
           </div>
-          <div className="flex shrink-0 flex-col items-end gap-1 font-mono text-[11px]">
-            <span className="text-foreground">
-              {assessment.totalPoints}
+          <div className="flex shrink-0 items-center gap-2 font-mono text-[12px]">
+            <span className="tabular-nums">
+              <span className="text-base font-semibold text-foreground">
+                {assessment.totalPoints}
+              </span>
               <span className="text-muted">
-                {" "}
-                / {assessment.maxAvailablePoints} established
+                /{assessment.maxAvailablePoints}
               </span>
             </span>
-            <span className="rounded border border-info/40 bg-info/10 px-2 py-0.5 text-info">
-              {trackTitle(assessment)}
+            <span className="rounded border border-border px-1.5 py-0.5 text-[10px] text-muted">
+              {formatPct(assessment.confidence)}
             </span>
-            <span className="text-muted">
-              brief · {brief.source}
+            <span className="rounded border border-info/40 bg-info/10 px-1.5 py-0.5 text-[10px] text-info">
+              {trackTitle(assessment)}
             </span>
           </div>
         </div>
-        <p className="mt-2 text-[12px] leading-5 text-muted">{brief.whyThisRank}</p>
-        <p className="mt-2 text-[12px] leading-5 text-foreground/85">
-          {brief.justification}
-        </p>
-        {(brief.strengths.length > 0 || brief.watchouts.length > 0) && (
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            {brief.strengths.length > 0 && (
-              <div>
-                <p className="mb-1 font-mono text-[10px] tracking-wider text-accent uppercase">
-                  Strengths
-                </p>
-                <ul className="list-inside list-disc space-y-1 text-[11px] leading-4 text-muted">
-                  {brief.strengths.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {brief.watchouts.length > 0 && (
-              <div>
-                <p className="mb-1 font-mono text-[10px] tracking-wider text-warn uppercase">
-                  Watchouts
-                </p>
-                <ul className="list-inside list-disc space-y-1 text-[11px] leading-4 text-muted">
-                  {brief.watchouts.map((w) => (
-                    <li key={w}>{w}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+
+        <p className="text-[13px] leading-5 text-foreground/90">{brief.headline}</p>
+        <p className="text-[12px] leading-5 text-muted">{brief.whyThisRank}</p>
+
+        {assessment.findings.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {assessment.findings.map((f, i) => (
+              <span
+                key={`${f.checkId}-${i}`}
+                className={`rounded border px-2 py-1 font-mono text-[10px] ${findingTone(f.severity)}`}
+                title={f.explanation}
+              >
+                {f.checkId}
+              </span>
+            ))}
           </div>
         )}
-        <p className="mt-2 font-mono text-[11px] text-muted">
-          {assessment.jobCreationTrack.reason}
-        </p>
       </header>
 
       <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain">
@@ -156,105 +141,79 @@ export function CompanyDetail({
                   <li
                     key={score.criterionId}
                     className={
-                      unestablished
-                        ? "bg-[var(--unestablished)]/50"
-                        : undefined
+                      unestablished ? "bg-[var(--unestablished)]/40" : undefined
                     }
                   >
                     <button
                       type="button"
                       onClick={() => onToggle(score.criterionId)}
-                      className="flex w-full items-stretch gap-3 border-b border-border/50 px-4 py-2.5 text-left hover:bg-surface-2/80"
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-surface-2/80"
                     >
                       <span className="w-8 shrink-0 font-mono text-[11px] text-muted">
                         {row.sn}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[13px] font-medium">
-                          {row.label}
-                        </span>
-                        {unestablished && (
-                          <span className="mt-0.5 block text-[11px] text-warn">
-                            Unestablished — not scored as zero
+                        <span className="block text-[13px]">{row.label}</span>
+                        {unestablished ? (
+                          <span className="text-[11px] text-warn">
+                            Unestablished
                           </span>
-                        )}
-                        {scored && band && (
-                          <span className="mt-0.5 block truncate font-mono text-[10px] text-muted">
+                        ) : band ? (
+                          <span className="block truncate font-mono text-[10px] text-muted">
                             {band}
                           </span>
-                        )}
+                        ) : null}
                       </span>
-                      <span className="shrink-0 self-center font-mono tabular-nums">
+                      <span className="shrink-0 font-mono tabular-nums">
                         {scored ? (
-                          <span>
+                          <>
                             {score.points}
                             <span className="text-muted">/{score.maxPoints}</span>
-                          </span>
+                          </>
                         ) : (
                           <span className="text-warn">—/{score.maxPoints}</span>
                         )}
                       </span>
-                      <span className="self-center font-mono text-[10px] text-muted">
+                      <span className="w-3 font-mono text-[10px] text-muted">
                         {expanded ? "▾" : "▸"}
                       </span>
                     </button>
 
                     {expanded && (
-                      <div className="space-y-3 border-b border-border bg-background/60 px-4 py-3 pl-14">
+                      <div className="space-y-2 border-t border-border/40 bg-background/70 px-4 py-3 pl-14">
                         {scored ? (
-                          <>
-                            <p className="text-[12px] leading-5 text-foreground/90">
-                              {score.reasoning}
-                            </p>
-                            {band && (
-                              <p className="font-mono text-[11px] text-accent">
-                                Matched band: {band}
-                              </p>
-                            )}
-                          </>
+                          <p className="text-[12px] leading-5">{score.reasoning}</p>
                         ) : unestablished ? (
-                          <div className="space-y-2 rounded border border-warn/30 bg-warn/5 p-3">
-                            <p className="text-[12px] text-warn">{score.reason}</p>
-                            <p className="text-[12px]">
-                              <span className="font-mono text-[10px] tracking-wider text-muted uppercase">
-                                Site-visit question ·{" "}
-                              </span>
-                              {score.openQuestion}
+                          <div className="space-y-1 text-[12px]">
+                            <p className="text-warn">{score.reason}</p>
+                            <p className="text-muted">
+                              Ask: {score.openQuestion}
                             </p>
                           </div>
                         ) : null}
 
-                        <div>
-                          <p className="mb-1.5 font-mono text-[10px] tracking-wider text-muted uppercase">
-                            Citations — click to inspect field
-                          </p>
-                          {score.citations.length === 0 ? (
-                            <p className="font-mono text-[11px] text-muted">
-                              No citations (unestablished / nothing inspected)
-                            </p>
-                          ) : (
-                            <div className="flex flex-wrap gap-1.5">
-                              {score.citations.map((path) => (
-                                <button
-                                  key={path}
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onCitationClick(path);
-                                  }}
-                                  className={[
-                                    "rounded border px-2 py-1 font-mono text-[11px] transition-colors",
-                                    activeCitation === path
-                                      ? "border-accent bg-accent-dim text-accent"
-                                      : "border-border bg-surface text-info hover:border-info/60",
-                                  ].join(" ")}
-                                >
-                                  {path}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+                        {score.citations.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {score.citations.map((path) => (
+                              <button
+                                key={path}
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onCitationClick(path);
+                                }}
+                                className={[
+                                  "rounded border px-2 py-1 font-mono text-[11px]",
+                                  activeCitation === path
+                                    ? "border-accent bg-accent-dim text-accent"
+                                    : "border-border text-info hover:border-info/50",
+                                ].join(" ")}
+                              >
+                                {path}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </li>

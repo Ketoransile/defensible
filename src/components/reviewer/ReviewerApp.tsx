@@ -5,7 +5,6 @@ import type { Application, Assessment, BatchResult, FieldPath } from "@/types";
 import { BatchView } from "./BatchView";
 import { CitationInspector } from "./CitationInspector";
 import { CompanyDetail } from "./CompanyDetail";
-import { FindingsPanel } from "./FindingsPanel";
 import { ResizableSplit } from "./ResizableSplit";
 import { formatPct } from "./format";
 
@@ -42,53 +41,19 @@ export function ReviewerApp({ batch, applications }: ReviewerAppProps) {
 
   const detailPane =
     selected && application ? (
-      <ResizableSplit
-        axis="vertical"
-        initial={62}
-        min={28}
-        max={82}
-        storageKey="sequa-split-detail-findings"
-        first={
-          <CompanyDetail
-            assessment={selected}
-            application={application}
-            expandedId={expandedId}
-            onToggle={handleToggle}
-            activeCitation={activeCitation}
-            onCitationClick={setActiveCitation}
-          />
-        }
-        second={
-          <FindingsPanel assessment={selected} application={application} />
-        }
+      <CompanyDetail
+        assessment={selected}
+        application={application}
+        expandedId={expandedId}
+        onToggle={handleToggle}
+        activeCitation={activeCitation}
+        onCitationClick={setActiveCitation}
       />
     ) : (
       <div className="flex h-full items-center justify-center bg-background text-muted">
         Select an application
       </div>
     );
-
-  const centerAndInspector = (
-    <ResizableSplit
-      axis="horizontal"
-      initial={72}
-      min={40}
-      max={88}
-      storageKey="sequa-split-detail-inspector"
-      first={detailPane}
-      second={
-        application ? (
-          <CitationInspector
-            application={application}
-            path={activeCitation}
-            onClose={() => setActiveCitation(null)}
-          />
-        ) : (
-          <div className="h-full bg-surface" />
-        )
-      }
-    />
-  );
 
   return (
     <div className="flex h-dvh max-h-dvh min-h-0 flex-col overflow-hidden bg-background text-foreground">
@@ -115,8 +80,8 @@ export function ReviewerApp({ batch, applications }: ReviewerAppProps) {
       <div className="hidden min-h-0 flex-1 overflow-hidden lg:block">
         <ResizableSplit
           axis="horizontal"
-          initial={34}
-          min={20}
+          initial={36}
+          min={22}
           max={55}
           storageKey="sequa-split-batch-main"
           first={
@@ -128,22 +93,42 @@ export function ReviewerApp({ batch, applications }: ReviewerAppProps) {
               />
             </div>
           }
-          second={centerAndInspector}
+          second={
+            <ResizableSplit
+              axis="horizontal"
+              initial={70}
+              min={45}
+              max={88}
+              storageKey="sequa-split-detail-inspector"
+              first={detailPane}
+              second={
+                application ? (
+                  <CitationInspector
+                    application={application}
+                    path={activeCitation}
+                    onClose={() => setActiveCitation(null)}
+                  />
+                ) : (
+                  <div className="h-full bg-surface" />
+                )
+              }
+            />
+          }
         />
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain lg:hidden">
-        <section className="h-[42vh] shrink-0 overflow-hidden border-b border-border">
+        <section className="h-[40vh] shrink-0 overflow-hidden border-b border-border">
           <BatchView
             assessments={assessments}
             selectedId={selected?.applicationId ?? null}
             onSelect={handleSelect}
           />
         </section>
-        <section className="h-[52vh] shrink-0 overflow-hidden border-b border-border">
+        <section className="h-[48vh] shrink-0 overflow-hidden border-b border-border">
           {detailPane}
         </section>
-        <section className="h-[36vh] shrink-0 overflow-hidden">
+        <section className="h-[32vh] shrink-0 overflow-hidden">
           {application ? (
             <CitationInspector
               application={application}
@@ -155,14 +140,12 @@ export function ReviewerApp({ batch, applications }: ReviewerAppProps) {
       </div>
 
       <footer className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-border bg-surface px-4 py-1.5 font-mono text-[10px] text-muted">
-        <span>
-          Official PDF bands · confidence = established share of 100
-        </span>
+        <span>Official sequa grid · click a citation to inspect the field</span>
         {selected && (
           <span>
             #{selected.rank} {selected.companyName ?? selected.applicationId} ·{" "}
-            {formatPct(selected.confidence)} conf · {selected.findings.length}{" "}
-            findings
+            {selected.totalPoints}/{selected.maxAvailablePoints} ·{" "}
+            {formatPct(selected.confidence)} established
           </span>
         )}
       </footer>
