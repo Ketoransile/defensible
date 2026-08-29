@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0c0e12;
+  --background: #07090d;
   --foreground: #e8eaed;
-  --surface: #12151c;
-  --surface-2: #181c26;
+  --surface: #10141c;
+  --surface-2: #161b26;
   --border: #2a3140;
   --border-strong: #3d4659;
   --muted: #8b93a7;
-  --accent: #6ee7b7;
+  --accent: #5ee6a8;
   --accent-dim: #34d39933;
   --warn: #fbbf24;
   --danger: #f87171;
@@ -30,7 +30,7 @@
   --color-warn: var(--warn);
   --color-danger: var(--danger);
   --color-info: var(--info);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-display);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -40,13 +40,13 @@
 
 html,
 body {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   font-size: 13px;
   line-height: 1.45;
 }
@@ -66,11 +66,126 @@ body {
   color: var(--foreground);
 }
 
-/* Resize handles: slightly wider hit target without eating layout */
 [role="separator"] {
   transition: background-color 120ms ease;
 }
 
 [role="separator"]:active {
   background-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* ── Landing atmosphere ── */
+
+.landing-root {
+  position: relative;
+}
+
+.landing-atmosphere {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 20%, rgba(94, 230, 168, 0.14), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 70%, rgba(125, 211, 252, 0.08), transparent 50%),
+    linear-gradient(165deg, #07090d 0%, #0d1218 45%, #0a100e 100%);
+}
+
+.landing-grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(to right, rgba(42, 49, 64, 0.45) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(42, 49, 64, 0.45) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
+  animation: grid-drift 28s linear infinite;
+}
+
+.landing-rank-row {
+  opacity: 0;
+  animation: fade-up 0.7s ease forwards;
+}
+
+/* ── Motion ── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 48px 48px;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes console-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease both;
+}
+
+.animate-fade-up-delay-1 {
+  animation: fade-up 0.7s ease 0.1s both;
+}
+
+.animate-fade-up-delay-2 {
+  animation: fade-up 0.7s ease 0.2s both;
+}
+
+.animate-fade-up-delay-3 {
+  animation: fade-up 0.7s ease 0.32s both;
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.animate-console-in {
+  animation: console-in 0.45s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-grid,
+  .animate-fade-up,
+  .animate-fade-up-delay-1,
+  .animate-fade-up-delay-2,
+  .animate-fade-up-delay-3,
+  .animate-float-slow,
+  .animate-console-in,
+  .landing-rank-row {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

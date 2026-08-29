@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const display = Syne({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
+const mono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "sequa SME Reviewer",
+  title: {
+    default: "Defensible · sequa SME Reviewer",
+    template: "%s · Defensible",
+  },
   description:
-    "Batch review of sequa gGmbH SME Support Scheme applications — ranked, cited, interrogable.",
+    "Ranked, cited shortlist for the sequa gGmbH SME Support Scheme — eligibility, contradictions, and interrogable scores.",
 };
 
 export default function RootLayout({
@@ -26,11 +30,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${display.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="h-full overflow-hidden bg-background text-foreground">
-        {children}
-      </body>
+      <body className="min-h-full bg-background text-foreground">{children}</body>
     </html>
   );
 }

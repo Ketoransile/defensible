@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Application, Assessment, BatchResult, FieldPath } from "@/types";
+import { logoutAction } from "@/app/actions/auth";
 import { BatchView } from "./BatchView";
 import { CitationInspector } from "./CitationInspector";
 import { CompanyDetail } from "./CompanyDetail";
@@ -11,9 +12,14 @@ import { formatPct } from "./format";
 interface ReviewerAppProps {
   batch: BatchResult;
   applications: Record<string, Application>;
+  reviewerName: string;
 }
 
-export function ReviewerApp({ batch, applications }: ReviewerAppProps) {
+export function ReviewerApp({
+  batch,
+  applications,
+  reviewerName,
+}: ReviewerAppProps) {
   const assessments = batch.assessments;
   const [selectedId, setSelectedId] = useState<string | null>(
     assessments[0]?.applicationId ?? null,
@@ -56,24 +62,30 @@ export function ReviewerApp({ batch, applications }: ReviewerAppProps) {
     );
 
   return (
-    <div className="flex h-dvh max-h-dvh min-h-0 flex-col overflow-hidden bg-background text-foreground">
+    <div className="animate-console-in flex h-dvh max-h-dvh min-h-0 flex-col overflow-hidden bg-background font-mono text-foreground">
       <header className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-border bg-surface px-4 py-2">
         <div className="flex items-baseline gap-3">
-          <h1 className="text-[15px] font-semibold tracking-tight">
-            sequa SME Reviewer
+          <h1 className="font-[family-name:var(--font-display)] text-[15px] font-semibold tracking-tight">
+            Defensible
           </h1>
-          <span className="hidden font-mono text-[10px] tracking-[0.16em] text-muted uppercase sm:inline">
-            Operator console
+          <span className="hidden text-[10px] tracking-[0.16em] text-muted uppercase sm:inline">
+            sequa console
           </span>
         </div>
-        <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] text-muted">
+        <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted">
+          <span>{reviewerName}</span>
           <span>{assessments.length} apps</span>
-          <span className="hidden md:inline">
-            {new Date(batch.generatedAt).toLocaleString()}
-          </span>
           <span className="rounded border border-accent/30 bg-accent-dim px-1.5 py-0.5 text-accent">
             Cited scores only
           </span>
+          <form action={logoutAction}>
+            <button
+              type="submit"
+              className="text-muted transition hover:text-foreground"
+            >
+              Sign out
+            </button>
+          </form>
         </div>
       </header>
 
@@ -139,7 +151,7 @@ export function ReviewerApp({ batch, applications }: ReviewerAppProps) {
         </section>
       </div>
 
-      <footer className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-border bg-surface px-4 py-1.5 font-mono text-[10px] text-muted">
+      <footer className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-border bg-surface px-4 py-1.5 text-[10px] text-muted">
         <span>Official sequa grid · click a citation to inspect the field</span>
         {selected && (
           <span>
