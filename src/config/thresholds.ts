@@ -20,6 +20,8 @@ export const THRESHOLDS = {
   projectionBreakFactor: 2.5,
 
   eligibilityMinYearsExclusive: 2,
+  /** Calendar year of this application round. Used by YEARS_VS_HISTORY. */
+  applicationYear: 2026,
   sequaEquipmentCapEur: SEQUA_EQUIPMENT_CAP_EUR,
   etbPerEur: DEFAULT_ETB_PER_EUR,
   maxConsultantRequests: 3,

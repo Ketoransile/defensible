@@ -7,6 +7,8 @@ import {
   type BatchResult,
   type CriterionScore,
 } from "@/types";
+import { runChecks } from "./checks";
+import { evaluateEligibility } from "./eligibility";
 import { scoreApplication, selectJobCreationTrack } from "./score";
 
 function totals(criteria: CriterionScore[]): {
@@ -27,41 +29,49 @@ function totals(criteria: CriterionScore[]): {
   };
 }
 
-/**
- * Assembles one assessment. Eligibility and findings are filled by the
- * engine track (`eligibility.ts`, `checks/`). Until those land, they are
- * empty so the UI can render scores immediately.
- */
+function rankAssessments(a: Assessment, b: Assessment): number {
+  const excluded = Number(a.eligibility.verdict === "excluded") - Number(b.eligibility.verdict === "excluded");
+  if (excluded !== 0) return excluded;
+  if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+  return b.confidence - a.confidence;
+}
+
 export function assessApplication(app: Application): Assessment {
   const criteria = scoreApplication(app);
   const jobCreationTrack = selectJobCreationTrack(app);
+  const eligibility = evaluateEligibility(app);
+  const findings = runChecks(app);
   const { totalPoints, maxAvailablePoints, confidence } = totals(criteria);
-  const openQuestions = criteria
-    .filter((c) => c.status === "unestablished")
-    .map((c) => c.openQuestion);
+
+  const openQuestions = [
+    ...eligibility.checks
+      .filter((c) => c.verdict !== "eligible" && c.openQuestion)
+      .map((c) => c.openQuestion as string),
+    ...criteria.filter((c) => c.status === "unestablished").map((c) => c.openQuestion),
+    ...findings
+      .filter((f) => f.severity !== "flag")
+      .map((f) => `${f.title}: ${f.explanation}`),
+  ];
+
+  const trackLabel = jobCreationTrack.id.replaceAll("_", " ");
 
   return {
     applicationId: app.id,
     companyName: app.companyName,
-    eligibility: {
-      verdict: "eligible",
-      checks: [],
-    },
-    findings: [],
+    eligibility,
+    findings,
     jobCreationTrack,
     criteria,
     totalPoints,
     maxAvailablePoints,
     confidence,
-    justification: `${app.companyName ?? app.id} scores ${totalPoints} of ${maxAvailablePoints} established points on the ${jobCreationTrack.id.replace("_", " ")} track.`,
+    justification: `${app.companyName ?? app.id} scores ${totalPoints} of ${maxAvailablePoints} established points (${trackLabel} track). Eligibility: ${eligibility.verdict}. ${findings.length} finding(s).`,
     openQuestions,
   };
 }
 
 export function assessBatch(apps: Application[] = loadApplications()): BatchResult {
-  const assessments = apps
-    .map(assessApplication)
-    .sort((a, b) => b.totalPoints - a.totalPoints || b.confidence - a.confidence);
+  const assessments = apps.map(assessApplication).sort(rankAssessments);
 
   return {
     assessments,

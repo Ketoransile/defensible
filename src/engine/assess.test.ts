@@ -4,11 +4,22 @@ import { selectJobCreationTrack } from "@/engine/score";
 import { loadApplication } from "@/lib/loadFixtures";
 
 describe("assessBatch", () => {
-  it("returns twelve ranked assessments on the 100-point grid", () => {
+  it("returns twelve assessments and ranks excluded last", () => {
     const batch = assessBatch();
     expect(batch.assessments).toHaveLength(12);
-    const points = batch.assessments.map((a) => a.totalPoints);
+    const excluded = batch.assessments.filter(
+      (a) => a.eligibility.verdict === "excluded",
+    );
+    expect(excluded.length).toBeGreaterThan(0);
+    const last = batch.assessments.slice(-excluded.length);
+    expect(last.every((a) => a.eligibility.verdict === "excluded")).toBe(true);
+
+    const active = batch.assessments.filter(
+      (a) => a.eligibility.verdict !== "excluded",
+    );
+    const points = active.map((a) => a.totalPoints);
     expect(points).toEqual([...points].sort((a, b) => b - a));
+
     for (const a of batch.assessments) {
       expect(a.criteria).toHaveLength(12);
       expect(a.jobCreationTrack.criterionId).toBeTruthy();
