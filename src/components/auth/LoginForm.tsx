@@ -59,7 +59,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-sm bg-accent px-4 py-3 text-[14px] font-semibold text-[#06281c] transition hover:brightness-110 disabled:opacity-60"
+        className="w-full rounded-md bg-accent px-4 py-3 text-[14px] font-semibold text-white transition hover:brightness-110 disabled:opacity-60 dark:text-[#06281c]"
       >
         {pending ? "Checking…" : "Enter review console"}
       </button>

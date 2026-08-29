@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Application, BatchResult } from "@/types";
 import { logoutAction } from "@/app/actions/auth";
+import { ThemeToggle } from "@/components/theme/ThemeProvider";
 import { CompanyReview } from "./CompanyReview";
 import { Shortlist } from "./Shortlist";
 
@@ -24,8 +25,7 @@ export function ReviewerApp({
   const selectedIndex = assessments.findIndex(
     (a) => a.applicationId === selectedId,
   );
-  const selected =
-    selectedIndex >= 0 ? assessments[selectedIndex] : null;
+  const selected = selectedIndex >= 0 ? assessments[selectedIndex] : null;
   const application =
     selected != null ? (applications[selected.applicationId] ?? null) : null;
 
@@ -49,21 +49,22 @@ export function ReviewerApp({
   return (
     <div className="animate-console-in min-h-dvh bg-background text-foreground">
       <header className="sticky top-0 z-20 border-b border-border/80 bg-background/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
           <div className="flex items-baseline gap-3">
-            <h1 className="font-[family-name:var(--font-display)] text-[17px] font-semibold tracking-tight">
+            <h1 className="font-[family-name:var(--font-display)] text-[18px] font-semibold tracking-tight">
               Defensible
             </h1>
             <span className="hidden font-mono text-[10px] tracking-[0.14em] text-muted uppercase sm:inline">
               sequa reviewer
             </span>
           </div>
-          <div className="flex items-center gap-3 text-[13px] text-muted">
-            <span className="hidden sm:inline">{reviewerName}</span>
+          <div className="flex items-center gap-2 sm:gap-3 text-[13px] text-muted">
+            <span className="hidden md:inline">{reviewerName}</span>
+            <ThemeToggle />
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="transition hover:text-foreground"
+                className="rounded-md border border-border bg-surface px-3 py-1.5 text-[12px] transition hover:text-foreground"
               >
                 Sign out
               </button>
@@ -80,9 +81,7 @@ export function ReviewerApp({
             assessment={selected}
             application={application}
             onBack={backToList}
-            onPrev={
-              selectedIndex > 0 ? () => goRelative(-1) : undefined
-            }
+            onPrev={selectedIndex > 0 ? () => goRelative(-1) : undefined}
             onNext={
               selectedIndex < assessments.length - 1
                 ? () => goRelative(1)

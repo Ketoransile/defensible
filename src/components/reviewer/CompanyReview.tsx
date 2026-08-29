@@ -209,7 +209,7 @@ export function CompanyReview({
   })();
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-8 sm:py-8">
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <button
           type="button"

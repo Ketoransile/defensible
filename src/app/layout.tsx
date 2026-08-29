@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, JetBrains_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import "./globals.css";
 
 const display = Syne({
@@ -22,6 +23,8 @@ export const metadata: Metadata = {
     "Ranked, cited shortlist for the sequa gGmbH SME Support Scheme — eligibility, contradictions, and interrogable scores.",
 };
 
+const themeInitScript = `(function(){try{var t=localStorage.getItem('defensible-theme');if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,9 +33,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${display.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-background text-foreground">{children}</body>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body className="min-h-full bg-background text-foreground">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

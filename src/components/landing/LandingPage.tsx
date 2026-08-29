@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme/ThemeProvider";
 
 export function LandingPage() {
   return (
@@ -6,19 +7,22 @@ export function LandingPage() {
       <div className="landing-atmosphere" aria-hidden />
       <div className="landing-grid" aria-hidden />
 
-      <header className="relative z-10 flex items-center justify-between px-6 py-5 md:px-10">
+      <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
         <p className="font-[family-name:var(--font-display)] text-lg tracking-tight md:text-xl">
           Defensible
         </p>
-        <Link
-          href="/login"
-          className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase transition hover:text-accent"
-        >
-          Sign in
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link
+            href="/login"
+            className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase transition hover:text-accent"
+          >
+            Sign in
+          </Link>
+        </div>
       </header>
 
-      <section className="relative z-10 flex min-h-[calc(100dvh-4.5rem)] flex-col justify-end px-6 pb-16 md:justify-center md:px-10 md:pb-24">
+      <section className="relative z-10 mx-auto flex min-h-[calc(100dvh-4.5rem)] max-w-6xl flex-col justify-end px-6 pb-16 md:justify-center md:px-10 md:pb-24">
         <div className="max-w-3xl">
           <p className="animate-fade-up font-mono text-[11px] tracking-[0.22em] text-accent uppercase">
             sequa SME Support Scheme · Ethiopia
@@ -26,14 +30,14 @@ export function LandingPage() {
           <h1 className="animate-fade-up-delay-1 mt-4 font-[family-name:var(--font-display)] text-[clamp(2.75rem,8vw,5.5rem)] leading-[0.95] tracking-tight">
             Defensible
           </h1>
-          <p className="animate-fade-up-delay-2 mt-5 max-w-xl text-[17px] leading-7 text-foreground/80 md:text-[18px]">
+          <p className="animate-fade-up-delay-2 mt-5 max-w-xl text-[17px] leading-7 text-muted md:text-[18px]">
             A ranked shortlist you can interrogate — every score cites a field,
             every contradiction is shown, and gaps stay unestablished.
           </p>
           <div className="animate-fade-up-delay-3 mt-8 flex flex-wrap items-center gap-4">
             <Link
               href="/login"
-              className="rounded-sm bg-accent px-6 py-3 text-[14px] font-semibold text-[#06281c] transition hover:brightness-110"
+              className="rounded-md bg-accent px-6 py-3 text-[14px] font-semibold text-white shadow-sm transition hover:brightness-110 dark:text-[#06281c]"
             >
               Open the reviewer
             </Link>
@@ -44,10 +48,10 @@ export function LandingPage() {
         </div>
 
         <div
-          className="pointer-events-none absolute inset-y-10 right-0 hidden w-[46%] lg:block"
+          className="pointer-events-none absolute inset-y-10 right-0 hidden w-[42%] xl:block"
           aria-hidden
         >
-          <div className="landing-rank-panel animate-float-slow mr-10 h-full max-h-[34rem] overflow-hidden rounded-sm border border-border/80 bg-surface/70 p-4 backdrop-blur-sm">
+          <div className="landing-rank-panel animate-float-slow mr-6 h-full max-h-[34rem] overflow-hidden rounded-xl border border-border bg-surface/80 p-4 shadow-sm backdrop-blur-sm">
             <p className="mb-3 font-mono text-[10px] tracking-[0.18em] text-muted uppercase">
               Live shortlist preview
             </p>
@@ -59,10 +63,12 @@ export function LandingPage() {
             ].map((row, i) => (
               <div
                 key={row[0]}
-                className="landing-rank-row mb-2 flex items-center gap-3 border border-border/50 bg-background/50 px-3 py-2.5"
+                className="landing-rank-row mb-2 flex items-center gap-3 rounded-md border border-border/60 bg-background/70 px-3 py-2.5"
                 style={{ animationDelay: `${0.35 + i * 0.12}s` }}
               >
-                <span className="w-6 font-mono text-[11px] text-muted">{row[0]}</span>
+                <span className="w-6 font-mono text-[11px] text-muted">
+                  {row[0]}
+                </span>
                 <span className="flex-1 text-[13px]">{row[1]}</span>
                 <span className="font-mono text-[12px] text-accent">{row[2]}</span>
                 <span className="font-mono text-[10px] text-info">{row[3]}</span>
@@ -76,7 +82,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="relative z-10 border-t border-border/70 px-6 py-16 md:px-10">
+      <section className="relative z-10 mx-auto max-w-6xl border-t border-border/70 px-6 py-16 md:px-10">
         <p className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
           Why judges can trust it
         </p>
@@ -105,7 +111,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <footer className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-t border-border/70 px-6 py-5 font-mono text-[10px] text-muted md:px-10">
+      <footer className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-t border-border/70 px-6 py-5 font-mono text-[10px] text-muted md:px-10">
         <span>Hackathon Challenge 1 · sequa gGmbH SME Support Scheme</span>
         <Link href="/login" className="text-accent hover:underline">
           Enter console →

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { ThemeToggle } from "@/components/theme/ThemeProvider";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 
 export const metadata: Metadata = {
@@ -18,7 +19,11 @@ export default async function LoginPage() {
       <div className="landing-atmosphere" aria-hidden />
       <div className="landing-grid" aria-hidden />
 
-      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-6 py-16">
+      <div className="relative z-10 flex justify-end px-6 pt-5">
+        <ThemeToggle />
+      </div>
+
+      <main className="relative z-10 mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-6 py-12">
         <p className="animate-fade-up font-mono text-[11px] tracking-[0.2em] text-accent uppercase">
           Reviewer access
         </p>
@@ -26,8 +31,8 @@ export default async function LoginPage() {
           Defensible
         </h1>
         <p className="animate-fade-up-delay-2 mt-3 mb-8 max-w-md text-[14px] leading-6 text-muted">
-          Sign in to open the ranked, cited shortlist console. Scores stay in
-          code — never invented by the model.
+          Sign in to open the ranked, cited shortlist. Scores stay in code —
+          never invented by the model.
         </p>
         <div className="animate-fade-up-delay-3">
           <LoginForm />
