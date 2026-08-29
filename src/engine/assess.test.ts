@@ -1,0 +1,26 @@
+import { describe, expect, it } from "vitest";
+import { assessBatch } from "@/engine/assess";
+import { selectJobCreationTrack } from "@/engine/score";
+import { loadApplication } from "@/lib/loadFixtures";
+
+describe("assessBatch", () => {
+  it("returns twelve ranked assessments on the 100-point grid", () => {
+    const batch = assessBatch();
+    expect(batch.assessments).toHaveLength(12);
+    const points = batch.assessments.map((a) => a.totalPoints);
+    expect(points).toEqual([...points].sort((a, b) => b - a));
+    for (const a of batch.assessments) {
+      expect(a.criteria).toHaveLength(12);
+      expect(a.jobCreationTrack.criterionId).toBeTruthy();
+    }
+  });
+
+  it("uses 7b for Alem (equipment) and still assesses the sparse applicant", () => {
+    const alem = loadApplication("01-alem-leather");
+    expect(selectJobCreationTrack(alem).id).toBe("investment_readiness");
+    const batch = assessBatch();
+    expect(batch.assessments.some((a) => a.applicationId === "11-sparse-workshop")).toBe(
+      true,
+    );
+  });
+});

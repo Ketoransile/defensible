@@ -24,6 +24,8 @@ export const THRESHOLDS = {
   etbPerEur: DEFAULT_ETB_PER_EUR,
   maxConsultantRequests: 3,
   requiredPriorityAreas: 3,
+  /** Form 2.5: jobs created in the next 15 months. 7a uses newJobs × this. */
+  jobHorizonMonths: 15,
 } as const;
 
 export type Thresholds = {

@@ -132,16 +132,21 @@ export interface Finding {
   values: Record<string, unknown>;
 }
 
+/** Leaf ids from the official sequa Company Evaluation grid. */
 export type CriterionId =
-  | "growth_trajectory"
-  | "job_creation"
-  | "employment_inclusion"
-  | "market_position"
+  | "success_story_sales"
+  | "success_story_employment"
   | "uniqueness"
-  | "intervention_fit"
+  | "market_served"
+  | "supply_chain"
+  | "ownership_gender"
+  | "women_employees"
+  | "youth_employees"
+  | "expected_results"
+  | "job_creation_employability"
+  | "job_creation_investment"
   | "management_capacity"
-  | "local_sourcing"
-  | "social_environmental_osh";
+  | "social_environmental";
 
 export interface ScoredCriterion {
   criterionId: CriterionId;
@@ -178,15 +183,25 @@ export interface EligibilityResult {
   checks: EligibilityCheck[];
 }
 
+export type JobCreationTrackId = "employability" | "investment_readiness";
+
+export interface JobCreationTrack {
+  id: JobCreationTrackId;
+  criterionId: "job_creation_employability" | "job_creation_investment";
+  reason: string;
+  fields: FieldPath[];
+}
+
 export interface Assessment {
   applicationId: string;
   companyName: string | null;
   eligibility: EligibilityResult;
   findings: Finding[];
+  jobCreationTrack: JobCreationTrack;
   criteria: CriterionScore[];
   totalPoints: number;
   maxAvailablePoints: number;
-  confidence: number; // maxAvailablePoints / 100 — not a model self-report
+  confidence: number; // maxAvailablePoints / GRID_MAX_POINTS — not a model self-report
   justification: string;
   openQuestions: string[];
 }

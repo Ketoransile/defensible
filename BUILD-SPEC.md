@@ -13,7 +13,7 @@ A batch of SME funding applications goes in. A ranked, defensible shortlist come
 For each application the system:
 1. Runs an **eligibility gate** (mechanical, from the form's stated criteria)
 2. Runs a **contradiction engine** (deterministic code, no LLM)
-3. Scores **nine criteria** with an explicit weighted model, each score citing the exact fields that justify it
+3. Scores the **official sequa evaluation grid** (banded, weighted, each score citing the exact fields that justify it)
 4. Returns `unestablished` plus an open question wherever the data does not support a score
 5. Produces a ranked list with per-company justification, findings, and site-visit questions
 
@@ -44,17 +44,15 @@ Stated eligibility criteria (verbatim from the form):
 
 Source form: https://form.jotform.com/251212903767052
 
-### Important: the scoring grid is not published
+### Official scoring grid
 
-The challenge owner directed us to the form and said everything is there. There is no grid document. So:
+Source: `docs/Company_Evaluation_grid.pdf`. The challenge owner published the grid. We do **not** derive weights.
 
-- We **derive** a nine-criterion weighted model from the form's structure and the programme's stated goals
-- We **state this openly** in the demo
-- The weights live in an **editable config**, surfaced in the UI, so a reviewer can tune them and watch the ranking reorder
+The LLM never invents a number. Band matching is plain TypeScript. Qualitative bands (market, green sector) are keyword rules over cited fields, not free-form model scores.
 
-This is a feature, not a compromise. An adjustable transparent model beats a hardcoded guess.
+The eligibility gate and the contradiction engine are unchanged: they come from the form and are provably correct.
 
-The eligibility gate and the contradiction engine are **not** derived. They come straight from the form and are provably correct.
+Weights stay in `src/config/criteria.ts` and remain visible in the UI so a reviewer can see the official bands. Do not silently replace official bands with a homemade 100-point model.
 
 ---
 
@@ -196,15 +194,19 @@ export interface Finding {
 // ─── Scoring ───
 
 export type CriterionId =
-  | "growth_trajectory"
-  | "job_creation"
-  | "employment_inclusion"
-  | "market_position"
+  | "success_story_sales"
+  | "success_story_employment"
   | "uniqueness"
-  | "intervention_fit"
+  | "market_served"
+  | "supply_chain"
+  | "ownership_gender"
+  | "women_employees"
+  | "youth_employees"
+  | "expected_results"
+  | "job_creation_employability"
+  | "job_creation_investment"
   | "management_capacity"
-  | "local_sourcing"
-  | "social_environmental_osh";
+  | "social_environmental";
 
 export interface ScoredCriterion {
   criterionId: CriterionId;
@@ -247,7 +249,7 @@ export interface Assessment {
   criteria: CriterionScore[];
   totalPoints: number;         // sum of scored points
   maxAvailablePoints: number;  // excludes unestablished criteria
-  confidence: number;          // maxAvailablePoints / 100
+  confidence: number;          // maxAvailablePoints / GRID_MAX_POINTS (100)
   justification: string;       // one paragraph
   openQuestions: string[];     // aggregated from unestablished criteria + findings
 }
@@ -259,7 +261,7 @@ export interface BatchResult {
 }
 ```
 
-**Note on `confidence`:** it is the share of the grid we could actually establish, not a model's self-report. Never ask an LLM how confident it is.
+**Note on `confidence`:** it is the share of the grid we could actually establish (`maxAvailablePoints / 100`), not a model's self-report. Never ask an LLM how confident it is.
 
 ---
 
@@ -329,30 +331,43 @@ Excluded applications still appear in the output, ranked last, clearly marked. N
 
 ## 6. Scoring model
 
-`src/config/criteria.ts` — weights here, not in code. Surfaced and editable in the UI.
+`src/config/criteria.ts` — official bands, not a derived model.
 
-Starting weights, 100 points total:
+`GRID_MAX_POINTS = 100`, matching the PDF footer. **7a and 7b are alternative tracks, not additive.** Pick one per application:
 
-| Criterion | Points | Primary source fields |
-|---|---|---|
-| `growth_trajectory` | 15 | `growth.*.salesEtb` |
-| `job_creation` | 20 | `jobPositions`, `jobCreationNarrative`, `growth.2026_proj.totalEmployees` |
-| `employment_inclusion` | 12 | `growth.*.femaleEmployees`, `growth.*.youthEmployees`, `ownershipWomenPct` |
-| `market_position` | 12 | `marketOverview`, `products` |
-| `uniqueness` | 10 | `uniqueness`, `uniqueFeatures` |
-| `intervention_fit` | 13 | `problemsToAddress`, `equipmentRequests`, `consultantRequests`, `expectedResults` |
-| `management_capacity` | 8 | `managementTeam`, `organogramFile` |
-| `local_sourcing` | 5 | `localRawMaterialPct`, `keyRawMaterials` |
-| `social_environmental_osh` | 5 | `socialEnvironmentalImpact`, `oshCommitment` |
+- Machinery/equipment requested → **7b investment readiness**
+- Otherwise → **7a employability**
+
+The unused track is omitted from the assessment, never scored as zero.
+
+| SN | Criterion | Points | Source fields | How scored |
+|---|---|---|---|---|
+| 1.1 | Sales growth | 5 | `growth.2023.salesEtb`, `growth.2024.salesEtb` | YoY %: >50 → 5; 25–50 → 3; <24 → 0 |
+| 1.2 | Employment | 5 | `growth.2024.totalEmployees` | >20 → 5; 11–20 → 3; 6–10 → 1; <5 → 0 |
+| 2 | Uniqueness (USP) | 5 | `uniqueness`, `uniqueFeatures` | new in Ethiopia → 5; unique features → 3; essential (form has no option) → 2; none → 1 |
+| 3 | Market served | 5 | `marketOverview`, `products` | international/export → 5; import substituting → 3; local → 2 |
+| 4 | Supply chain | 5 | `localRawMaterialPct` | ≥75 → 5; 40–74 → 3; 20–39 → 1; <20 → 0. Null → unestablished |
+| 5.1 | Ownership / managed | 5 | `ownershipWomenPct`, `managementTeam` | any women ownership → 5; else women manager → 3; else 0 |
+| 5.2 | Women employees % | 5 | `growth.2024.femaleEmployees` / total | >50 → 5; 41–50 → 4; 30–40 → 3; 1–29 → 2; 0 → 0 |
+| 5.3 | Youth employees % | 5 | `growth.2024.youthEmployees` / total | same bands as 5.2 |
+| 6 | Expected results | 20 | `expectedResults` | 3 areas → 20; 2 → 15; 1 → 10 |
+| 7a | Job creation (employability) | 25 | `jobPositions` | person-months = new jobs × 15: ≥400 → 25; 300–399 → 20; 200–299 → 15; else 0 |
+| 7b | Job creation (investment readiness) | 25 | `jobPositions` | headcount: ≥25 → 25; 20–24 → 15; 15–19 → 5; else 0 |
+| 8 | Management capacity | 5 | `managementTeam` | ≥4 named → 5; 3 → 3; 2 → 0 |
+| 9 | Social / environmental / green | 10 | `socialEnvironmentalImpact`, `oshCommitment` | green-sector keywords → 10; both social+env → 8; one → 5; neither → 0 |
+
+**7a unit:** person-months (`newJobs × 15`). **7b unit:** new-job headcount. Only one of them is applied.
 
 Scoring pipeline per criterion:
-1. Extract only that criterion's source fields from the application
-2. If required fields are null or unusable → return `UnestablishedCriterion` with an open question. **Do not send it to the LLM.**
-3. Otherwise pass those fields to the LLM with the rubric, requiring points, reasoning, and citations in JSON
-4. **Validate every returned citation resolves to a real field path.** Invalid citation → discard and retry once → then `unestablished`
+1. Extract only that criterion's source fields
+2. If required fields are null or unusable → `UnestablishedCriterion` with an open question. **Do not invent a band.**
+3. Match the official band in TypeScript. Attach reasoning and citations.
+4. **Validate every citation resolves to a real field path.**
 5. Clamp points to `0..maxPoints`
 
 `totalPoints` sums only scored criteria. `confidence` is `maxAvailablePoints / 100`. Never scale an incomplete score up to look complete.
+
+Qualitative bands (3, 9) use cited text + keyword rules. They are still code. An LLM may later *explain* a band; it may not pick the number.
 
 ---
 
@@ -388,7 +403,7 @@ The challenge owner will supply real sample data later. Build against fixtures n
 
 **Batch view.** Ranked table: rank, company, total points, confidence, finding badges, eligibility status. Excluded rows visually distinct at the bottom. Weight sliders in a side panel that re-rank live.
 
-**Company detail.** Nine criteria as rows. Each expands to reasoning and citations. **Clicking a citation shows the actual field value from the application.** Unestablished criteria render in a distinct style with their open question, never as zero.
+**Company detail.** Official grid rows (grouped 1–9). Criterion 7 shows only the chosen track (7a or 7b) plus why. Each row expands to the matched band, reasoning, and citations. **Clicking a citation shows the actual field value from the application.** Unestablished criteria render in a distinct style with their open question, never as zero.
 
 **Findings panel.** Each finding shows both conflicting values side by side with their field paths. This is what wins the demo. Make it clear and make it big.
 
@@ -398,25 +413,17 @@ Judges must be able to click anything and get an answer. If they can only watch,
 
 ## 9. Build order
 
-Types and fixtures first. Then split.
+Types, fixtures, official grid scorer, and 7a/7b track selection are done.
 
-**Person B — engine and UI**
-1. `src/types/index.ts` (jointly agreed)
-2. All twelve fixtures + manifest
-3. Contradiction engine, one check at a time, unit tested against the manifest
-4. Batch view, then company detail, then findings panel
+Split is in `TEAM-PLAN.md`. Short version:
 
-**Person A — pipeline and scoring**
-1. Fixture loader and field-path resolver (`get(app, "growth.2024.salesEtb")`)
-2. Citation validator (used by both, build early)
-3. Eligibility gate
-4. Per-criterion scoring with the LLM, in parallel across criteria
-5. Ranking and justification paragraphs
+**Ketoransile — engine:** eligibility + contradiction checks, wire into `assess.ts`.  
+**Amir — UI:** batch view, company detail, citation click-through, findings panel.
 
-Merge around hour 13.
+Do not edit each other's folders. `assessBatch()` is the join point.
 
 ### Performance
-Score criteria in parallel per application, and applications in parallel across the batch. Cache every LLM response to disk keyed by application id and criterion id, so repeat runs are instant and the demo works offline.
+`assessBatch` is synchronous over fixtures. Cache LLM responses to disk only if an LLM path is added later. The demo must run with the wifi off.
 
 ---
 

@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { CRITERIA, DEFAULT_WEIGHTS, totalWeight } from "@/config/criteria";
+import { CRITERIA, GRID_MAX_POINTS, activeWeightSum } from "@/config/criteria";
 import { loadApplications, loadManifest, MANIFEST } from "@/lib/loadFixtures";
 
 describe("scoring grid", () => {
-  it("sums to 100 points", () => {
-    expect(totalWeight(DEFAULT_WEIGHTS)).toBe(100);
-    expect(CRITERIA).toHaveLength(9);
+  it("live grid is 100 after choosing 7a or 7b", () => {
+    expect(CRITERIA).toHaveLength(13);
+    expect(GRID_MAX_POINTS).toBe(100);
+    expect(activeWeightSum("job_creation_employability")).toBe(100);
+    expect(activeWeightSum("job_creation_investment")).toBe(100);
   });
 });
 
