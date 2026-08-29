@@ -32,14 +32,14 @@ export default async function LoginPage() {
 
       <main className="relative z-10 mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-6 py-12">
         <p className="animate-fade-up font-mono text-[11px] tracking-[0.2em] text-accent uppercase">
-          Reviewer access
+          Simulated sign-in
         </p>
         <h1 className="animate-fade-up-delay-1 mt-3 font-[family-name:var(--font-display)] text-4xl tracking-tight md:text-5xl">
           Defensible
         </h1>
         <p className="animate-fade-up-delay-2 mt-3 mb-8 max-w-md text-[14px] leading-6 text-muted">
-          Sign in to open the ranked, cited shortlist. Scores stay in code —
-          never invented by the model.
+          Enter any username and the demo password to open the ranked, cited
+          shortlist.
         </p>
         <div className="animate-fade-up-delay-3">
           <LoginForm />

@@ -25,6 +25,8 @@ interface CompanyReviewProps {
   onBack: () => void;
   onPrev?: () => void;
   onNext?: () => void;
+  /** Side panel next to the ranked list (animated expand). */
+  variant?: "page" | "panel";
 }
 
 function ExpandSection({
@@ -195,8 +197,10 @@ export function CompanyReview({
   onBack,
   onPrev,
   onNext,
+  variant = "page",
 }: CompanyReviewProps) {
   const brief = assessment.brief;
+  const panel = variant === "panel";
   const groups = (() => {
     const map = new Map<string, CriterionScore[]>();
     for (const score of assessment.criteria) {
@@ -209,14 +213,26 @@ export function CompanyReview({
   })();
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-8 sm:py-8">
-      <div className="mb-6 flex flex-wrap items-center gap-2">
+    <div
+      className={
+        panel
+          ? "flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+          : "mx-auto w-full max-w-6xl px-4 py-6 sm:px-8 sm:py-8"
+      }
+    >
+      <div
+        className={
+          panel
+            ? "z-10 flex shrink-0 flex-wrap items-center gap-2 border-b border-border bg-background px-4 py-3 sm:px-6"
+            : "mb-6 flex flex-wrap items-center gap-2"
+        }
+      >
         <button
           type="button"
           onClick={onBack}
           className="rounded-sm border border-border px-3 py-1.5 text-[13px] text-muted transition hover:border-accent/40 hover:text-foreground"
         >
-          ← Shortlist
+          {panel ? "Close" : "← Shortlist"}
         </button>
         <div className="ml-auto flex gap-2">
           <button
@@ -238,13 +254,25 @@ export function CompanyReview({
         </div>
       </div>
 
-      <header className="mb-8">
+      <div
+        className={
+          panel
+            ? "min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 sm:px-6 sm:py-6"
+            : ""
+        }
+      >
+      <header className={panel ? "mb-6" : "mb-8"}>
         <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">
           Rank {assessment.rank} ·{" "}
           {eligibilityLabel(assessment.eligibility.verdict)} ·{" "}
           {trackTitle(assessment)}
         </p>
-        <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl tracking-tight sm:text-4xl">
+        <h2
+          className={[
+            "mt-2 font-[family-name:var(--font-display)] tracking-tight",
+            panel ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl",
+          ].join(" ")}
+        >
           {assessment.companyName ?? assessment.applicationId}
         </h2>
         <div className="mt-4 flex flex-wrap items-end gap-4">
@@ -263,7 +291,7 @@ export function CompanyReview({
         </p>
       </header>
 
-      <div className="space-y-4">
+      <div className="space-y-4 pb-8">
         <ExpandSection
           title="Why this rank"
           summary={brief.whyThisRank}
@@ -355,6 +383,7 @@ export function CompanyReview({
             ))}
           </div>
         </ExpandSection>
+      </div>
       </div>
     </div>
   );

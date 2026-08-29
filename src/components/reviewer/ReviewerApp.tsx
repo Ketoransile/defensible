@@ -20,7 +20,6 @@ export function ReviewerApp({
   reviewerName,
 }: ReviewerAppProps) {
   const assessments = batch.assessments;
-  const [view, setView] = useState<"list" | "detail">("list");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const selectedIndex = assessments.findIndex(
@@ -29,28 +28,26 @@ export function ReviewerApp({
   const selected = selectedIndex >= 0 ? assessments[selectedIndex] : null;
   const application =
     selected != null ? (applications[selected.applicationId] ?? null) : null;
+  const detailOpen = selected != null && application != null;
 
-  function openCompany(id: string) {
+  function selectCompany(id: string) {
     setSelectedId(id);
-    setView("detail");
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function backToList() {
-    setView("list");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  function closeDetail() {
+    setSelectedId(null);
   }
 
   function goRelative(delta: number) {
     const next = assessments[selectedIndex + delta];
     if (!next) return;
-    openCompany(next.applicationId);
+    setSelectedId(next.applicationId);
   }
 
   return (
-    <div className="animate-console-in min-h-dvh bg-background text-foreground">
-      <header className="sticky top-0 z-20 border-b border-border/80 bg-background/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
+    <div className="animate-console-in flex h-dvh flex-col overflow-hidden bg-background text-foreground">
+      <header className="z-20 shrink-0 border-b border-border/80 bg-background/90 backdrop-blur-md">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex items-baseline gap-3">
             <Link
               href="/"
@@ -62,7 +59,7 @@ export function ReviewerApp({
               sequa reviewer
             </span>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 text-[13px] text-muted">
+          <div className="flex items-center gap-2 text-[13px] text-muted sm:gap-3">
             <span className="hidden md:inline">{reviewerName}</span>
             <ThemeToggle />
             <form action={logoutAction}>
@@ -77,22 +74,65 @@ export function ReviewerApp({
         </div>
       </header>
 
-      <main className="pb-16">
-        {view === "list" || !selected || !application ? (
-          <Shortlist assessments={assessments} onOpen={openCompany} />
-        ) : (
-          <CompanyReview
-            assessment={selected}
-            application={application}
-            onBack={backToList}
-            onPrev={selectedIndex > 0 ? () => goRelative(-1) : undefined}
-            onNext={
-              selectedIndex < assessments.length - 1
-                ? () => goRelative(1)
-                : undefined
-            }
+      <main className="flex min-h-0 flex-1">
+        {/* Ranked list — full width on mobile until a row is opened */}
+        <aside
+          className={[
+            "flex min-h-0 flex-col border-border bg-surface",
+            detailOpen
+              ? "hidden w-full max-w-md border-r lg:flex lg:w-[min(420px,38%)] lg:shrink-0"
+              : "flex w-full lg:w-[min(420px,38%)] lg:shrink-0 lg:border-r",
+          ].join(" ")}
+        >
+          <Shortlist
+            assessments={assessments}
+            selectedId={selectedId}
+            onSelect={selectCompany}
           />
-        )}
+        </aside>
+
+        {/* Detail expands on the right with motion */}
+        <section
+          className={[
+            "relative min-h-0 min-w-0 flex-1 overflow-hidden bg-background",
+            detailOpen ? "flex flex-col" : "hidden lg:flex",
+          ].join(" ")}
+        >
+          {detailOpen ? (
+            <div
+              key={selected.applicationId}
+              className="review-detail-panel flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+            >
+              <CompanyReview
+                assessment={selected}
+                application={application}
+                variant="panel"
+                onBack={closeDetail}
+                onPrev={
+                  selectedIndex > 0 ? () => goRelative(-1) : undefined
+                }
+                onNext={
+                  selectedIndex < assessments.length - 1
+                    ? () => goRelative(1)
+                    : undefined
+                }
+              />
+            </div>
+          ) : (
+            <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
+              <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">
+                Company review
+              </p>
+              <p className="mt-3 max-w-sm font-[family-name:var(--font-display)] text-2xl tracking-tight">
+                Select a ranked applicant
+              </p>
+              <p className="mt-2 max-w-sm text-[14px] leading-6 text-muted">
+                Details expand here — scores, findings, and source fields for
+                the company you pick on the left.
+              </p>
+            </div>
+          )}
+        </section>
       </main>
     </div>
   );

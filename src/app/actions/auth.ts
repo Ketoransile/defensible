@@ -16,12 +16,18 @@ export async function loginAction(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
-  const name = String(formData.get("name") ?? "").trim();
-  const code = String(formData.get("code") ?? "").trim();
+  const name = String(
+    formData.get("username") ?? formData.get("name") ?? "",
+  ).trim();
+  const password = String(
+    formData.get("password") ?? formData.get("code") ?? "",
+  ).trim();
 
-  if (!name) return { error: "Enter your name to continue." };
-  if (code !== expectedAccessCode()) {
-    return { error: "Access code did not match. Try again." };
+  if (!name) return { error: "Enter a username to continue." };
+  if (password !== expectedAccessCode()) {
+    return {
+      error: `Wrong password. Use the demo password “${expectedAccessCode()}”.`,
+    };
   }
 
   const token = signSession({ name, exp: sessionExpiryMs() });

@@ -11,13 +11,16 @@ import {
 
 interface ShortlistProps {
   assessments: Assessment[];
-  onOpen: (id: string) => void;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
 }
 
 type EligibilityFilter = "all" | EligibilityVerdict;
 type TrackFilter = "all" | "7a" | "7b";
 type FindingsFilter = "all" | "with" | "clean";
 type SortKey = "rank" | "points" | "name";
+/** Cap how many filtered rows to render; 0 = show all. */
+type LimitOption = 0 | 5 | 10 | 25 | 50;
 
 function eligibilityTone(verdict: EligibilityVerdict): string {
   switch (verdict) {
@@ -44,7 +47,7 @@ function Chip({
       type="button"
       onClick={onClick}
       className={[
-        "rounded-full border px-3 py-1 text-[12px] transition",
+        "rounded-full border px-2.5 py-0.5 text-[11px] transition",
         active
           ? "border-accent bg-accent-dim text-accent"
           : "border-border bg-surface text-muted hover:border-border-strong hover:text-foreground",
@@ -55,7 +58,11 @@ function Chip({
   );
 }
 
-export function Shortlist({ assessments, onOpen }: ShortlistProps) {
+export function Shortlist({
+  assessments,
+  selectedId,
+  onSelect,
+}: ShortlistProps) {
   const [query, setQuery] = useState("");
   const [eligibility, setEligibility] = useState<EligibilityFilter>("all");
   const [track, setTrack] = useState<TrackFilter>("all");
@@ -63,8 +70,9 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
   const [rankMin, setRankMin] = useState("");
   const [rankMax, setRankMax] = useState("");
   const [sort, setSort] = useState<SortKey>("rank");
+  const [limit, setLimit] = useState<LimitOption>(0);
 
-  const filtered = useMemo(() => {
+  const matched = useMemo(() => {
     const min = rankMin === "" ? null : Number(rankMin);
     const max = rankMax === "" ? null : Number(rankMax);
     const q = query.trim().toLowerCase();
@@ -80,7 +88,8 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
       if (min != null && !Number.isNaN(min) && a.rank < min) return false;
       if (max != null && !Number.isNaN(max) && a.rank > max) return false;
       if (q) {
-        const hay = `${a.companyName ?? ""} ${a.applicationId} ${a.brief.headline}`.toLowerCase();
+        const hay =
+          `${a.companyName ?? ""} ${a.applicationId} ${a.brief.headline}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -108,6 +117,8 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
     sort,
   ]);
 
+  const filtered = limit > 0 ? matched.slice(0, limit) : matched;
+
   const hasFilters =
     query !== "" ||
     eligibility !== "all" ||
@@ -115,7 +126,8 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
     findings !== "all" ||
     rankMin !== "" ||
     rankMax !== "" ||
-    sort !== "rank";
+    sort !== "rank" ||
+    limit !== 0;
 
   function clearFilters() {
     setQuery("");
@@ -125,73 +137,79 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
     setRankMin("");
     setRankMax("");
     setSort("rank");
+    setLimit(0);
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-8">
-      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="shrink-0 space-y-3 border-b border-border px-4 py-4 sm:px-5">
         <div>
-          <p className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
-            Shortlist · {filtered.length} of {assessments.length} shown
+          <p className="font-mono text-[10px] tracking-[0.16em] text-muted uppercase">
+            {limit > 0 && matched.length > filtered.length
+              ? `Showing ${filtered.length} of ${matched.length} · ${assessments.length} total`
+              : matched.length !== assessments.length
+                ? `${matched.length} matched · ${assessments.length} total`
+                : `${assessments.length} applications`}
           </p>
-          <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl tracking-tight md:text-4xl">
-            Ranked applicants
+          <h2 className="mt-1 font-[family-name:var(--font-display)] text-xl tracking-tight">
+            Ranked shortlist
           </h2>
-          <p className="mt-2 max-w-2xl text-[15px] leading-6 text-muted">
-            Filter the ranked list, then open a company to inspect scores and
-            source fields.
-          </p>
         </div>
-      </div>
 
-      <div className="mb-6 space-y-4 rounded-xl border border-border bg-surface p-4 shadow-sm sm:p-5">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search company…"
+          className="w-full rounded-md border border-border bg-background px-3 py-2 text-[13px] outline-none transition focus:border-accent"
+        />
+
+        <div className="flex flex-wrap items-center gap-2">
           <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search company or headline…"
-            className="w-full flex-1 rounded-md border border-border bg-background px-3 py-2.5 text-[14px] outline-none transition focus:border-accent"
+            type="number"
+            min={1}
+            value={rankMin}
+            onChange={(e) => setRankMin(e.target.value)}
+            placeholder="Rank from"
+            className="w-[4.5rem] rounded-md border border-border bg-background px-2 py-1.5 text-[12px] outline-none focus:border-accent"
           />
-          <div className="flex flex-wrap items-center gap-2">
-            <label className="font-mono text-[11px] text-muted">Ranks</label>
-            <input
-              type="number"
-              min={1}
-              value={rankMin}
-              onChange={(e) => setRankMin(e.target.value)}
-              placeholder="From"
-              className="w-20 rounded-md border border-border bg-background px-2 py-2 text-[13px] outline-none focus:border-accent"
-            />
-            <span className="text-muted">–</span>
-            <input
-              type="number"
-              min={1}
-              value={rankMax}
-              onChange={(e) => setRankMax(e.target.value)}
-              placeholder="To"
-              className="w-20 rounded-md border border-border bg-background px-2 py-2 text-[13px] outline-none focus:border-accent"
-            />
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as SortKey)}
-              className="rounded-md border border-border bg-background px-3 py-2 text-[13px] outline-none focus:border-accent"
-            >
-              <option value="rank">Sort: rank</option>
-              <option value="points">Sort: points</option>
-              <option value="name">Sort: name</option>
-            </select>
-          </div>
+          <span className="text-muted">–</span>
+          <input
+            type="number"
+            min={1}
+            value={rankMax}
+            onChange={(e) => setRankMax(e.target.value)}
+            placeholder="To"
+            className="w-[4.5rem] rounded-md border border-border bg-background px-2 py-1.5 text-[12px] outline-none focus:border-accent"
+          />
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortKey)}
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-[12px] outline-none focus:border-accent"
+          >
+            <option value="rank">Rank</option>
+            <option value="points">Points</option>
+            <option value="name">Name</option>
+          </select>
+          <select
+            value={limit}
+            onChange={(e) => setLimit(Number(e.target.value) as LimitOption)}
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-[12px] outline-none focus:border-accent"
+            aria-label="Number of applications to show"
+          >
+            <option value={0}>Show all</option>
+            <option value={5}>Show 5</option>
+            <option value={10}>Show 10</option>
+            <option value={25}>Show 25</option>
+            <option value={50}>Show 50</option>
+          </select>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <span className="self-center font-mono text-[10px] tracking-wider text-muted uppercase">
-            Eligibility
-          </span>
+        <div className="flex flex-wrap gap-1.5">
           {(
             [
               ["all", "All"],
               ["eligible", "Eligible"],
-              ["unestablished", "Unestablished"],
+              ["unestablished", "Unest."],
               ["excluded", "Excluded"],
             ] as const
           ).map(([value, label]) => (
@@ -205,15 +223,12 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <span className="self-center font-mono text-[10px] tracking-wider text-muted uppercase">
-            Track
-          </span>
+        <div className="flex flex-wrap items-center gap-1.5">
           {(
             [
-              ["all", "All"],
-              ["7a", "7a Employability"],
-              ["7b", "7b Investment"],
+              ["all", "All tracks"],
+              ["7a", "7a"],
+              ["7b", "7b"],
             ] as const
           ).map(([value, label]) => (
             <Chip
@@ -224,21 +239,15 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
               {label}
             </Chip>
           ))}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="self-center font-mono text-[10px] tracking-wider text-muted uppercase">
-            Findings
-          </span>
           {(
             [
-              ["all", "All"],
+              ["all", "All findings"],
               ["with", "Has findings"],
-              ["clean", "Clean only"],
+              ["clean", "Clean"],
             ] as const
           ).map(([value, label]) => (
             <Chip
-              key={value}
+              key={`f-${value}`}
               active={findings === value}
               onClick={() => setFindings(value)}
             >
@@ -249,96 +258,109 @@ export function Shortlist({ assessments, onOpen }: ShortlistProps) {
             <button
               type="button"
               onClick={clearFilters}
-              className="ml-auto text-[12px] text-accent hover:underline"
+              className="ml-auto text-[11px] text-accent hover:underline"
             >
-              Clear filters
+              Clear
             </button>
           )}
         </div>
       </div>
 
-      {filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-surface px-6 py-16 text-center">
-          <p className="text-[15px] text-muted">
-            No applications match these filters.
-          </p>
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="mt-3 text-[13px] text-accent hover:underline"
-          >
-            Reset filters
-          </button>
-        </div>
-      ) : (
-        <ol className="grid gap-3 md:grid-cols-2">
-          {filtered.map((a, index) => {
-            const excluded = a.eligibility.verdict === "excluded";
-            return (
-              <li
-                key={a.applicationId}
-                className="animate-list-in"
-                style={{ animationDelay: `${Math.min(index, 12) * 30}ms` }}
-              >
-                <button
-                  type="button"
-                  onClick={() => onOpen(a.applicationId)}
-                  className={[
-                    "group flex h-full w-full flex-col gap-4 rounded-xl border border-border bg-surface p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-md",
-                    excluded ? "opacity-80" : "",
-                  ].join(" ")}
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        {filtered.length === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <p className="text-[14px] text-muted">No matches.</p>
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="mt-2 text-[12px] text-accent hover:underline"
+            >
+              Reset filters
+            </button>
+          </div>
+        ) : (
+          <ol className="divide-y divide-border">
+            {filtered.map((a, index) => {
+              const excluded = a.eligibility.verdict === "excluded";
+              const active = a.applicationId === selectedId;
+              return (
+                <li
+                  key={a.applicationId}
+                  className="animate-list-in"
+                  style={{ animationDelay: `${Math.min(index, 16) * 28}ms` }}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="font-mono text-[12px] text-muted">
-                        Official rank {excluded ? "—" : `#${a.rank}`}
-                        {hasFilters ? ` · filtered #${index + 1}` : ""}
-                      </p>
-                      <p className="mt-1 truncate text-[18px] font-semibold tracking-tight">
+                  <button
+                    type="button"
+                    onClick={() => onSelect(a.applicationId)}
+                    aria-pressed={active}
+                    className={[
+                      "group flex w-full items-start gap-3 px-4 py-3.5 text-left transition sm:px-5",
+                      active
+                        ? "bg-accent-dim/60 ring-1 ring-inset ring-accent/35"
+                        : "hover:bg-surface-2/50",
+                      excluded ? "opacity-75" : "",
+                    ].join(" ")}
+                  >
+                    <span
+                      className={[
+                        "mt-0.5 w-8 shrink-0 font-mono text-[13px] tabular-nums",
+                        active ? "text-accent" : "text-muted",
+                      ].join(" ")}
+                    >
+                      {excluded ? "—" : String(a.rank).padStart(2, "0")}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[14px] font-semibold tracking-tight">
                         {a.companyName ?? a.applicationId}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-mono text-2xl tabular-nums">
+                      </span>
+                      <span className="mt-0.5 line-clamp-1 text-[12px] text-muted">
+                        {a.brief.headline}
+                      </span>
+                      <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
+                        <span className={eligibilityTone(a.eligibility.verdict)}>
+                          {eligibilityLabel(a.eligibility.verdict)}
+                        </span>
+                        <span className="text-info">{trackLabel(a)}</span>
+                        {a.findings.slice(0, 1).map((f, i) => (
+                          <span
+                            key={`${f.checkId}-${i}`}
+                            className={`rounded border px-1 py-0.5 font-mono text-[9px] ${findingTone(f.severity)}`}
+                          >
+                            {f.checkId}
+                          </span>
+                        ))}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className="block font-mono text-[15px] tabular-nums">
                         {a.totalPoints}
-                        <span className="text-sm text-muted">
+                        <span className="text-[11px] text-muted">
                           /{a.maxAvailablePoints}
                         </span>
-                      </p>
-                      <p className="font-mono text-[11px] text-muted">
-                        {formatPct(a.confidence)} est.
-                      </p>
-                    </div>
-                  </div>
-
-                  <p className="line-clamp-2 text-[13px] leading-5 text-muted">
-                    {a.brief.headline}
-                  </p>
-
-                  <div className="mt-auto flex flex-wrap items-center gap-2 text-[12px]">
-                    <span className={eligibilityTone(a.eligibility.verdict)}>
-                      {eligibilityLabel(a.eligibility.verdict)}
-                    </span>
-                    <span className="text-muted">·</span>
-                    <span className="text-info">{trackLabel(a)}</span>
-                    {a.findings.slice(0, 2).map((f, i) => (
-                      <span
-                        key={`${f.checkId}-${i}`}
-                        className={`rounded border px-1.5 py-0.5 font-mono text-[10px] ${findingTone(f.severity)}`}
-                      >
-                        {f.checkId}
                       </span>
-                    ))}
-                    <span className="ml-auto rounded-md border border-border px-3 py-1.5 text-[12px] text-accent transition group-hover:border-accent/50 group-hover:bg-accent-dim">
-                      Review →
+                      <span className="font-mono text-[10px] text-muted">
+                        {formatPct(a.confidence)}
+                      </span>
                     </span>
-                  </div>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-      )}
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+        {limit > 0 && matched.length > filtered.length && (
+          <p className="border-t border-border px-4 py-3 text-center font-mono text-[11px] text-muted">
+            First {filtered.length} of {matched.length}.{" "}
+            <button
+              type="button"
+              onClick={() => setLimit(0)}
+              className="text-accent hover:underline"
+            >
+              Show all
+            </button>
+          </p>
+        )}
+      </div>
     </div>
   );
 }

@@ -122,7 +122,7 @@ export function HeroDemoReel() {
         >
           {phase === "flag" ? (
             <>
-              <strong>{current.name}</strong> scores well — then{" "}
+              <strong>{current.name}</strong> scores well, then{" "}
               <em>{current.flag}</em> lands.
             </>
           ) : (
