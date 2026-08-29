@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node --use-system-ca ./node_modules/next/dist/bin/next dev",
+    "build": "node --use-system-ca ./node_modules/next/dist/bin/next build",
+    "start": "node --use-system-ca ./node_modules/next/dist/bin/next start",
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
     "fixtures:dump": "npx vite-node scripts/dump-fixtures.ts",
-    "explain": "node --env-file=.env.local node_modules/vite-node/dist/cli.mjs --config vitest.config.mts scripts/explain-batch.ts",
+    "explain": "node --use-system-ca --env-file=.env.local node_modules/vite-node/dist/cli.mjs --config vitest.config.mts scripts/explain-batch.ts",
     "explain:ping": "node --env-file=.env.local --experimental-strip-types scripts/ping-gemini.ts",
     "db:up": "docker compose up -d mongo",
-    "db:seed": "node --env-file=.env.local node_modules/vite-node/dist/cli.mjs --config vitest.config.mts scripts/seed-mongo.ts"
+    "db:seed": "node --use-system-ca --env-file=.env.local node_modules/vite-node/dist/cli.mjs --config vitest.config.mts scripts/seed-mongo.ts"
   },
   "dependencies": {
     "@google/genai": "^2.19.0",
