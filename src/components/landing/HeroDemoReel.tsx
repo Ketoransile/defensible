@@ -45,9 +45,12 @@ export function HeroDemoReel() {
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
-      setActive(3);
-      setPhase("flag");
-      return;
+      // Defer so we don't setState synchronously in the effect body.
+      const idle = window.setTimeout(() => {
+        setActive(3);
+        setPhase("flag");
+      }, 0);
+      return () => window.clearTimeout(idle);
     }
 
     let step = 0;
