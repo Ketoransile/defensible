@@ -36,6 +36,37 @@ function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/** Standing reviewer-agent with a dossier — the hackathon is about agents. */
+function AgentMark() {
+  return (
+    <span className="reviewer-chat-agent" aria-hidden>
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="9.2" r="3.35" fill="currentColor" />
+        <path
+          d="M8.8 23.8c.55-4.35 3.15-6.55 7.2-6.55s6.65 2.2 7.2 6.55"
+          fill="currentColor"
+        />
+        <rect
+          x="13.15"
+          y="15.85"
+          width="5.7"
+          height="4.55"
+          rx="0.7"
+          fill="#f4f7f4"
+          stroke="currentColor"
+          strokeWidth="1.15"
+        />
+        <path
+          d="M14.35 17.15h3.3M14.35 18.55h2.2"
+          stroke="#14201a"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
 function renderRich(text: string): ReactNode {
   const lines = text.split("\n");
   return lines.map((line, i) => {
@@ -246,10 +277,14 @@ export function ReviewerChat({
         ].join(" ")}
         aria-expanded={open}
         aria-controls="reviewer-chat-panel"
+        aria-label={open ? "Close the agent" : "Ask the Agent"}
       >
-        <span className="reviewer-chat-launcher-orb" aria-hidden />
-        <span className="reviewer-chat-launcher-label">
-          {open ? "Close" : "Ask AI"}
+        <AgentMark />
+        <span className="reviewer-chat-launcher-copy">
+          <span className="reviewer-chat-launcher-kicker">Sequa reviewer</span>
+          <span className="reviewer-chat-launcher-label">
+            {open ? "Close" : "Ask the Agent"}
+          </span>
         </span>
       </button>
 
@@ -262,7 +297,7 @@ export function ReviewerChat({
         <header className="reviewer-chat-head">
           <div className="min-w-0">
             <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
-              Defensible assistant
+              Defensible agent
               {mode ? (
                 <span className="ml-2 text-muted normal-case tracking-normal">
                   · {mode === "gemini" ? "live model" : "engine facts"}
@@ -302,12 +337,11 @@ export function ReviewerChat({
           {messages.length === 0 ? (
             <div className="reviewer-chat-empty">
               <p className="font-[family-name:var(--font-display)] text-xl tracking-tight">
-                Interrogate this dossier
+                Brief you on this file
               </p>
               <p className="mt-2 text-[13px] leading-5 text-muted">
-                Ask about rank, findings, eligibility, growth, jobs, or any
-                criterion. Answers stay grounded in the scored application.
-                Never invented points.
+                Ask what you should watch — rank, findings, eligibility,
+                growth, jobs. Engine facts only. Never invented points.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {SUGGESTIONS.map((s) => (
@@ -334,7 +368,7 @@ export function ReviewerChat({
                   ].join(" ")}
                 >
                   <p className="mb-1 font-mono text-[9px] tracking-[0.14em] text-muted uppercase">
-                    {m.role === "user" ? "You" : "Assistant"}
+                    {m.role === "user" ? "You" : "Agent"}
                   </p>
                   <div className="text-[13px] leading-5 whitespace-pre-wrap">
                     {m.content ? renderRich(m.content) : null}
@@ -396,7 +430,7 @@ export function ReviewerChat({
         <button
           type="button"
           className="reviewer-chat-backdrop"
-          aria-label="Close assistant"
+          aria-label="Close the agent"
           onClick={() => onOpenChange(false)}
         />
       ) : null}

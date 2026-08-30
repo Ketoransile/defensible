@@ -1,7 +1,22 @@
 import { criterionById } from "@/config/criteria";
-import type { Application, Assessment } from "@/types";
+import {
+  checkLabel,
+  fieldLabel,
+  formatReviewerValue,
+} from "@/components/reviewer/fieldDisplay";
+import type { Application, Assessment, FieldPath } from "@/types";
 import { isScoredCriterion, isUnestablishedCriterion } from "@/types";
 import { explanationFacts } from "@/engine/explain/gemini";
+
+const ELIGIBILITY_LABEL: Record<string, string> = {
+  AGE_OVER_2Y: "Years in operation",
+  PRIVATELY_OWNED: "Private ownership",
+};
+
+function humanFieldList(paths: string[] | undefined): string {
+  if (!paths?.length) return "";
+  return paths.map((p) => fieldLabel(p as FieldPath)).join(", ");
+}
 
 /**
  * Compact, citation-ready packet for the reviewer chat assistant.
@@ -71,19 +86,48 @@ export function buildReviewerChatContext(
 
 export type ReviewerChatContext = ReturnType<typeof buildReviewerChatContext>;
 
+/** True when the model stopped mid-clause (MAX_TOKENS / thinking ate the budget). */
+export function isCutOffReply(text: string): boolean {
+  const tail = text.trim();
+  if (!tail) return false;
+  const lastLine = tail.split("\n").filter(Boolean).at(-1) ?? "";
+  if (/^Check:\s+\S/.test(lastLine)) return false;
+  if (/[.!?…]"?$/.test(tail)) return false;
+  return /[A-Za-z0-9,;]$/.test(tail);
+}
+
+/** Reinforces voice on the latest user turn so history does not dilute the brief. */
+export function wrapReviewerTurn(question: string): string {
+  return `Brief me as the reviewer. Verdict first, then at most four bullets. Plain English only — no schema names, no backticks, no camelCase.\n\n${question.trim()}`;
+}
+
 export function chatSystemPrompt(ctx: ReviewerChatContext): string {
-  return `You are Defensible Assistant, a sequa SME Support Scheme reviewer co-pilot in Ethiopia.
+  return `You sit with the sequa SME Support Scheme reviewer. This application is already scored by deterministic code. You do not score, re-rank, or invent numbers. You brief the reviewer on THIS file only.
 
-You help a human reviewer interrogate ONE company application. All ranks, points, eligibility, findings, and criterion scores below were decided by deterministic code. You explain and navigate them. You never invent or change numbers.
+Audience
+- Speak directly to the reviewer: "you", "this file".
+- Never address the applicant. Never pitch the company. Never sound like marketing.
+- Do not open with hello, sure, of course, great question, or a recap of their question.
+- Do not close with "let me know", "happy to help", or an offer to do more.
 
-Rules:
-- Answer only from the CONTEXT JSON. If something is missing, say it is not in the form or is unestablished.
+Facts
+- CONTEXT JSON is the only source. Ranks, points, eligibility, findings, and criterion scores were decided by the engine.
+- If a value is missing or a criterion is unestablished, say so. Unestablished is a gap — never treat it as zero.
 - Never invent a score, rank, finding, field value, or citation.
-- When referencing a score, name the criterion and points (e.g. "Market overview: 8/10").
-- When useful, cite field paths like companyName, growth.2024.salesEtb, jobPositions.
-- Be concise, precise, and calm. Use short paragraphs or tight bullets.
-- Prefer actionable review guidance over marketing language.
-- If asked about another company, say you only have this company's packet open.
+- Quote official bands only, with the real maximum from CONTEXT (e.g. "Market overview: 5/5"). Never invent a denominator.
+
+Wording — mandatory
+- CONTEXT keys are internal. Never print them.
+- Never write camelCase, snake_case enums, backticks, or parenthetical schema names such as yearsInOperation, businessOrgForm, jobPositions, growth.2022.salesEtb, private_limited_company.
+- Say the same facts in ordinary English: years in operation, legal form, private limited company, 2022 sales, new jobs.
+
+Shape every answer
+1. One verdict sentence — what you should take from this.
+2. At most four short bullets of engine facts.
+3. Stop. No "Check:" line. No field-path footnotes.
+
+Length: keep it under ~120 words. Prefer spoken professional English over essays.
+Other companies: you only have this packet. Mention neighborAbove only if it explains this rank.
 
 CONTEXT:
 ${JSON.stringify(ctx, null, 2)}`;
@@ -103,44 +147,43 @@ export function localAssistantReply(
 
   if (/rank|why (this|are they)|position|place/.test(q)) {
     return [
-      `**${name}** is rank **#${a.rank}** with **${a.totalPoints}/${a.maxAvailablePoints}** established points (${Math.round(a.confidence * 100)}% of the grid established).`,
+      `You have **${name}** at rank **#${a.rank}** — **${a.totalPoints}/${a.maxAvailablePoints}** established (${Math.round(a.confidence * 100)}% of the grid filled).`,
       a.brief.whyThisRank,
       a.neighborAbove
-        ? `Company immediately above: ${a.neighborAbove}.`
-        : "This is the top-ranked application in the current batch.",
+        ? `The file immediately above is ${a.neighborAbove}.`
+        : "This is the top of the current batch.",
     ].join("\n\n");
   }
 
   if (/finding|contradict|conflict|flag|watch|risk|years.?vs.?history/.test(q)) {
     if (a.findings.length === 0) {
-      return `No contradiction or defect findings on **${name}**. Eligibility is **${a.eligibility}**.`;
+      return `You have no contradiction or defect findings on this file. Eligibility is **${a.eligibility}**.`;
     }
     const lines = a.findings.map(
       (f) =>
-        `• **${f.checkId}** (${f.severity}): ${f.title}\n  ${f.explanation}${
-          f.fields?.length
-            ? `\n  Fields: ${f.fields.join(", ")}`
-            : ""
+        `• **${checkLabel(f.checkId)}** (${f.severity}): ${f.title}\n  ${f.explanation}${
+          f.fields?.length ? `\n  Look at ${humanFieldList(f.fields)}.` : ""
         }`,
     );
-    return [`**${a.findings.length} finding(s)** on **${name}**:`, ...lines].join(
-      "\n\n",
-    );
+    return [
+      `Watch these before you sign off — **${a.findings.length}** finding(s) on this file:`,
+      ...lines,
+    ].join("\n\n");
   }
 
   if (/unestablish|missing|open question|cannot (score|prove)/.test(q)) {
     if (a.unestablishedCount === 0) {
-      return `Every scored criterion on **${name}** is established. Open questions: ${
+      return `Every scored criterion on this file is established. Open questions: ${
         a.openQuestions.length
           ? a.openQuestions.join("; ")
           : "none listed."
       }`;
     }
     return [
-      `**${a.unestablishedCount}** criterion/criteria remain unestablished on **${name}**:`,
+      `You still have **${a.unestablishedCount}** unestablished criterion/criteria on this file:`,
       ...a.unestablishedLabels.map((l) => `• ${l}`),
       a.openQuestions.length
-        ? `\nSite-visit prompts:\n${a.openQuestions.map((o) => `• ${o}`).join("\n")}`
+        ? `Check (site visit):\n${a.openQuestions.map((o) => `• ${o}`).join("\n")}`
         : "",
     ]
       .filter(Boolean)
@@ -149,11 +192,14 @@ export function localAssistantReply(
 
   if (/eligib|gate|excluded|ownership|age|year/.test(q)) {
     const checks = a.eligibilityChecks
-      .map((ch) => `• **${ch.id}**: ${ch.verdict}. ${ch.explanation}`)
+      .map((ch) => {
+        const label = ELIGIBILITY_LABEL[ch.id] ?? checkLabel(ch.id);
+        return `• **${label}**: ${ch.verdict}. ${ch.explanation}`;
+      })
       .join("\n");
     return [
-      `Eligibility for **${name}**: **${a.eligibility}**.`,
-      `Years in operation (form): **${c.yearsInOperation ?? "null"}**. Org form: **${c.businessOrgForm ?? "null"}**.`,
+      `Eligibility on this file is **${a.eligibility}**.`,
+      `Years in operation: **${c.yearsInOperation ?? "not filed"}**. Legal form: **${formatReviewerValue(c.businessOrgForm)}**.`,
       checks,
     ].join("\n\n");
   }
@@ -171,12 +217,12 @@ export function localAssistantReply(
       )
       .join("\n");
     return [
-      `Job-creation track for **${name}**: **${a.track}** (exclusive 7a/7b).`,
+      `You are on the **${a.track}** job-creation track (7a and 7b stay exclusive).`,
       c.jobCreationNarrative
-        ? `Narrative: ${c.jobCreationNarrative}`
+        ? c.jobCreationNarrative
         : "No job-creation narrative on the form.",
       jobs || "No job positions listed.",
-      equip ? `Equipment requests:\n${equip}` : "No equipment requests.",
+      equip ? `Equipment on the form:\n${equip}` : "No equipment requests.",
     ].join("\n\n");
   }
 
@@ -190,7 +236,7 @@ export function localAssistantReply(
       })
       .filter(Boolean)
       .join("\n");
-    return `Growth table for **${name}**:\n\n${rows || "No growth rows present."}`;
+    return `Growth as filed on this form:\n\n${rows || "No growth rows present."}`;
   }
 
   if (/score|grid|criteria|points|band/.test(q)) {
@@ -206,19 +252,17 @@ export function localAssistantReply(
       })
       .join("\n");
     return [
-      `**${name}** totals **${a.totalPoints}/${a.maxAvailablePoints}** (${Math.round(a.confidence * 100)}% established).`,
+      `This file totals **${a.totalPoints}/${a.maxAvailablePoints}** (${Math.round(a.confidence * 100)}% established).`,
       top || "No scored criteria.",
       a.brief.justification,
     ].join("\n\n");
   }
 
-  // Default dossier
   return [
-    `**${name}** — rank #${a.rank}, ${a.totalPoints}/${a.maxAvailablePoints} pts, eligibility **${a.eligibility}**, track **${a.track}**.`,
+    `You have **${name}** — rank #${a.rank}, ${a.totalPoints}/${a.maxAvailablePoints} pts, eligibility **${a.eligibility}**, track **${a.track}**.`,
     a.brief.headline,
     a.findings.length
-      ? `${a.findings.length} finding(s): ${a.findings.map((f) => f.checkId).join(", ")}.`
-      : "No findings.",
-    "Ask about rank, findings, eligibility, growth, jobs/track, or unestablished criteria for a deeper cut.",
+      ? `Findings to watch: ${a.findings.map((f) => f.checkId).join(", ")}.`
+      : "No findings on this file.",
   ].join("\n\n");
 }

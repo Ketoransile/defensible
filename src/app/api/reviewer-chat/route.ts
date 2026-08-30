@@ -6,7 +6,9 @@ import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 import {
   buildReviewerChatContext,
   chatSystemPrompt,
+  isCutOffReply,
   localAssistantReply,
+  wrapReviewerTurn,
   type ReviewerChatContext,
 } from "@/lib/reviewerChat";
 
@@ -33,25 +35,56 @@ const SSE_HEADERS = {
   "X-Accel-Buffering": "no",
 } as const;
 
+/**
+ * Gemini 3 thinks at HIGH by default. Thinking tokens count against
+ * maxOutputTokens — a 512 cap cuts the spoken reply mid-sentence.
+ */
+function thinkingConfig() {
+  if (MODEL.includes("gemini-3")) {
+    return { thinkingLevel: "LOW" as const };
+  }
+  return { thinkingBudget: 0 };
+}
+
+function visibleGeminiText(response: {
+  text?: string;
+  candidates?: Array<{
+    finishReason?: string;
+    content?: { parts?: Array<{ text?: string; thought?: boolean }> };
+  }>;
+}): { text: string; cutOff: boolean } {
+  const candidate = response.candidates?.[0];
+  const fromParts = (candidate?.content?.parts ?? [])
+    .filter((p) => typeof p.text === "string" && !p.thought)
+    .map((p) => p.text)
+    .join("");
+  const text = (fromParts || response.text || "").trim();
+  const reason = String(candidate?.finishReason ?? "");
+  const cutOff =
+    reason === "MAX_TOKENS" || (text.length > 0 && isCutOffReply(text));
+  return { text, cutOff };
+}
+
 /** Gemini full reply, then SSE token chunks (avoids Next mid-stream abort). */
 async function geminiAnswer(
   key: string,
   history: { role: string; parts: { text: string }[] }[],
   ctx: ReviewerChatContext,
   signal: AbortSignal,
-): Promise<string> {
+): Promise<{ text: string; cutOff: boolean }> {
   const ai = new GoogleGenAI({ apiKey: key });
   const response = await ai.models.generateContent({
     model: MODEL,
     contents: history,
     config: {
-      temperature: 0.35,
+      temperature: 0.2,
       systemInstruction: chatSystemPrompt(ctx),
-      maxOutputTokens: 1024,
+      maxOutputTokens: 8192,
+      thinkingConfig: thinkingConfig(),
       abortSignal: signal,
     },
   });
-  return (response.text ?? "").trim();
+  return visibleGeminiText(response);
 }
 
 function chunkForSse(text: string): string[] {
@@ -180,10 +213,22 @@ export async function POST(request: Request) {
   const question = lastUser.content.trim();
   const key = geminiApiKey();
 
-  const history = messages.slice(-12).map((m) => ({
-    role: m.role === "assistant" ? "model" : "user",
-    parts: [{ text: m.content.slice(0, 4000) }],
-  }));
+  const recent = messages.slice(-12);
+  const lastUserIndex = recent.reduce(
+    (acc, m, i) => (m.role === "user" ? i : acc),
+    -1,
+  );
+  const history = recent.map((m, i) => {
+    const raw = m.content.slice(0, 4000);
+    const text =
+      i === lastUserIndex && m.role === "user"
+        ? wrapReviewerTurn(raw)
+        : raw;
+    return {
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text }],
+    };
+  });
 
   return sseResponse(async (send, signal) => {
     let mode: "gemini" | "local" = key ? "gemini" : "local";
@@ -203,7 +248,20 @@ export async function POST(request: Request) {
 
     let answer = "";
     try {
-      answer = await geminiAnswer(key, history, ctx, signal);
+      const live = await geminiAnswer(key, history, ctx, signal);
+      if (live.text && !live.cutOff) {
+        answer = live.text;
+      } else {
+        mode = "local";
+        answer = localAssistantReply(question, ctx);
+        send({
+          type: "meta",
+          mode: "local",
+          notice: live.cutOff
+            ? "Live model cut off. Answering from engine facts."
+            : "Empty model reply. Answering from engine facts.",
+        });
+      }
     } catch (err) {
       if (signal.aborted) return;
       const message = err instanceof Error ? err.message : "Chat failed";
@@ -218,16 +276,6 @@ export async function POST(request: Request) {
     }
 
     if (signal.aborted) return;
-
-    if (!answer) {
-      mode = "local";
-      answer = localAssistantReply(question, ctx);
-      send({
-        type: "meta",
-        mode: "local",
-        notice: "Empty model reply. Answering from engine facts.",
-      });
-    }
 
     for (const part of chunkForSse(answer)) {
       if (signal.aborted) return;

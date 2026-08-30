@@ -141,8 +141,8 @@ export function ReviewerApp({
               </p>
               <p className="mt-2 max-w-sm text-[14px] leading-6 text-muted">
                 Details expand here: scores, findings, and source fields for
-                the company you pick on the left. Open Ask AI once a company
-                is selected.
+                the company you pick on the left. Open Ask the Agent once a
+                company is selected.
               </p>
             </div>
           )}

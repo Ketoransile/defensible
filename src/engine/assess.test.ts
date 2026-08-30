@@ -19,7 +19,14 @@ describe("assessBatch", () => {
     );
     const points = active.map((a) => a.totalPoints);
     expect(points).toEqual([...points].sort((a, b) => b - a));
-    expect(new Set(points.slice(0, 5)).size).toBe(5);
+    expect(points.slice(0, 5)).toEqual([92, 80, 73, 71, 67]);
+    expect(active.slice(0, 5).map((a) => a.applicationId)).toEqual([
+      "01-alem-leather",
+      "12-harar-coffee",
+      "05-abyssinia-metal",
+      "04-misrak-foods",
+      "08-kality-furniture",
+    ]);
 
     for (const a of batch.assessments) {
       expect(a.criteria).toHaveLength(12);

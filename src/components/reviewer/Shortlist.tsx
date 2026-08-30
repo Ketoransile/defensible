@@ -24,6 +24,17 @@ type SortKey = "rank" | "points" | "name";
 /** Cap how many filtered rows to render; 0 = show all. */
 type LimitOption = 0 | 5 | 10 | 25 | 50;
 
+/** One short line for the ranked list — never a clipped Gemini essay. */
+export function shortlistKicker(a: Assessment): string {
+  if (a.eligibility.verdict === "excluded") return "Fails the two-year rule";
+  if (a.eligibility.verdict === "unestablished") {
+    return "Private ownership not established";
+  }
+  const first = a.findings[0];
+  if (first) return first.title;
+  return a.rank === 1 ? "Clean file — shortlist lead" : "No findings on this file";
+}
+
 function eligibilityTone(verdict: EligibilityVerdict): string {
   switch (verdict) {
     case "eligible":
@@ -129,7 +140,7 @@ function ShortlistRow({
             {a.companyName ?? a.applicationId}
           </span>
           <span className="mt-0.5 line-clamp-1 text-[12px] text-muted">
-            {a.brief.headline}
+            {shortlistKicker(a)}
           </span>
           <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
             <span className={eligibilityTone(a.eligibility.verdict)}>
