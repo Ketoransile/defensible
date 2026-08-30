@@ -79,6 +79,11 @@
       "name": "Marta Alemu",
       "position": "Finance Lead",
       "gender": "female"
+    },
+    {
+      "name": "Samuel Girma",
+      "position": "Export Manager",
+      "gender": "male"
     }
   ],
   "organogramFile": "organogram.pdf",

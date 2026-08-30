@@ -79,6 +79,11 @@
       "name": "Marta Alemu",
       "position": "Finance Lead",
       "gender": "female"
+    },
+    {
+      "name": "Samuel Girma",
+      "position": "Export Manager",
+      "gender": "male"
     }
   ],
   "organogramFile": "organogram.pdf",
@@ -111,10 +116,10 @@
     "new_markets"
   ],
   "priorityAreasExplanation": "The splitter and finishing expert raise quality; the trade advisor opens Kenya volume.",
-  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
+  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months in milling and cupping.",
   "jobPositions": [
     {
-      "position": "Splitting machine operators",
+      "position": "Line operators",
       "newJobs": 8
     },
     {
@@ -122,11 +127,11 @@
       "newJobs": 2
     },
     {
-      "position": "Finishing technicians",
+      "position": "Technicians",
       "newJobs": 6
     },
     {
-      "position": "Export sales",
+      "position": "Sales",
       "newJobs": 2
     },
     {

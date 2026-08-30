@@ -47,38 +47,28 @@
   },
   "motivation": "Need coaching and a splitting machine to raise quality and hire operators.",
   "businessGoals": "Double export volume by 2027 and add a finishing line in Addis.",
-  "marketOverview": "Domestic hotels and two East African buyers. Main challenge is finishing quality versus imported goods.",
+  "marketOverview": "Serves hotels and retailers in Addis Ababa. No cross-border contracts yet.",
   "products": [
     {
-      "productService": "Finished leather bags",
-      "marketServed": "Addis hotels and Nairobi boutiques",
-      "distributionChannels": "Direct B2B and one distributor in Kenya"
-    },
-    {
-      "productService": "Belt and small leather goods",
-      "marketServed": "Domestic retail",
+      "productService": "Finished goods for the domestic trade",
+      "marketServed": "Addis retailers and hotels",
       "distributionChannels": "Own shop and Merkato wholesalers"
     }
   ],
-  "uniqueness": "not_new_but_unique_features",
-  "uniqueFeatures": "Vegetable-tanned hides sourced from Modjo with a patented edge-paint finish.",
-  "localRawMaterialPct": 70,
+  "uniqueness": "no_unique_features",
+  "uniqueFeatures": null,
+  "localRawMaterialPct": 32,
   "keyRawMaterials": "Ethiopian cattle hides, local cotton lining, vegetable tannins",
   "managementTeam": [
     {
-      "name": "Hanna Bekele",
-      "position": "Managing Director",
-      "gender": "female"
-    },
-    {
       "name": "Yonas Tadesse",
-      "position": "Production Manager",
+      "position": "Managing Director",
       "gender": "male"
     },
     {
-      "name": "Marta Alemu",
-      "position": "Finance Lead",
-      "gender": "female"
+      "name": "Abel Mekonnen",
+      "position": "Production Manager",
+      "gender": "male"
     }
   ],
   "organogramFile": "organogram.pdf",
@@ -126,6 +116,6 @@
       "newJobs": 2
     }
   ],
-  "socialEnvironmentalImpact": "Chrome-free tanning waste is collected; 40% of shop-floor staff are women from the woreda.",
-  "oshCommitment": "PPE at every station, first-aid kit, monthly risk assessment, and paid sick leave."
+  "socialEnvironmentalImpact": "Forty percent of shop-floor staff are women from the woreda; youth apprentices rotate each season.",
+  "oshCommitment": "Press-room ear protection."
 }

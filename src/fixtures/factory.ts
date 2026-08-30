@@ -31,9 +31,9 @@ export function emptyGrowth(): Record<GrowthYear, GrowthRow> {
 const BASE_GROWTH: Record<GrowthYear, GrowthRow> = {
   "2022": growthRow(4_800_000, 18, 7, 4),
   "2023": growthRow(6_200_000, 24, 10, 6),
-  "2024": growthRow(8_100_000, 31, 13, 8),
-  "2025_proj": growthRow(10_400_000, 40, 17, 11),
-  "2026_proj": growthRow(13_000_000, 61, 26, 16),
+  "2024": growthRow(9_800_000, 31, 13, 8),
+  "2025_proj": growthRow(12_400_000, 42, 18, 12),
+  "2026_proj": growthRow(15_200_000, 67, 28, 18),
 };
 
 /** Complete, internally consistent applicant. Overrides replace top-level fields. */
@@ -86,6 +86,7 @@ export function makeApplication(
       { name: "Hanna Bekele", position: "Managing Director", gender: "female" },
       { name: "Yonas Tadesse", position: "Production Manager", gender: "male" },
       { name: "Marta Alemu", position: "Finance Lead", gender: "female" },
+      { name: "Samuel Girma", position: "Export Manager", gender: "male" },
     ],
     organogramFile: "organogram.pdf",
     problemsToAddress:
@@ -116,11 +117,11 @@ export function makeApplication(
     priorityAreasExplanation:
       "The splitter and finishing expert raise quality; the trade advisor opens Kenya volume.",
     jobCreationNarrative:
-      "We will create 21 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
+      "We will create 25 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
     jobPositions: [
       { position: "Splitting machine operators", newJobs: 8 },
       { position: "Quality controllers", newJobs: 2 },
-      { position: "Finishing technicians", newJobs: 6 },
+      { position: "Finishing technicians", newJobs: 10 },
       { position: "Export sales", newJobs: 2 },
       { position: "Store keepers", newJobs: 3 },
     ],

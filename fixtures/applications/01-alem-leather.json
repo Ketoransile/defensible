@@ -27,22 +27,22 @@
       "youthEmployees": 6
     },
     "2024": {
-      "salesEtb": 8100000,
+      "salesEtb": 9800000,
       "totalEmployees": 31,
       "femaleEmployees": 13,
       "youthEmployees": 8
     },
     "2025_proj": {
-      "salesEtb": 10400000,
-      "totalEmployees": 40,
-      "femaleEmployees": 17,
-      "youthEmployees": 11
+      "salesEtb": 12400000,
+      "totalEmployees": 42,
+      "femaleEmployees": 18,
+      "youthEmployees": 12
     },
     "2026_proj": {
-      "salesEtb": 13000000,
-      "totalEmployees": 61,
-      "femaleEmployees": 26,
-      "youthEmployees": 16
+      "salesEtb": 15200000,
+      "totalEmployees": 67,
+      "femaleEmployees": 28,
+      "youthEmployees": 18
     }
   },
   "motivation": "Need coaching and a splitting machine to raise quality and hire operators.",
@@ -79,6 +79,11 @@
       "name": "Marta Alemu",
       "position": "Finance Lead",
       "gender": "female"
+    },
+    {
+      "name": "Samuel Girma",
+      "position": "Export Manager",
+      "gender": "male"
     }
   ],
   "organogramFile": "organogram.pdf",
@@ -111,7 +116,7 @@
     "new_markets"
   ],
   "priorityAreasExplanation": "The splitter and finishing expert raise quality; the trade advisor opens Kenya volume.",
-  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
+  "jobCreationNarrative": "We will create 25 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
   "jobPositions": [
     {
       "position": "Splitting machine operators",
@@ -123,7 +128,7 @@
     },
     {
       "position": "Finishing technicians",
-      "newJobs": 6
+      "newJobs": 10
     },
     {
       "position": "Export sales",

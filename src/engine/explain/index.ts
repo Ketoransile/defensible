@@ -22,15 +22,18 @@ export async function explainBatch(batch: BatchResult): Promise<BatchResult> {
   };
 
   const assessments: Assessment[] = [];
+  let skipLive = false;
   for (let i = 0; i < withTemplates.assessments.length; i++) {
     const a = withTemplates.assessments[i];
-    const polished = await geminiBrief(
+    const { brief, exhausted } = await geminiBrief(
       a,
       neighborLine(withTemplates.assessments, i),
+      { skipLive },
     );
+    if (exhausted) skipLive = true;
     assessments.push(
-      polished
-        ? { ...a, brief: polished, justification: polished.justification }
+      brief
+        ? { ...a, brief, justification: brief.justification }
         : a,
     );
   }

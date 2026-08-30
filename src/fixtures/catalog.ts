@@ -85,6 +85,44 @@ export const MANIFEST: FixtureMeta[] = [
   },
 ];
 
+const DOMESTIC_MARKET =
+  "Serves hotels and retailers in Addis Ababa. No cross-border contracts yet.";
+
+const DOMESTIC_PRODUCTS = [
+  {
+    productService: "Finished goods for the domestic trade",
+    marketServed: "Addis retailers and hotels",
+    distributionChannels: "Own shop and Merkato wholesalers",
+  },
+];
+
+const TWO_MALE_MANAGERS = [
+  {
+    name: "Yonas Tadesse",
+    position: "Managing Director" as const,
+    gender: "male" as const,
+  },
+  {
+    name: "Abel Mekonnen",
+    position: "Production Manager" as const,
+    gender: "male" as const,
+  },
+];
+
+const SOCIAL_ONLY =
+  "Forty percent of shop-floor staff are women from the woreda; youth apprentices rotate each season.";
+
+const BOTH_IMPACT =
+  "Waste water is settled before discharge. Forty percent of shop-floor staff are women from the woreda.";
+
+const JOBS_21 = [
+  { position: "Line operators", newJobs: 8 },
+  { position: "Quality controllers", newJobs: 2 },
+  { position: "Technicians", newJobs: 6 },
+  { position: "Sales", newJobs: 2 },
+  { position: "Store keepers", newJobs: 3 },
+];
+
 export function buildApplications(): Application[] {
   return [
     makeApplication({
@@ -129,6 +167,24 @@ export function buildApplications(): Application[] {
       yearsInOperation: 12,
       uniqueness: "no_unique_features",
       uniqueFeatures: null,
+      marketOverview: DOMESTIC_MARKET,
+      products: DOMESTIC_PRODUCTS,
+      localRawMaterialPct: 45,
+      growth: {
+        "2022": growthRow(5_000_000, 20, 8, 4),
+        "2023": growthRow(6_000_000, 24, 10, 5),
+        "2024": growthRow(7_200_000, 28, 11, 6),
+        "2025_proj": growthRow(8_400_000, 34, 13, 7),
+        "2026_proj": growthRow(9_600_000, 50, 19, 11),
+      },
+      jobCreationNarrative:
+        "We will create 16 new jobs in the next 15 months on the weaving line.",
+      jobPositions: [
+        { position: "Weavers", newJobs: 10 },
+        { position: "Finishers", newJobs: 4 },
+        { position: "Stores", newJobs: 2 },
+      ],
+      socialEnvironmentalImpact: BOTH_IMPACT,
     }),
 
     makeApplication({
@@ -137,6 +193,34 @@ export function buildApplications(): Application[] {
       businessType: "Agro-processing",
       ownershipWomenPct: 40,
       ownershipMenPct: 40,
+      marketOverview: DOMESTIC_MARKET,
+      products: DOMESTIC_PRODUCTS,
+      localRawMaterialPct: 50,
+      growth: {
+        "2022": growthRow(3_400_000, 10, 4, 2),
+        "2023": growthRow(4_000_000, 12, 5, 3),
+        "2024": growthRow(4_600_000, 14, 6, 3),
+        "2025_proj": growthRow(5_400_000, 18, 8, 4),
+        "2026_proj": growthRow(6_200_000, 39, 16, 9),
+      },
+      managementTeam: [
+        {
+          name: "Hanna Bekele",
+          position: "Managing Director",
+          gender: "female",
+        },
+        {
+          name: "Yonas Tadesse",
+          position: "Production Manager",
+          gender: "male",
+        },
+        { name: "Marta Alemu", position: "Finance Lead", gender: "female" },
+      ],
+      jobCreationNarrative:
+        "We will create 21 new jobs in the next 15 months across packing and sales.",
+      jobPositions: JOBS_21,
+      socialEnvironmentalImpact: BOTH_IMPACT,
+      oshCommitment: "First-aid kit and monthly toolbox talks.",
     }),
 
     makeApplication({
@@ -175,12 +259,11 @@ export function buildApplications(): Application[] {
       expectedResults: ["production_capacity", "quality", "new_markets"],
       jobCreationNarrative:
         "We will create 21 new jobs in the next 15 months across CNC, welding, and field service.",
-      jobPositions: [
-        { position: "CNC operators", newJobs: 6 },
-        { position: "Welders", newJobs: 8 },
-        { position: "Quality inspectors", newJobs: 3 },
-        { position: "Field service technicians", newJobs: 4 },
-      ],
+      jobPositions: JOBS_21,
+      socialEnvironmentalImpact:
+        "Weld fumes are extracted; 30% of shop-floor staff are women from the woreda.",
+      oshCommitment:
+        "PPE at every station, first-aid kit, and monthly risk assessment.",
     }),
 
     makeApplication({
@@ -189,12 +272,41 @@ export function buildApplications(): Application[] {
       businessType: "Consumer goods",
       uniqueness: "not_new_but_unique_features",
       uniqueFeatures: null,
+      ownershipWomenPct: 0,
+      ownershipMenPct: 100,
+      marketOverview: DOMESTIC_MARKET,
+      products: DOMESTIC_PRODUCTS,
+      localRawMaterialPct: 18,
+      managementTeam: TWO_MALE_MANAGERS,
+      equipmentRequests: [],
+      growth: {
+        "2022": growthRow(1_800_000, 8, 2, 1),
+        "2023": growthRow(2_100_000, 9, 2, 1),
+        "2024": growthRow(2_400_000, 10, 2, 1),
+        "2025_proj": growthRow(2_800_000, 14, 3, 2),
+        "2026_proj": growthRow(3_200_000, 28, 6, 4),
+      },
+      jobCreationNarrative:
+        "We will create 14 new jobs in the next 15 months in boiling and packing.",
+      jobPositions: [
+        { position: "Boiling operators", newJobs: 6 },
+        { position: "Packers", newJobs: 6 },
+        { position: "Driver", newJobs: 2 },
+      ],
+      socialEnvironmentalImpact: SOCIAL_ONLY,
+      oshCommitment: "Soap-room gloves and a first-aid kit.",
     }),
 
     makeApplication({
       id: "07-hilcoe-print",
       companyName: "Hilcoe Print House PLC",
       businessType: "Printing services",
+      uniqueness: "no_unique_features",
+      uniqueFeatures: null,
+      marketOverview: DOMESTIC_MARKET,
+      products: DOMESTIC_PRODUCTS,
+      localRawMaterialPct: 32,
+      managementTeam: TWO_MALE_MANAGERS,
       jobCreationNarrative:
         "We will create 40 new jobs in the next 15 months as the new press comes online.",
       jobPositions: [
@@ -209,12 +321,35 @@ export function buildApplications(): Application[] {
         "2025_proj": growthRow(10_400_000, 40, 17, 11),
         "2026_proj": growthRow(13_000_000, 52, 22, 14),
       },
+      socialEnvironmentalImpact: SOCIAL_ONLY,
+      oshCommitment: "Press-room ear protection.",
     }),
 
     makeApplication({
       id: "08-kality-furniture",
       companyName: "Kality Furniture PLC",
       businessType: "Wood furniture",
+      marketOverview: DOMESTIC_MARKET,
+      products: DOMESTIC_PRODUCTS,
+      localRawMaterialPct: 48,
+      uniqueness: "not_new_but_unique_features",
+      uniqueFeatures: "Knock-down hotel bedroom sets that ship flat on a single truck.",
+      jobCreationNarrative:
+        "We will create 16 new jobs in the next 15 months on the CNC and finishing line.",
+      jobPositions: [
+        { position: "CNC operators", newJobs: 6 },
+        { position: "Finishers", newJobs: 6 },
+        { position: "Stores", newJobs: 4 },
+      ],
+      growth: {
+        "2022": growthRow(5_200_000, 16, 5, 3),
+        "2023": growthRow(6_400_000, 18, 6, 4),
+        "2024": growthRow(8_400_000, 22, 7, 4),
+        "2025_proj": growthRow(9_600_000, 28, 9, 6),
+        "2026_proj": growthRow(11_000_000, 44, 14, 9),
+      },
+      socialEnvironmentalImpact: BOTH_IMPACT,
+      oshCommitment: "Dust masks and a first-aid kit.",
       equipmentRequests: [
         {
           description: "CNC wood router",
@@ -243,13 +378,24 @@ export function buildApplications(): Application[] {
       businessType: "Garment manufacturing",
       cityRegion: "Dire Dawa",
       address: "Kebele 05, Dire Dawa",
+      marketOverview: DOMESTIC_MARKET,
+      products: DOMESTIC_PRODUCTS,
+      localRawMaterialPct: 42,
+      jobCreationNarrative:
+        "We will create 10 new jobs in the next 15 months in cutting and sewing.",
+      jobPositions: [
+        { position: "Cutters", newJobs: 4 },
+        { position: "Sewers", newJobs: 6 },
+      ],
       growth: {
         "2022": growthRow(3_100_000, 22, 14, 6),
         "2023": growthRow(3_800_000, 26, 16, 7),
         "2024": growthRow(4_600_000, 20, 25, 8),
         "2025_proj": growthRow(5_500_000, 28, 18, 9),
-        "2026_proj": growthRow(6_400_000, 49, 26, 14),
+        "2026_proj": growthRow(6_400_000, 38, 22, 11),
       },
+      socialEnvironmentalImpact: SOCIAL_ONLY,
+      oshCommitment: "Needle guards on every machine.",
     }),
 
     makeApplication({
@@ -260,6 +406,23 @@ export function buildApplications(): Application[] {
       expectedResults: ["new_markets", "quality"],
       priorityAreasExplanation:
         "We want better packaging and a second market in Djibouti.",
+      marketOverview: DOMESTIC_MARKET,
+      localRawMaterialPct: 88,
+      jobCreationNarrative:
+        "We will create 8 new jobs in the next 15 months in packing.",
+      jobPositions: [
+        { position: "Packers", newJobs: 6 },
+        { position: "Driver", newJobs: 2 },
+      ],
+      growth: {
+        "2022": growthRow(1_100_000, 6, 2, 1),
+        "2023": growthRow(1_400_000, 7, 2, 1),
+        "2024": growthRow(1_600_000, 8, 2, 1),
+        "2025_proj": growthRow(2_000_000, 11, 3, 2),
+        "2026_proj": growthRow(2_400_000, 19, 5, 3),
+      },
+      socialEnvironmentalImpact: SOCIAL_ONLY,
+      oshCommitment: "Aprons in the packing room.",
     }),
 
     makeApplication({
@@ -305,6 +468,9 @@ export function buildApplications(): Application[] {
       businessType: "Coffee processing",
       cityRegion: "Harar",
       address: "Jegol, Harar",
+      jobCreationNarrative:
+        "We will create 21 new jobs in the next 15 months in milling and cupping.",
+      jobPositions: JOBS_21,
       growth: {
         "2022": growthRow(2_200_000, 12, 5, 3),
         "2023": growthRow(2_600_000, 14, 6, 4),

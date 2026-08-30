@@ -39,7 +39,7 @@ describe("7a vs 7b track", () => {
     expect(scores).toHaveLength(12);
 
     const jobs = scores.find((s) => s.criterionId === "job_creation_investment");
-    expect(jobs && isScoredCriterion(jobs) && jobs.points).toBe(15);
+    expect(jobs && isScoredCriterion(jobs) && jobs.points).toBe(25);
   });
 
   it("picks 7a when there is no equipment request and does not score 7b", () => {
@@ -84,7 +84,7 @@ describe("band scorer", () => {
 
     expect(byId.success_story_sales.status).toBe("scored");
     if (isScoredCriterion(byId.success_story_sales)) {
-      expect(byId.success_story_sales.points).toBe(3);
+      expect(byId.success_story_sales.points).toBe(5);
     }
     if (isScoredCriterion(byId.success_story_employment)) {
       expect(byId.success_story_employment.points).toBe(5);
@@ -104,8 +104,11 @@ describe("band scorer", () => {
     if (isScoredCriterion(byId.expected_results)) {
       expect(byId.expected_results.points).toBe(20);
     }
+    if (isScoredCriterion(byId.job_creation_investment)) {
+      expect(byId.job_creation_investment.points).toBe(25);
+    }
     if (isScoredCriterion(byId.management_capacity)) {
-      expect(byId.management_capacity.points).toBe(3);
+      expect(byId.management_capacity.points).toBe(5);
     }
   });
 

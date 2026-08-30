@@ -15,54 +15,49 @@
   "companyOverview": "Started as a workshop supplying local retailers. Now exports finished leather goods to Kenya and Djibouti while serving hotels in Addis.",
   "growth": {
     "2022": {
-      "salesEtb": 4800000,
-      "totalEmployees": 18,
-      "femaleEmployees": 7,
-      "youthEmployees": 4
+      "salesEtb": 3400000,
+      "totalEmployees": 10,
+      "femaleEmployees": 4,
+      "youthEmployees": 2
     },
     "2023": {
-      "salesEtb": 6200000,
-      "totalEmployees": 24,
-      "femaleEmployees": 10,
-      "youthEmployees": 6
+      "salesEtb": 4000000,
+      "totalEmployees": 12,
+      "femaleEmployees": 5,
+      "youthEmployees": 3
     },
     "2024": {
-      "salesEtb": 8100000,
-      "totalEmployees": 31,
-      "femaleEmployees": 13,
-      "youthEmployees": 8
+      "salesEtb": 4600000,
+      "totalEmployees": 14,
+      "femaleEmployees": 6,
+      "youthEmployees": 3
     },
     "2025_proj": {
-      "salesEtb": 10400000,
-      "totalEmployees": 40,
-      "femaleEmployees": 17,
-      "youthEmployees": 11
+      "salesEtb": 5400000,
+      "totalEmployees": 18,
+      "femaleEmployees": 8,
+      "youthEmployees": 4
     },
     "2026_proj": {
-      "salesEtb": 13000000,
-      "totalEmployees": 61,
-      "femaleEmployees": 26,
-      "youthEmployees": 16
+      "salesEtb": 6200000,
+      "totalEmployees": 39,
+      "femaleEmployees": 16,
+      "youthEmployees": 9
     }
   },
   "motivation": "Need coaching and a splitting machine to raise quality and hire operators.",
   "businessGoals": "Double export volume by 2027 and add a finishing line in Addis.",
-  "marketOverview": "Domestic hotels and two East African buyers. Main challenge is finishing quality versus imported goods.",
+  "marketOverview": "Serves hotels and retailers in Addis Ababa. No cross-border contracts yet.",
   "products": [
     {
-      "productService": "Finished leather bags",
-      "marketServed": "Addis hotels and Nairobi boutiques",
-      "distributionChannels": "Direct B2B and one distributor in Kenya"
-    },
-    {
-      "productService": "Belt and small leather goods",
-      "marketServed": "Domestic retail",
+      "productService": "Finished goods for the domestic trade",
+      "marketServed": "Addis retailers and hotels",
       "distributionChannels": "Own shop and Merkato wholesalers"
     }
   ],
   "uniqueness": "not_new_but_unique_features",
   "uniqueFeatures": "Vegetable-tanned hides sourced from Modjo with a patented edge-paint finish.",
-  "localRawMaterialPct": 70,
+  "localRawMaterialPct": 50,
   "keyRawMaterials": "Ethiopian cattle hides, local cotton lining, vegetable tannins",
   "managementTeam": [
     {
@@ -111,10 +106,10 @@
     "new_markets"
   ],
   "priorityAreasExplanation": "The splitter and finishing expert raise quality; the trade advisor opens Kenya volume.",
-  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
+  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months across packing and sales.",
   "jobPositions": [
     {
-      "position": "Splitting machine operators",
+      "position": "Line operators",
       "newJobs": 8
     },
     {
@@ -122,11 +117,11 @@
       "newJobs": 2
     },
     {
-      "position": "Finishing technicians",
+      "position": "Technicians",
       "newJobs": 6
     },
     {
-      "position": "Export sales",
+      "position": "Sales",
       "newJobs": 2
     },
     {
@@ -134,6 +129,6 @@
       "newJobs": 3
     }
   ],
-  "socialEnvironmentalImpact": "Chrome-free tanning waste is collected; 40% of shop-floor staff are women from the woreda.",
-  "oshCommitment": "PPE at every station, first-aid kit, monthly risk assessment, and paid sick leave."
+  "socialEnvironmentalImpact": "Waste water is settled before discharge. Forty percent of shop-floor staff are women from the woreda.",
+  "oshCommitment": "First-aid kit and monthly toolbox talks."
 }

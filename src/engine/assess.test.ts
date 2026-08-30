@@ -19,6 +19,7 @@ describe("assessBatch", () => {
     );
     const points = active.map((a) => a.totalPoints);
     expect(points).toEqual([...points].sort((a, b) => b - a));
+    expect(new Set(points.slice(0, 5)).size).toBe(5);
 
     for (const a of batch.assessments) {
       expect(a.criteria).toHaveLength(12);

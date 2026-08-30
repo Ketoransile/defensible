@@ -40,29 +40,24 @@
     },
     "2026_proj": {
       "salesEtb": 6400000,
-      "totalEmployees": 49,
-      "femaleEmployees": 26,
-      "youthEmployees": 14
+      "totalEmployees": 38,
+      "femaleEmployees": 22,
+      "youthEmployees": 11
     }
   },
   "motivation": "Need coaching and a splitting machine to raise quality and hire operators.",
   "businessGoals": "Double export volume by 2027 and add a finishing line in Addis.",
-  "marketOverview": "Domestic hotels and two East African buyers. Main challenge is finishing quality versus imported goods.",
+  "marketOverview": "Serves hotels and retailers in Addis Ababa. No cross-border contracts yet.",
   "products": [
     {
-      "productService": "Finished leather bags",
-      "marketServed": "Addis hotels and Nairobi boutiques",
-      "distributionChannels": "Direct B2B and one distributor in Kenya"
-    },
-    {
-      "productService": "Belt and small leather goods",
-      "marketServed": "Domestic retail",
+      "productService": "Finished goods for the domestic trade",
+      "marketServed": "Addis retailers and hotels",
       "distributionChannels": "Own shop and Merkato wholesalers"
     }
   ],
   "uniqueness": "not_new_but_unique_features",
   "uniqueFeatures": "Vegetable-tanned hides sourced from Modjo with a patented edge-paint finish.",
-  "localRawMaterialPct": 70,
+  "localRawMaterialPct": 42,
   "keyRawMaterials": "Ethiopian cattle hides, local cotton lining, vegetable tannins",
   "managementTeam": [
     {
@@ -79,6 +74,11 @@
       "name": "Marta Alemu",
       "position": "Finance Lead",
       "gender": "female"
+    },
+    {
+      "name": "Samuel Girma",
+      "position": "Export Manager",
+      "gender": "male"
     }
   ],
   "organogramFile": "organogram.pdf",
@@ -111,29 +111,17 @@
     "new_markets"
   ],
   "priorityAreasExplanation": "The splitter and finishing expert raise quality; the trade advisor opens Kenya volume.",
-  "jobCreationNarrative": "We will create 21 new jobs in the next 15 months: operators on the new line, two quality controllers, and sales for export.",
+  "jobCreationNarrative": "We will create 10 new jobs in the next 15 months in cutting and sewing.",
   "jobPositions": [
     {
-      "position": "Splitting machine operators",
-      "newJobs": 8
+      "position": "Cutters",
+      "newJobs": 4
     },
     {
-      "position": "Quality controllers",
-      "newJobs": 2
-    },
-    {
-      "position": "Finishing technicians",
+      "position": "Sewers",
       "newJobs": 6
-    },
-    {
-      "position": "Export sales",
-      "newJobs": 2
-    },
-    {
-      "position": "Store keepers",
-      "newJobs": 3
     }
   ],
-  "socialEnvironmentalImpact": "Chrome-free tanning waste is collected; 40% of shop-floor staff are women from the woreda.",
-  "oshCommitment": "PPE at every station, first-aid kit, monthly risk assessment, and paid sick leave."
+  "socialEnvironmentalImpact": "Forty percent of shop-floor staff are women from the woreda; youth apprentices rotate each season.",
+  "oshCommitment": "Needle guards on every machine."
 }

@@ -85,19 +85,44 @@ function parseBrief(raw: string): ReviewerBrief | null {
   }
 }
 
+function errorText(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+}
+
+export function isGeminiQuotaError(err: unknown): boolean {
+  const text = errorText(err);
+  return (
+    text.includes("RESOURCE_EXHAUSTED") ||
+    text.includes('"code":429') ||
+    text.includes("exceeded your current quota") ||
+    text.includes("Too Many Requests")
+  );
+}
+
+export interface GeminiBriefResult {
+  brief: ReviewerBrief | null;
+  /** Live Gemini is out of quota — skip further API calls this request. */
+  exhausted: boolean;
+}
+
 export async function geminiBrief(
   a: Assessment,
   neighbor: string | null,
-): Promise<ReviewerBrief | null> {
-  const key = geminiApiKey();
+  options: { skipLive?: boolean } = {},
+): Promise<GeminiBriefResult> {
   const facts = explanationFacts(a, neighbor);
   const hash = factsHash(facts);
   const cached = readCachedBrief(a.applicationId, hash);
-  if (cached) return cached;
-  if (!key) return null;
+  if (cached) return { brief: cached, exhausted: false };
+  if (options.skipLive || !geminiApiKey()) return { brief: null, exhausted: false };
 
   try {
-    const ai = new GoogleGenAI({ apiKey: key });
+    const ai = new GoogleGenAI({ apiKey: geminiApiKey() });
     const prompt = `You are a sequa SME Support Scheme reviewer in Ethiopia. You write for the evaluation dashboard.
 
 You do NOT score. Points, eligibility, findings, and citations below are already decided by code. You only write prose.
@@ -134,16 +159,17 @@ ${JSON.stringify(facts, null, 2)}`;
     });
 
     const text = response.text;
-    if (!text) return null;
+    if (!text) return { brief: null, exhausted: false };
     const brief = parseBrief(text);
-    if (!brief) return null;
+    if (!brief) return { brief: null, exhausted: false };
     if (brief.strengths.length === 0) brief.strengths = a.brief.strengths;
     if (brief.watchouts.length === 0) brief.watchouts = a.brief.watchouts;
     writeCachedBrief(a.applicationId, hash, brief);
-    return brief;
+    return { brief, exhausted: false };
   } catch (err) {
-    const message = err instanceof Error ? err.message : "unknown error";
-    console.error(`Gemini brief failed for ${a.applicationId}: ${message}`);
-    return null;
+    if (isGeminiQuotaError(err)) {
+      return { brief: null, exhausted: true };
+    }
+    return { brief: null, exhausted: false };
   }
 }
