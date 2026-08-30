@@ -70,34 +70,13 @@
   right: 0;
   left: 0;
   z-index: 40;
-  border-bottom: 1px solid transparent;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: none;
-  transition:
-    background-color 280ms ease,
-    border-color 280ms ease,
-    box-shadow 280ms ease;
+  border-bottom: 1px solid var(--landing-line);
+  background: var(--landing-cream);
 }
 
 .headerSpacer {
-  height: 5.25rem;
+  height: 3.75rem;
   flex: none;
-}
-
-.headerScrolled {
-  border-bottom-color: color-mix(in srgb, var(--landing-ink) 10%, transparent);
-  background: color-mix(in srgb, var(--landing-cream) 62%, transparent);
-  box-shadow: 0 10px 40px color-mix(in srgb, var(--landing-ink) 6%, transparent);
-  backdrop-filter: blur(22px) saturate(1.35);
-  -webkit-backdrop-filter: blur(22px) saturate(1.35);
-}
-
-:global(.dark) .headerScrolled {
-  border-bottom-color: rgba(225, 244, 234, 0.1);
-  background: color-mix(in srgb, #0a1511 58%, transparent);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
 }
 
 .header {
@@ -105,7 +84,7 @@
   grid-template-columns: minmax(11rem, 1fr) auto minmax(11rem, 1fr);
   align-items: center;
   width: min(100%, 92rem);
-  min-height: 5.25rem;
+  min-height: 3.75rem;
   margin: 0 auto;
   padding: 0 3rem;
 }
@@ -139,7 +118,7 @@
 
 .nav a {
   position: relative;
-  padding: 0.7rem 0;
+  padding: 0.35rem 0;
   color: color-mix(in srgb, var(--landing-ink-deep) 82%, transparent);
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 0.875rem;
@@ -174,8 +153,8 @@
 }
 
 .themeToggle {
-  width: 2.7rem !important;
-  height: 2.7rem !important;
+  width: 2.35rem !important;
+  height: 2.35rem !important;
   border-color: rgba(16, 56, 45, 0.1) !important;
   border-radius: 0.65rem !important;
   color: var(--landing-ink-deep) !important;
@@ -185,7 +164,7 @@
 
 .signIn {
   display: inline-flex;
-  min-height: 2.7rem;
+  min-height: 2.35rem;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(8, 122, 85, 0.42);
@@ -218,7 +197,7 @@
   grid-template-columns: minmax(0, 1.02fr) minmax(27rem, 0.98fr);
   align-items: center;
   width: min(100%, 92rem);
-  min-height: calc(100svh - 5.25rem);
+  min-height: calc(100svh - 3.75rem);
   margin: 0 auto;
   padding: 1rem 3rem 3rem;
 }
@@ -1219,12 +1198,16 @@
 
 @media (max-width: 680px) {
   .headerSpacer {
-    height: 4.6rem;
+    height: 3.4rem;
   }
 
   .header {
-    min-height: 4.6rem;
+    min-height: 3.4rem;
     padding: 0 1.15rem;
+  }
+
+  .heroGrid {
+    min-height: calc(100svh - 3.4rem);
   }
 
   .brand {
@@ -1394,8 +1377,7 @@
   .primaryAction,
   .secondaryAction span,
   .signIn,
-  .reviewerCta,
-  .headerWrap {
+  .reviewerCta {
     transition: none;
   }
 }
