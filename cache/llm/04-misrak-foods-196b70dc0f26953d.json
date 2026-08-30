@@ -1,0 +1,17 @@
+{
+  "headline": "Misrak Foods PLC ranks 4th with 71/100 points on the investment readiness track; ownership reporting discrepancy flagged.",
+  "whyThisRank": "Misrak Foods PLC placed 4th in the batch with 71 points, trailing Abyssinia Metalworks PLC (73 points) by 2 points. Its rank is anchored by maximum scores in market reach and expected intervention results, offset by zero points in sales growth.",
+  "justification": "Misrak Foods PLC is eligible for the support scheme as a privately owned company operating for 8 years. Evaluated on the investment readiness track (7b) due to an equipment request, the company secured 71 out of 100 available points. Strong performances in export market reach (5/5), expected intervention results (20/20), and positive social/environmental impact (8/10) supported the total score. However, overall points were constrained by 15.0% sales growth from 2023 to 2024 (0/5) and a job creation potential score of 15/25 based on 21 projected positions. Additionally, a data discrepancy was identified where reported female (40%) and male (40%) ownership totals 80% instead of 100%.",
+  "strengths": [
+    "Achieved full points (5/5) for serving international or export markets.",
+    "Secured maximum score (20/20) for expected intervention results across 3 selected priority areas.",
+    "Demonstrated strong social and environmental impact scoring 8 out of 10 points.",
+    "High female workforce representation at 42.9% of total employees (4/5 points)."
+  ],
+  "watchouts": [
+    "Ownership share reporting discrepancy: female (40%) and male (40%) shares total 80% rather than 100%.",
+    "Zero points scored for sales growth due to a 15.0% increase between 2023 and 2024.",
+    "Youth employment headcount is low at 21.4% of the total workforce (2/5 points)."
+  ],
+  "source": "gemini"
+}

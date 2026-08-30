@@ -1,0 +1,17 @@
+{
+  "headline": "Abyssinia Metalworks PLC (73 pts, Rank 3): High scores in expected results and management offset by reported history contradiction and low sales growth.",
+  "whyThisRank": "Abyssinia Metalworks PLC ranks 3rd with 73 points, placing behind Harar Highland Coffee PLC (rank 2, 80 points) primarily due to zero points in sales growth and an operational history contradiction.",
+  "justification": "Abyssinia Metalworks PLC achieves an eligible status and a total score of 73 out of 100 points under the investment readiness track. The application demonstrates solid fundamentals, securing maximum points for intervention results, management capacity, international market reach, and 30% women ownership. However, overall performance is limited by a 0 out of 5 score in sales growth alongside modest youth and female employment ratios. Furthermore, an automated check flagged a severe contradiction where 2022 figures were submitted despite a declared operational history of 3 years.",
+  "strengths": [
+    "Maximum score (20/20) for expected results from the intervention across 3 target areas.",
+    "Full points awarded for management capacity (4 core members with organogram), international market reach, headcount, and female ownership (30%).",
+    "High score (8/10) for positive social and environmental impact with commitments to OSH.",
+    "Solid job creation potential under investment readiness track (21 projected new jobs)."
+  ],
+  "watchouts": [
+    "Contradiction flagged: trading history for 2022 predates the stated 3-year operational history (earliest allowed year 2023).",
+    "Zero points awarded for sales growth from 2023 to 2024 (19.1%).",
+    "Low scores for female employee share (26.8%) and youth employee share (22.0%)."
+  ],
+  "source": "gemini"
+}

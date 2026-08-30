@@ -1,0 +1,17 @@
+{
+  "headline": "Sheger Honey PLC ranks 10th with 48 points on the investment readiness track, limited by zero job creation points and documentation defects.",
+  "whyThisRank": "Sheger Honey PLC places 10th in the batch with 48 points on the investment readiness track, trailing Hilcoe Print House PLC (Rank 9) by 3 points. Its position is primarily constrained by scoring 0 out of 25 points on job creation potential and 0 out of 5 on sales growth.",
+  "justification": "Sheger Honey PLC is an eligible 8-year-old private entity evaluated on the investment readiness track due to equipment requests. The application demonstrates strong performance in market reach, local raw material integration (88%), 40% female ownership, and management capacity. However, total scoring is heavily impacted by zero points in job creation potential (8 planned jobs) and historical sales growth (14.3%). Furthermore, compliance checks revealed two defects: only two priority areas were selected instead of the required three, and the mandatory organogram document was not uploaded.",
+  "strengths": [
+    "Full points achieved for serving international/export markets (5/5 points).",
+    "High local supply chain integration with 88% local raw material usage (5/5 points).",
+    "Strong ownership structure with 40% female ownership (5/5 points) and complete management capacity (5/5 points)."
+  ],
+  "watchouts": [
+    "Scored zero points (0/25) under Criterion 7b for job creation potential based on 8 planned jobs.",
+    "Section 2.4 defect: selected only 2 priority areas instead of the required 3.",
+    "Documentation defect: required organogram file was not uploaded.",
+    "Zero points awarded for historical sales growth (14.3%)."
+  ],
+  "source": "gemini"
+}

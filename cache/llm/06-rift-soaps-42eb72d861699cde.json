@@ -1,0 +1,17 @@
+{
+  "headline": "Rift Valley Soaps PLC placed 8th (53 pts); strong market reach and intervention results are tempered by unsupported uniqueness claims and weak growth.",
+  "whyThisRank": "Rift Valley Soaps PLC ranks 8th in the batch with 53 points, placing 4 points behind Dire Garments PLC (57 points). The application was evaluated under the employability track (7a) due to the absence of machinery or equipment requests.",
+  "justification": "Rift Valley Soaps PLC met basic eligibility criteria and earned 53 out of 100 points on the employability track. The firm performed strongly in market reach, securing full points (5/5) for international export destinations, and expected intervention results (20/20), along with 15 points for job creation potential (210 person-months). However, performance was offset by zero scores in sales growth (14.3%), local raw material share (18%), women ownership or management, and management capacity. Additionally, unique product features were claimed without supporting descriptions, and environmental impact remains unestablished.",
+  "strengths": [
+    "Maximum points (5/5) achieved for market served by reaching international export destinations.",
+    "Full score (20/20) awarded for expected intervention results across three selected areas.",
+    "Solid job creation potential (15/25) with 210 projected person-months from 14 new jobs."
+  ],
+  "watchouts": [
+    "Claimed unique product features without providing the required description (UNIQUENESS_UNSUPPORTED finding).",
+    "Zero points scored for sales growth (14.3%), local raw material sourcing (18%), and management capacity.",
+    "Zero points scored for women business ownership or management representation.",
+    "Environmental impact details are unestablished."
+  ],
+  "source": "gemini"
+}

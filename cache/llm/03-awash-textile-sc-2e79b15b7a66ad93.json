@@ -1,0 +1,18 @@
+{
+  "headline": "Awash Textile Share Company holds rank 6 with 62 points; private ownership status remains unestablished.",
+  "whyThisRank": "Awash Textile Share Company sits at rank 6 with 62 points, trailing Kality Furniture PLC (rank 5, 67 points). While scoring well in management capacity, expected results, and market reach, its rank is constrained by low job creation points and unestablished private ownership status.",
+  "justification": "Awash Textile Share Company achieved 62 out of 100 points under the investment readiness track, placing it 6th overall. The company scored maximum points in management capacity, intervention results, international market reach, and women ownership (40%). However, total points were heavily limited by low job creation potential (5 out of 25 points for 16 projected jobs), zero points for sales growth below 24%, and a low uniqueness score. Furthermore, overall eligibility remains unestablished because the application does not confirm whether state participation exists within the share company.",
+  "strengths": [
+    "Achieved full points (20/20) for expected intervention results across 3 selected areas.",
+    "Serves an international or export market (5/5 points).",
+    "Full points for management capacity with 4 named core team members.",
+    "Significant women ownership at 40% (5/5 points) and 12 years in operation."
+  ],
+  "watchouts": [
+    "Privately-owned eligibility status is unestablished due to potential state participation in the share company.",
+    "Low job creation potential score (5/25 points) based on 16 projected new jobs.",
+    "Scored 0/5 points on sales growth (20.0% growth was below the 24% threshold).",
+    "Minimal product uniqueness score (1/5 points) with no unique features selected."
+  ],
+  "source": "gemini"
+}

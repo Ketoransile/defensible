@@ -1,0 +1,16 @@
+{
+  "headline": "Sparse Workshop (Rank 11): Unestablished eligibility and zero points scored due to incomplete submission.",
+  "whyThisRank": "Sparse Workshop ranks at 11th position, behind Sheger Honey PLC (rank 10, 48 pts), because its private ownership status is unestablished and no evaluation criteria could be scored. The application lacks core financial, operational, and organizational data across the evaluation grid.",
+  "justification": "Sparse Workshop has an unestablished eligibility status because its legal form is recorded as 'other', leaving private ownership unverified despite operating for five years. The submission scored zero points across all 12 evaluation criteria due to missing baseline metrics for sales growth, headcount, market details, and management capacity. Critical compliance defects include omitting the required organogram file and leaving 17 required form fields blank. Targeted data collection across financial, HR, and ownership records is required before any scoring can occur.",
+  "strengths": [
+    "Years in operation (5 years) meets the minimum two-year requirement."
+  ],
+  "watchouts": [
+    "Private ownership is unestablished due to legal form recorded as 'other'.",
+    "Required organogram file is missing.",
+    "17 required form fields are blank or null.",
+    "Zero priority areas selected (exactly three required).",
+    "All 12 evaluation criteria remain unestablished."
+  ],
+  "source": "gemini"
+}

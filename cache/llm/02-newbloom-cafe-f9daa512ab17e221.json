@@ -1,0 +1,18 @@
+{
+  "headline": "Excluded: NewBloom Cafe operating for 1 year (below 2-year requirement) with 58/95 points scored.",
+  "whyThisRank": "NewBloom Cafe is ranked 12th because it is excluded on eligibility for operating for only 1 year, placing it behind applicants like Sparse Workshop despite scoring 58 points.",
+  "justification": "NewBloom Cafe scored 58 out of 95 points under the investment readiness track, securing full points for 100% women ownership, female employee share, green sector impact, and management team capacity. However, the application is formally excluded because the company has operated for only 1 year, failing the requirement of more than 2 years. Furthermore, a data contradiction exists where 2024 trading history is reported despite the 1-year operation timeline, and sales growth remains unestablished due to missing 2023 sales data. The company also scored zero points on job creation potential under criterion 7b.",
+  "strengths": [
+    "Achieved maximum points for 100% women ownership and 66.7% female staffing (Criteria 5.1 and 5.2)",
+    "Full points awarded for expected intervention results, green sector impact, and management capacity (Criteria 6, 8, and 9)",
+    "Reaches international or export destinations in market served (Criterion 3)"
+  ],
+  "watchouts": [
+    "Excluded due to failing the minimum 2-year operational history requirement (Check AGE_OVER_2Y)",
+    "Contradiction identified between 1-year operating timeline and reported 2024 sales and staffing figures",
+    "Sales growth (Criterion 1.1) is unestablished due to missing 2023 financial figures",
+    "Zero points scored for job creation potential under investment readiness (Criterion 7b)",
+    "Low product uniqueness rating with no unique features selected (Criterion 2)"
+  ],
+  "source": "gemini"
+}

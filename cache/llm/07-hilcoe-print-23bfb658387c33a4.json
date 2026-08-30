@@ -1,0 +1,19 @@
+{
+  "headline": "Hilcoe Print House PLC scores 51/100 (Rank 9), impacted by job table discrepancy and zero scores in job creation potential and management capacity.",
+  "whyThisRank": "Hilcoe Print House PLC places 9th with 51 points, placing 2 points behind Rift Valley Soaps PLC (53 points). Its position is primarily limited by zero scores in job creation potential (7b) and management capacity.",
+  "justification": "Hilcoe Print House PLC was evaluated under the investment readiness track (7b) following its equipment request. The business demonstrated strong performance in expected intervention outcomes (20/20), international market reach (5/5), and female ownership (5/5). However, it received zero points for job creation potential (0/25) and management capacity (0/5), alongside a material contradiction where the narrative claims 40 new jobs while the table lists 12. Additionally, environmental impact is unestablished, and local raw material usage remains low at 32%.",
+  "strengths": [
+    "Achieved full score for expected results from the intervention (20/20)",
+    "Serves international or export market (5/5)",
+    "40% female business ownership (5/5) and 41.9% female workforce (4/5)",
+    "Established operating baseline of 31 total employees (5/5)"
+  ],
+  "watchouts": [
+    "Contradiction: narrative states 40 new jobs while the positions table sums to 12",
+    "Zero points awarded for job creation potential on the investment readiness track (0/25)",
+    "Zero points awarded for management capacity (0/5)",
+    "Low local raw material integration at 32% (1/5) and no unique product features selected (1/5)",
+    "Environmental impact is not established"
+  ],
+  "source": "gemini"
+}
