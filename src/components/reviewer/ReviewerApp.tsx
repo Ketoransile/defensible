@@ -76,7 +76,7 @@ export function ReviewerApp({
 
   return (
     <div className="animate-console-in flex h-dvh flex-col overflow-hidden bg-background text-foreground">
-      <header className="z-20 shrink-0 border-b border-transparent bg-background/55 backdrop-blur-xl supports-backdrop-filter:bg-background/40">
+      <header className="z-20 shrink-0 border-b border-border/80 bg-background/90 backdrop-blur-md">
         <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex items-baseline gap-3">
             <Link

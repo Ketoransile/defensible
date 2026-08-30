@@ -16,12 +16,15 @@ export function LandingHeader({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <header
-      className={[styles.headerWrap, scrolled ? styles.headerScrolled : ""]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      {children}
-    </header>
+    <>
+      <header
+        className={[styles.headerWrap, scrolled ? styles.headerScrolled : ""]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {children}
+      </header>
+      <div className={styles.headerSpacer} aria-hidden />
+    </>
   );
 }

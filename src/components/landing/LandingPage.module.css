@@ -8,7 +8,7 @@
   --landing-line: rgba(16, 56, 45, 0.12);
   position: relative;
   min-height: 100dvh;
-  overflow-x: hidden;
+  overflow-x: clip;
   color: var(--landing-ink-deep);
   background:
     radial-gradient(circle at 7% 27%, rgba(255, 255, 255, 0.9), transparent 31%),
@@ -65,8 +65,10 @@
 }
 
 .headerWrap {
-  position: sticky;
+  position: fixed;
   top: 0;
+  right: 0;
+  left: 0;
   z-index: 40;
   border-bottom: 1px solid transparent;
   background: transparent;
@@ -76,8 +78,12 @@
   transition:
     background-color 280ms ease,
     border-color 280ms ease,
-    box-shadow 280ms ease,
-    backdrop-filter 280ms ease;
+    box-shadow 280ms ease;
+}
+
+.headerSpacer {
+  height: 5.25rem;
+  flex: none;
 }
 
 .headerScrolled {
@@ -110,9 +116,10 @@
   justify-self: start;
   gap: 0.7rem;
   color: var(--landing-ink-deep);
-  font-size: 1.24rem;
-  font-weight: 700;
-  letter-spacing: -0.045em;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
 }
 
 .brandMark {
@@ -134,9 +141,10 @@
   position: relative;
   padding: 0.7rem 0;
   color: color-mix(in srgb, var(--landing-ink-deep) 82%, transparent);
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .nav a::after {
@@ -1210,6 +1218,10 @@
 }
 
 @media (max-width: 680px) {
+  .headerSpacer {
+    height: 4.6rem;
+  }
+
   .header {
     min-height: 4.6rem;
     padding: 0 1.15rem;
