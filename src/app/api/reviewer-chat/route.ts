@@ -7,6 +7,7 @@ import {
   buildReviewerChatContext,
   chatSystemPrompt,
   localAssistantReply,
+  type ReviewerChatContext,
 } from "@/lib/reviewerChat";
 
 export const runtime = "nodejs";
@@ -23,6 +24,102 @@ interface ChatMessage {
 
 function sse(data: unknown): string {
   return `data: ${JSON.stringify(data)}\n\n`;
+}
+
+const SSE_HEADERS = {
+  "Content-Type": "text/event-stream; charset=utf-8",
+  "Cache-Control": "no-cache, no-transform",
+  Connection: "keep-alive",
+  "X-Accel-Buffering": "no",
+} as const;
+
+/** Gemini full reply, then SSE token chunks (avoids Next mid-stream abort). */
+async function geminiAnswer(
+  key: string,
+  history: { role: string; parts: { text: string }[] }[],
+  ctx: ReviewerChatContext,
+  signal: AbortSignal,
+): Promise<string> {
+  const ai = new GoogleGenAI({ apiKey: key });
+  const response = await ai.models.generateContent({
+    model: MODEL,
+    contents: history,
+    config: {
+      temperature: 0.35,
+      systemInstruction: chatSystemPrompt(ctx),
+      maxOutputTokens: 1024,
+      abortSignal: signal,
+    },
+  });
+  return (response.text ?? "").trim();
+}
+
+function chunkForSse(text: string): string[] {
+  // Prefer word-ish chunks so the UI still feels live without true token stream.
+  const parts = text.match(/\S+\s*/g);
+  return parts && parts.length > 0 ? parts : [text];
+}
+
+function sseResponse(
+  run: (
+    send: (payload: unknown) => void,
+    signal: AbortSignal,
+  ) => Promise<void>,
+  requestSignal: AbortSignal,
+): Response {
+  const encoder = new TextEncoder();
+  const abort = new AbortController();
+
+  const onParentAbort = () => abort.abort();
+  if (requestSignal.aborted) abort.abort();
+  else requestSignal.addEventListener("abort", onParentAbort, { once: true });
+
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      let closed = false;
+
+      const send = (payload: unknown) => {
+        if (closed || abort.signal.aborted) return;
+        try {
+          controller.enqueue(encoder.encode(sse(payload)));
+        } catch {
+          closed = true;
+          abort.abort();
+        }
+      };
+
+      const close = () => {
+        if (closed) return;
+        closed = true;
+        requestSignal.removeEventListener("abort", onParentAbort);
+        try {
+          controller.close();
+        } catch {
+          /* already closed by the runtime */
+        }
+      };
+
+      try {
+        await run(send, abort.signal);
+      } catch (err) {
+        if (!abort.signal.aborted) {
+          const message = err instanceof Error ? err.message : "Chat failed";
+          console.error(`[reviewer-chat] ${message}`);
+          send({
+            type: "error",
+            text: "Assistant failed. Try again in a moment.",
+          });
+        }
+      } finally {
+        close();
+      }
+    },
+    cancel() {
+      abort.abort();
+    },
+  });
+
+  return new Response(stream, { headers: SSE_HEADERS });
 }
 
 export async function POST(request: Request) {
@@ -83,86 +180,59 @@ export async function POST(request: Request) {
   const question = lastUser.content.trim();
   const key = geminiApiKey();
 
-  const encoder = new TextEncoder();
+  const history = messages.slice(-12).map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content.slice(0, 4000) }],
+  }));
 
-  if (!key) {
-    const text = localAssistantReply(question, ctx);
-    const stream = new ReadableStream({
-      start(controller) {
-        controller.enqueue(
-          encoder.encode(sse({ type: "meta", mode: "local", company: ctx.company.name })),
-        );
-        // Chunk for a streaming feel even offline
-        const parts = text.split(/(?<=\s)/);
-        for (const part of parts) {
-          controller.enqueue(encoder.encode(sse({ type: "token", text: part })));
-        }
-        controller.enqueue(encoder.encode(sse({ type: "done", mode: "local" })));
-        controller.close();
-      },
-    });
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/event-stream; charset=utf-8",
-        "Cache-Control": "no-cache, no-transform",
-        Connection: "keep-alive",
-      },
-    });
-  }
+  return sseResponse(async (send, signal) => {
+    let mode: "gemini" | "local" = key ? "gemini" : "local";
 
-  const history = messages
-    .slice(-12)
-    .map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content.slice(0, 4000) }],
-    }));
-
-  const stream = new ReadableStream({
-    async start(controller) {
-      const send = (payload: unknown) =>
-        controller.enqueue(encoder.encode(sse(payload)));
-
-      try {
-        send({ type: "meta", mode: "gemini", company: ctx.company.name });
-        const ai = new GoogleGenAI({ apiKey: key });
-        const gen = await ai.models.generateContentStream({
-          model: MODEL,
-          contents: history,
-          config: {
-            temperature: 0.35,
-            systemInstruction: chatSystemPrompt(ctx),
-            maxOutputTokens: 1024,
-          },
-        });
-
-        for await (const chunk of gen) {
-          const text = chunk.text;
-          if (text) send({ type: "token", text });
-        }
-        send({ type: "done", mode: "gemini" });
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Chat failed";
-        console.error(`[reviewer-chat] ${message}`);
-        // Graceful degrade to local facts
-        const fallback = localAssistantReply(question, ctx);
-        send({
-          type: "meta",
-          mode: "local",
-          notice: "Live model unavailable — answering from engine facts.",
-        });
-        send({ type: "token", text: fallback });
-        send({ type: "done", mode: "local" });
-      } finally {
-        controller.close();
+    if (!key) {
+      const text = localAssistantReply(question, ctx);
+      send({ type: "meta", mode: "local", company: ctx.company.name });
+      for (const part of chunkForSse(text)) {
+        if (signal.aborted) return;
+        send({ type: "token", text: part });
       }
-    },
-  });
+      send({ type: "done", mode: "local" });
+      return;
+    }
 
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/event-stream; charset=utf-8",
-      "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
-    },
-  });
+    send({ type: "meta", mode: "gemini", company: ctx.company.name });
+
+    let answer = "";
+    try {
+      answer = await geminiAnswer(key, history, ctx, signal);
+    } catch (err) {
+      if (signal.aborted) return;
+      const message = err instanceof Error ? err.message : "Chat failed";
+      console.error(`[reviewer-chat] ${message}`);
+      mode = "local";
+      answer = localAssistantReply(question, ctx);
+      send({
+        type: "meta",
+        mode: "local",
+        notice: "Live model unavailable. Answering from engine facts.",
+      });
+    }
+
+    if (signal.aborted) return;
+
+    if (!answer) {
+      mode = "local";
+      answer = localAssistantReply(question, ctx);
+      send({
+        type: "meta",
+        mode: "local",
+        notice: "Empty model reply. Answering from engine facts.",
+      });
+    }
+
+    for (const part of chunkForSse(answer)) {
+      if (signal.aborted) return;
+      send({ type: "token", text: part });
+    }
+    send({ type: "done", mode });
+  }, request.signal);
 }

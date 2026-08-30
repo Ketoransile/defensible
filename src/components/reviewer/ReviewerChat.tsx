@@ -85,37 +85,46 @@ async function streamAssistant(params: {
   const decoder = new TextDecoder();
   let buffer = "";
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const chunks = buffer.split("\n\n");
-    buffer = chunks.pop() ?? "";
+  const onAbort = () => {
+    void reader.cancel().catch(() => undefined);
+  };
+  if (params.signal.aborted) onAbort();
+  else params.signal.addEventListener("abort", onAbort, { once: true });
 
-    for (const chunk of chunks) {
-      const line = chunk
-        .split("\n")
-        .find((l) => l.startsWith("data: "));
-      if (!line) continue;
-      try {
-        const payload = JSON.parse(line.slice(6)) as {
-          type: string;
-          text?: string;
-          mode?: string;
-          notice?: string;
-        };
-        if (payload.type === "meta") {
-          params.onMeta({ mode: payload.mode, notice: payload.notice });
-        } else if (payload.type === "token" && payload.text) {
-          params.onToken(payload.text);
-        } else if (payload.type === "error") {
-          throw new Error(payload.text ?? "Assistant error");
+  try {
+    while (true) {
+      if (params.signal.aborted) break;
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const chunks = buffer.split("\n\n");
+      buffer = chunks.pop() ?? "";
+
+      for (const chunk of chunks) {
+        const line = chunk.split("\n").find((l) => l.startsWith("data: "));
+        if (!line) continue;
+        try {
+          const payload = JSON.parse(line.slice(6)) as {
+            type: string;
+            text?: string;
+            mode?: string;
+            notice?: string;
+          };
+          if (payload.type === "meta") {
+            params.onMeta({ mode: payload.mode, notice: payload.notice });
+          } else if (payload.type === "token" && payload.text) {
+            params.onToken(payload.text);
+          } else if (payload.type === "error") {
+            throw new Error(payload.text ?? "Assistant error");
+          }
+        } catch (e) {
+          if (e instanceof SyntaxError) continue;
+          throw e;
         }
-      } catch (e) {
-        if (e instanceof SyntaxError) continue;
-        throw e;
       }
     }
+  } finally {
+    params.signal.removeEventListener("abort", onAbort);
   }
 }
 

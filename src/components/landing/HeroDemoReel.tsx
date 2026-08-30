@@ -19,13 +19,13 @@ const ROWS = [
   },
   {
     rank: "03",
-    name: "Abyssinia Metalworks",
-    pts: "73",
+    name: "Dire Garments PLC",
+    pts: "75",
     track: "7b",
     flag: null,
   },
   {
-    rank: "03",
+    rank: "08",
     name: "Abyssinia Metalworks",
     pts: "73",
     track: "7b",
