@@ -1,162 +1,300 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ThemeToggle } from "@/components/theme/ThemeProvider";
-import { HeroDemoReel } from "./HeroDemoReel";
+import { HeroEvidenceStage } from "./HeroEvidenceStage";
 import { Reveal } from "./Reveal";
+import styles from "./LandingPage.module.css";
+
+function BrandMark() {
+  return (
+    <svg
+      className={styles.brandMark}
+      viewBox="0 0 28 32"
+      fill="none"
+      aria-hidden
+    >
+      <path d="M3 9.5 12.5 4v10.5L3 20V9.5Z" fill="currentColor" opacity=".72" />
+      <path d="m15 2 10 5.7-10 5.7V2Z" fill="currentColor" />
+      <path d="m3 22.4 9.5-5.5v11L3 22.4Z" fill="currentColor" />
+      <path d="m15 15.4 10-5.7v11.6L15 27V15.4Z" fill="currentColor" opacity=".9" />
+    </svg>
+  );
+}
+
+function ArrowRight() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        d="M4 10h11m-4-4 4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ShieldIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 3 19 6v5.1c0 4.5-2.8 7.8-7 9.9-4.2-2.1-7-5.4-7-9.9V6l7-3Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect
+        x="5.5"
+        y="10"
+        width="13"
+        height="10"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M8 10V7.7a4 4 0 0 1 8 0V10"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="m8.5 12 2.2 2.2 4.8-5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const TRUST: Array<{
+  title: string;
+  body: string;
+  icon: ReactNode;
+}> = [
+  {
+    title: "Transparency first",
+    body: "Every score is explained and traceable.",
+    icon: <ShieldIcon />,
+  },
+  {
+    title: "Secure by design",
+    body: "Application data stays private and protected.",
+    icon: <LockIcon />,
+  },
+  {
+    title: "Grounded AI agent",
+    body: "Ask why any rank, finding, or gap exists.",
+    icon: <CheckIcon />,
+  },
+];
+
+const STEPS = [
+  {
+    number: "01",
+    title: "Gate and detect",
+    body: "Apply the programme’s eligibility rules and surface contradictions before ranking.",
+  },
+  {
+    number: "02",
+    title: "Score and cite",
+    body: "Apply official bands in code and attach the exact form evidence behind every point.",
+  },
+  {
+    number: "03",
+    title: "Ask the agent",
+    body: "Interrogate one selected file in plain language without letting the model invent a score.",
+  },
+];
+
+const PROOF = [
+  {
+    title: "The agent explains; code decides",
+    body: "Gemini briefs the reviewer. Deterministic code owns every score, gate, and finding.",
+    icon: <CheckIcon />,
+  },
+  {
+    title: "Honest about gaps",
+    body: "Missing evidence stays unestablished. It is never silently converted into a zero.",
+    icon: <ShieldIcon />,
+  },
+  {
+    title: "Private application data",
+    body: "Reviewers interrogate one selected file at a time, inside the protected console.",
+    icon: <LockIcon />,
+  },
+];
 
 export function LandingPage() {
   return (
-    <div className="landing-root min-h-dvh overflow-x-hidden bg-background text-foreground">
-      <div className="landing-atmosphere" aria-hidden />
-      <div className="landing-grid" aria-hidden />
-      <div className="landing-orb landing-orb--a" aria-hidden />
-      <div className="landing-orb landing-orb--b" aria-hidden />
+    <div className={styles.page}>
+      <a href="#main-content" className={styles.skipLink}>
+        Skip to content
+      </a>
 
-      <div className="landing-hero-plane" aria-hidden>
-        <div className="landing-hero-glow" />
-        <HeroDemoReel />
-      </div>
-
-      <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
-        <Link
-          href="/"
-          className="landing-brand-link font-[family-name:var(--font-display)] text-lg tracking-tight md:text-xl"
-        >
-          Defensible
-        </Link>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <ThemeToggle />
-          <Link
-            href="/login"
-            className="rounded-md border border-border bg-surface/80 px-3 py-2 text-[13px] backdrop-blur-sm transition hover:border-accent/40 hover:text-accent"
-          >
-            Sign in
+      <header className={styles.headerWrap}>
+        <div className={styles.header}>
+          <Link href="/" className={styles.brand} aria-label="Defensible home">
+            <BrandMark />
+            <span>Defensible</span>
           </Link>
+
+          <nav className={styles.nav} aria-label="Primary navigation">
+            <a href="#how-it-works">How it works</a>
+            <a href="#why-defensible">Why Defensible</a>
+            <a href="#for-reviewers">For Reviewers</a>
+            <a href="#security">Security</a>
+          </nav>
+
+          <div className={styles.headerActions}>
+            <ThemeToggle className={styles.themeToggle} />
+            <Link href="/login" className={styles.signIn}>
+              Sign in
+            </Link>
+          </div>
         </div>
       </header>
 
-      <section className="relative z-10 flex min-h-[calc(100dvh-4.25rem)] flex-col justify-end px-6 pb-16 md:justify-center md:px-10 md:pb-24">
-        <div className="mx-auto w-full max-w-6xl">
-          <p className="animate-fade-up landing-eyebrow font-mono text-[11px] tracking-[0.24em] text-accent uppercase">
-            Built for sequa · Ethiopia
-          </p>
-          <h1 className="landing-hero-title mt-4 max-w-[11ch] font-[family-name:var(--font-display)] text-[clamp(3.4rem,11vw,7.5rem)] leading-[0.9] tracking-tight">
-            Defensible
-          </h1>
-          <p className="animate-fade-up-delay-2 mt-6 max-w-lg text-[17px] leading-7 text-muted md:text-[19px]">
-            The SME funding shortlist you can defend. Ranked, cited, and honest
-            about what the form cannot prove.
-          </p>
-          <div className="animate-fade-up-delay-3 mt-9 flex flex-wrap items-center gap-4">
-            <Link href="/login" className="landing-cta">
-              Enter the console
-            </Link>
-            <a
-              href="#product"
-              className="landing-text-link text-[14px] text-muted"
-            >
-              See how it works
-              <span className="landing-text-link-arrow" aria-hidden>
-                ↓
-              </span>
-            </a>
+      <main id="main-content">
+        <section className={styles.hero}>
+          <div className={styles.heroGrid}>
+            <div className={styles.copy}>
+              <p className={styles.eyebrow}>
+                <i aria-hidden />
+                AI reviewer agent · Built for sequa
+              </p>
+
+              <h1 className={styles.title}>
+                Fund what works. <em>Defend</em> every decision.
+              </h1>
+
+              <p className={styles.subtitle}>
+                Defensible is a grounded AI reviewer agent that turns forms into
+                a ranked shortlist with transparent scores and citations—so you
+                can choose with confidence.
+              </p>
+
+              <div className={styles.heroActions}>
+                <Link href="/login" className={styles.primaryAction}>
+                  Enter the console
+                  <ArrowRight />
+                </Link>
+                <a href="#how-it-works" className={styles.secondaryAction}>
+                  See how it works
+                  <span aria-hidden>›</span>
+                </a>
+              </div>
+
+              <div className={styles.trustGrid}>
+                {TRUST.map((item) => (
+                  <div key={item.title} className={styles.trustItem}>
+                    <span className={styles.trustIcon}>{item.icon}</span>
+                    <div>
+                      <strong>{item.title}</strong>
+                      <p>{item.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.visualColumn}>
+              <HeroEvidenceStage />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section
-        id="product"
-        className="relative z-10 border-t border-border/70 bg-surface/40"
-      >
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2 md:gap-16 md:px-10 md:py-28">
-          <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
-              The product
-            </p>
-            <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl tracking-tight md:text-4xl">
-              One reviewer. One batch. Zero invented scores.
-            </h2>
-          </Reveal>
-          <Reveal delayMs={120} className="self-end">
-            <p className="text-[16px] leading-7 text-muted md:text-[17px]">
-              Defensible turns sequa SME applications into a ranked shortlist on
-              the official evaluation grid. Eligibility and contradictions run
-              in code. The model only explains what the fields already show.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+        <section id="how-it-works" className={styles.contentSection}>
+          <div className={styles.sectionInner}>
+            <Reveal>
+              <p className={styles.sectionLabel}>How it works</p>
+              <h2 className={styles.sectionTitle}>
+                From submitted form to defensible shortlist.
+              </h2>
+            </Reveal>
 
-      <section className="relative z-10 border-t border-border/70">
-        <div className="mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28">
-          <Reveal>
-            <p className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
-              How reviewers win
-            </p>
-          </Reveal>
-          <div className="mt-10 grid gap-12 md:grid-cols-3 md:gap-10">
-            {[
-              {
-                step: "01",
-                title: "Gate, don’t guess",
-                body: "Mechanical eligibility from the form. Share companies stay unestablished when ownership is unclear.",
-              },
-              {
-                step: "02",
-                title: "Surface the conflict",
-                body: "A contradiction engine catches arithmetic and history clashes, including the demo-closing years-vs-history case.",
-              },
-              {
-                step: "03",
-                title: "Cite every point",
-                body: "Official sequa bands only. Expand a score, tap a field path, read the live application value.",
-              },
-            ].map((item, i) => (
-              <Reveal key={item.step} delayMs={80 * i}>
-                <div className="landing-step">
-                  <p className="landing-step-num font-mono text-[12px] text-accent">
-                    {item.step}
-                  </p>
-                  <h3 className="mt-3 font-[family-name:var(--font-display)] text-2xl tracking-tight">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-[15px] leading-6 text-muted">
-                    {item.body}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+            <div className={styles.steps}>
+              {STEPS.map((step, index) => (
+                <Reveal key={step.number} delayMs={index * 90}>
+                  <article className={styles.step}>
+                    <span>{step.number}</span>
+                    <h3>{step.title}</h3>
+                    <p>{step.body}</p>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="relative z-10 overflow-hidden border-t border-border/70 bg-accent text-white dark:text-[#06281c]">
-        <div className="landing-cta-sheen" aria-hidden />
-        <div className="relative mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-6 py-16 md:flex-row md:items-center md:px-10 md:py-20">
+        <section id="why-defensible" className={styles.proofSection}>
+          <div className={styles.proofInner}>
+            <Reveal>
+              <p className={styles.sectionLabel}>Why Defensible</p>
+              <h2 className={styles.sectionTitle}>
+                Evidence before confidence.
+              </h2>
+            </Reveal>
+
+            <div className={styles.proofList}>
+              {PROOF.map((item, index) => (
+                <Reveal key={item.title} delayMs={index * 80}>
+                  <article
+                    id={item.title === "Private application data" ? "security" : undefined}
+                    className={styles.proofRow}
+                  >
+                    {item.icon}
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.body}</p>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="for-reviewers" className={styles.reviewerSection}>
           <Reveal>
-            <h2 className="font-[family-name:var(--font-display)] text-3xl tracking-tight md:text-4xl">
-              Ready for the shortlist.
-            </h2>
-            <p className="mt-3 max-w-md text-[15px] leading-6 opacity-90">
-              Sign in with any username and the demo password, then open Alem
-              Leather, then Abyssinia Metalworks. Every score traces to a field.
-            </p>
+            <div className={styles.reviewerCard}>
+              <div>
+                <h2>One reviewer. One batch. Every point explained.</h2>
+                <p>
+                  Open the ranked demo, inspect the clean shortlist lead, then
+                  reveal the history contradiction that changes the review.
+                </p>
+              </div>
+              <Link href="/login" className={styles.reviewerCta}>
+                Open Defensible
+                <ArrowRight />
+              </Link>
+            </div>
           </Reveal>
-          <Reveal delayMs={100}>
-            <Link
-              href="/login"
-              className="landing-cta landing-cta--inverse inline-block"
-            >
-              Open Defensible
-            </Link>
-          </Reveal>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      <footer className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-6 font-mono text-[10px] text-muted md:px-10">
-        <Link href="/" className="transition hover:text-foreground">
-          Defensible
-        </Link>
-        <span>sequa gGmbH SME Support Scheme · Challenge 1</span>
+      <footer className={styles.footer}>
+        <span>Defensible · sequa SME reviewer</span>
+        <span>Ranked. Cited. Interrogable.</span>
       </footer>
     </div>
   );

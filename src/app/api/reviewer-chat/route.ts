@@ -1,5 +1,9 @@
 import { cookies } from "next/headers";
-import { GoogleGenAI } from "@google/genai";
+import {
+  GoogleGenAI,
+  ThinkingLevel,
+  type ThinkingConfig,
+} from "@google/genai";
 import { assessBatch, geminiApiKey } from "@/engine";
 import { getApplication, getApplications } from "@/lib/applicationsRepo";
 import { SESSION_COOKIE, verifySession } from "@/lib/auth";
@@ -39,9 +43,9 @@ const SSE_HEADERS = {
  * Gemini 3 thinks at HIGH by default. Thinking tokens count against
  * maxOutputTokens — a 512 cap cuts the spoken reply mid-sentence.
  */
-function thinkingConfig() {
+function thinkingConfig(): ThinkingConfig {
   if (MODEL.includes("gemini-3")) {
-    return { thinkingLevel: "LOW" as const };
+    return { thinkingLevel: ThinkingLevel.LOW };
   }
   return { thinkingBudget: 0 };
 }
