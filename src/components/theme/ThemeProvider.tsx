@@ -64,11 +64,16 @@ function MoonIcon() {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(readStoredTheme);
+  // Always start as light so SSR HTML matches the first client render.
+  // localStorage is applied after mount; the blocking layout script already
+  // set the html class so the page does not flash the wrong palette.
+  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    const stored = readStoredTheme();
+    setThemeState(stored);
+    applyTheme(stored);
+  }, []);
 
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
@@ -99,6 +104,14 @@ export function useTheme() {
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && theme === "dark";
+
   return (
     <button
       type="button"
@@ -107,10 +120,10 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
         "inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-muted transition hover:border-accent/40 hover:text-foreground",
         className,
       ].join(" ")}
-      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      title={theme === "dark" ? "Light mode" : "Dark mode"}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Light mode" : "Dark mode"}
     >
-      {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+      {isDark ? <SunIcon /> : <MoonIcon />}
     </button>
   );
 }

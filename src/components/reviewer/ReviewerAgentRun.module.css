@@ -1,0 +1,837 @@
+.runTrigger {
+  position: relative;
+  display: inline-flex;
+  min-height: 2.45rem;
+  align-items: center;
+  gap: 0.55rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 68%, var(--border));
+  border-radius: 999px;
+  padding: 0.25rem 0.8rem 0.25rem 0.3rem;
+  color: #fff;
+  background:
+    linear-gradient(
+      110deg,
+      color-mix(in srgb, var(--accent) 96%, #00180e),
+      var(--accent)
+    );
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 22%, transparent);
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.runTrigger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 11px 28px color-mix(in srgb, var(--accent) 31%, transparent);
+}
+
+.runTriggerDashboard {
+  width: 100%;
+  min-height: 3.15rem;
+  justify-content: flex-start;
+  border-color: rgba(255, 255, 255, 0.32);
+  border-radius: 0.65rem;
+  padding: 0.35rem 1rem 0.35rem 0.4rem;
+  color: #0b3f2e;
+  background: #d9f0e3;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.runTriggerDashboard:hover {
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.23);
+}
+
+.runTriggerDashboard .agentGlyphCompact {
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #d9f0e3;
+  background: #0b4c35;
+}
+
+.runTriggerDashboard > span:nth-child(2) {
+  flex: 1;
+  text-align: left;
+}
+
+.runTriggerDashboard > i {
+  background: #1b8059;
+  box-shadow: 0 0 0 0 rgba(27, 128, 89, 0.32);
+}
+
+.runTrigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.runTrigger > i {
+  width: 0.38rem;
+  height: 0.38rem;
+  margin-left: 0.1rem;
+  border-radius: 999px;
+  background: #a9f1cb;
+  box-shadow: 0 0 0 0 rgba(169, 241, 203, 0.5);
+  animation: triggerPulse 2s ease-out infinite;
+}
+
+.agentGlyph,
+.agentGlyphCompact {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--accent);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 8px 20px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.agentGlyph {
+  width: 2.65rem;
+  height: 2.65rem;
+}
+
+.agentGlyphCompact {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: none;
+}
+
+.agentGlyph svg {
+  width: 1.65rem;
+  height: 1.65rem;
+}
+
+.agentGlyphCompact svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.integrityStrip {
+  position: relative;
+  z-index: 18;
+  display: flex;
+  min-height: 3.1rem;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: clamp(1rem, 2.2vw, 2.4rem);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 1.5rem;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 7%, var(--surface)),
+      var(--surface) 38%
+    );
+  scrollbar-width: none;
+}
+
+.integrityStrip::-webkit-scrollbar {
+  display: none;
+}
+
+.integrityLead {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.integrityLead > span:last-child {
+  display: grid;
+}
+
+.integrityLead strong {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.integrityLead small {
+  margin-top: 0.05rem;
+  color: var(--muted);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.integrityPulse {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 42%, transparent);
+  animation: integrityPulse 2.4s ease-out infinite;
+}
+
+.integrityDivider {
+  width: 1px;
+  height: 1.65rem;
+  flex: 0 0 auto;
+  background: var(--border);
+}
+
+.integrityMetric {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: baseline;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.integrityMetric strong {
+  color: var(--foreground);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.74rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.integrityMetric span {
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+.integrityPromise {
+  margin-left: auto;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.integrityPromise strong {
+  color: var(--accent);
+}
+
+.overlay {
+  position: fixed;
+  z-index: 80;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: color-mix(in srgb, var(--foreground) 32%, transparent);
+  backdrop-filter: blur(5px);
+  animation: backdropIn 360ms ease-out both;
+}
+
+.dialog {
+  --run-ink: #0b1510;
+  --run-copy: #44534a;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(52rem, 100%);
+  max-height: min(50rem, calc(100dvh - 3rem));
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  border-radius: 1.15rem;
+  background: var(--surface);
+  box-shadow:
+    0 40px 100px color-mix(in srgb, var(--foreground) 27%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--background) 70%, transparent);
+  animation: dialogIn 540ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+:global(.dark) .dialog {
+  --run-ink: #f3f6f4;
+  --run-copy: #aeb8b2;
+}
+
+.dialogHeader {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--accent) 11%, transparent),
+      transparent 50%
+    ),
+    var(--surface);
+}
+
+.agentIdentity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.agentIdentity > span:last-child {
+  display: grid;
+}
+
+.agentIdentity small {
+  color: var(--accent);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.agentIdentity strong {
+  margin-top: 0.05rem;
+  color: var(--run-ink);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.closeButton {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 1.2rem;
+  line-height: 1;
+  transition:
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.closeButton:hover {
+  border-color: var(--border-strong);
+  color: var(--foreground);
+}
+
+.dialogBody {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  padding: clamp(1.25rem, 3.5vw, 2rem);
+}
+
+.runIntro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.runKicker {
+  color: var(--accent);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.runIntro h2 {
+  max-width: 17ch;
+  margin-top: 0.45rem;
+  color: var(--run-ink);
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.85rem, 4vw, 2.55rem);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -0.045em;
+}
+
+.runIntro .runTitleComplete {
+  color: var(--run-ink);
+  font-weight: 800;
+  animation: titleCompleteIn 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.runState {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--info) 30%, var(--border));
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  color: var(--info);
+  background: color-mix(in srgb, var(--info) 8%, transparent);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.runState i {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: currentColor;
+  animation: stateBlink 1.6s ease-in-out infinite;
+}
+
+.runStateDone {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.runStateDone i {
+  animation: none;
+}
+
+.runStateError {
+  border-color: color-mix(in srgb, var(--danger) 35%, var(--border));
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+}
+
+.runStateError i {
+  animation: none;
+}
+
+.stepList {
+  position: relative;
+  display: grid;
+  gap: 0;
+  margin-top: 1.75rem;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 3.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  opacity: 0;
+  animation: stepIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.step:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+}
+
+.stepIcon {
+  display: grid;
+  width: 1.55rem;
+  height: 1.55rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 999px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+.stepIcon svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.stepIconDanger {
+  border-color: color-mix(in srgb, var(--danger) 35%, var(--border));
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 8%, var(--surface));
+}
+
+.stepCopy {
+  display: grid;
+  min-width: 0;
+}
+
+.stepCopy strong {
+  overflow: hidden;
+  color: var(--run-ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+  opacity: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stepCopy small {
+  overflow: hidden;
+  margin-top: 0.12rem;
+  color: var(--run-copy);
+  font-size: 0.8rem;
+  opacity: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stepMetric {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.32rem 0.58rem;
+  color: var(--run-copy);
+  background: var(--background);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.stepActive {
+  opacity: 1;
+  animation: none;
+}
+
+.stepSpinner {
+  display: flex;
+  width: 1.55rem;
+  height: 1.55rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.16rem;
+}
+
+.stepSpinner i {
+  width: 0.22rem;
+  height: 0.22rem;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: spinnerDot 1.35s ease-in-out infinite;
+}
+
+.stepSpinner i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.stepSpinner i:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.runSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--border);
+  animation: summaryIn 680ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.runSummary > div {
+  display: grid;
+  min-height: 4.6rem;
+  place-content: center;
+  padding: 0.75rem;
+  text-align: center;
+  background: var(--background);
+}
+
+.runSummary strong {
+  color: var(--accent);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.runSummary span {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.runError {
+  margin-top: 1rem;
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--border));
+  border-radius: 0.55rem;
+  padding: 0.75rem;
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+  font-size: 0.85rem;
+}
+
+.dialogFooter {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  background: color-mix(in srgb, var(--surface-2) 55%, var(--surface));
+}
+
+.dialogFooter > p {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.dialogFooter > p span {
+  color: var(--accent);
+  font-size: 0.5rem;
+}
+
+.dialogFooter > div {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 0.5rem;
+  padding: 0 0.9rem;
+  font-size: 0.84rem;
+  font-weight: 650;
+  transition:
+    transform 170ms ease,
+    opacity 170ms ease;
+}
+
+.primaryButton {
+  border: 1px solid var(--accent);
+  color: #fff;
+  background: var(--accent);
+}
+
+.secondaryButton {
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  background: var(--surface);
+}
+
+.primaryButton:hover:not(:disabled),
+.secondaryButton:hover {
+  transform: translateY(-1px);
+}
+
+.primaryButton:disabled {
+  opacity: 0.38;
+}
+
+@keyframes triggerPulse {
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgba(169, 241, 203, 0);
+  }
+}
+
+@keyframes integrityPulse {
+  70%,
+  100% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+}
+
+@keyframes backdropIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes stateBlink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes titleCompleteIn {
+  from {
+    transform: translateY(7px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spinnerDot {
+  0%,
+  70%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes summaryIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (max-width: 760px) {
+  .runTrigger > span:nth-child(2) {
+    display: none;
+  }
+
+  .runTrigger {
+    width: 2.45rem;
+    justify-content: center;
+    padding: 0.25rem;
+  }
+
+  .runTrigger > i {
+    position: absolute;
+    top: 0.15rem;
+    right: 0.1rem;
+  }
+
+  .runTriggerDashboard {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.35rem 1rem 0.35rem 0.4rem;
+  }
+
+  .runTriggerDashboard > span:nth-child(2) {
+    display: inline;
+  }
+
+  .runTriggerDashboard > i {
+    position: static;
+    margin-left: auto;
+  }
+
+  .integrityStrip {
+    gap: 1rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .integrityPromise {
+    margin-left: 0;
+  }
+
+  .overlay {
+    padding: 0.5rem;
+  }
+
+  .dialog {
+    max-height: calc(100dvh - 1rem);
+    border-radius: 0.9rem;
+  }
+
+  .runIntro h2 {
+    font-size: 1.85rem;
+  }
+
+  .step {
+    grid-template-columns: 1.8rem minmax(0, 1fr);
+  }
+
+  .stepMetric {
+    display: none;
+  }
+
+  .runSummary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dialogFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dialogFooter > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dialogFooter > div > :only-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .integrityLead small,
+  .integrityDivider {
+    display: none;
+  }
+
+  .dialogBody {
+    padding: 1rem;
+  }
+
+  .runIntro {
+    gap: 0.75rem;
+  }
+
+  .runState {
+    padding: 0.3rem 0.45rem;
+  }
+
+  .stepCopy small {
+    white-space: normal;
+  }
+
+  .dialogFooter > div {
+    grid-template-columns: 1fr;
+  }
+
+  .dialogFooter > div > * {
+    grid-column: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runTrigger,
+  .runTrigger > i,
+  .integrityPulse,
+  .backdrop,
+  .dialog,
+  .runTitleComplete,
+  .runState i,
+  .step,
+  .stepSpinner i,
+  .runSummary,
+  .primaryButton,
+  .secondaryButton {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -3,15 +3,19 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Application, BatchResult } from "@/types";
+import type { ReviewerIntegritySummary } from "@/lib/reviewerIntegrity";
 import { logoutAction } from "@/app/actions/auth";
 import { ThemeToggle } from "@/components/theme/ThemeProvider";
 import { CompanyReview } from "./CompanyReview";
+import { IntegrityStrip } from "./ReviewerAgentRun";
 import { ReviewerChat } from "./ReviewerChat";
+import { ReviewRoundDashboard } from "./ReviewRoundDashboard";
 import { Shortlist } from "./Shortlist";
 
 interface ReviewerAppProps {
   batch: BatchResult;
   applications: Record<string, Application>;
+  integrity: ReviewerIntegritySummary;
   reviewerName: string;
 }
 
@@ -27,6 +31,7 @@ function firstRankedId(assessments: BatchResult["assessments"]): string | null {
 export function ReviewerApp({
   batch,
   applications,
+  integrity,
   reviewerName,
 }: ReviewerAppProps) {
   const assessments = batch.assessments;
@@ -34,6 +39,8 @@ export function ReviewerApp({
     firstRankedId(assessments),
   );
   const [chatOpen, setChatOpen] = useState(false);
+  const [screen, setScreen] = useState<"dashboard" | "rankings">("dashboard");
+  const [agentRunComplete, setAgentRunComplete] = useState(false);
   const selectedIndex = assessments.findIndex(
     (a) => a.applicationId === selectedId,
   );
@@ -41,6 +48,7 @@ export function ReviewerApp({
   const application =
     selected != null ? (applications[selected.applicationId] ?? null) : null;
   const detailOpen = selected != null && application != null;
+  const leaderId = firstRankedId(assessments);
 
   function selectCompany(id: string) {
     setSelectedId(id);
@@ -59,6 +67,13 @@ export function ReviewerApp({
     setChatOpen(false);
   }
 
+  function revealRankings() {
+    setAgentRunComplete(true);
+    setSelectedId(leaderId);
+    setChatOpen(false);
+    setScreen("rankings");
+  }
+
   return (
     <div className="animate-console-in flex h-dvh flex-col overflow-hidden bg-background text-foreground">
       <header className="z-20 shrink-0 border-b border-border/80 bg-background/90 backdrop-blur-md">
@@ -66,15 +81,27 @@ export function ReviewerApp({
           <div className="flex items-baseline gap-3">
             <Link
               href="/"
-              className="font-[family-name:var(--font-display)] text-[18px] font-semibold tracking-tight transition hover:text-accent"
+              className="font-(family-name:--font-display) text-[18px] font-semibold tracking-tight transition hover:text-accent"
             >
               Defensible
             </Link>
             <span className="hidden font-mono text-[10px] tracking-[0.14em] text-muted uppercase sm:inline">
-              sequa reviewer
+              {screen === "dashboard" ? "intake dashboard" : "ranked review"}
             </span>
           </div>
           <div className="flex items-center gap-2 text-[13px] text-muted sm:gap-3">
+            {screen === "rankings" ? (
+              <button
+                type="button"
+                className="rounded-md border border-border bg-surface px-3 py-1.5 text-[12px] transition hover:text-foreground"
+                onClick={() => {
+                  setChatOpen(false);
+                  setScreen("dashboard");
+                }}
+              >
+                Round overview
+              </button>
+            ) : null}
             <span className="hidden md:inline">{reviewerName}</span>
             <ThemeToggle />
             <form action={logoutAction}>
@@ -89,75 +116,91 @@ export function ReviewerApp({
         </div>
       </header>
 
-      <main className="relative flex min-h-0 flex-1">
-        <aside
-          className={[
-            "flex min-h-0 flex-col border-border bg-surface",
-            detailOpen
-              ? "hidden w-full max-w-md border-r lg:flex lg:w-[min(420px,38%)] lg:shrink-0"
-              : "flex w-full lg:w-[min(420px,38%)] lg:shrink-0 lg:border-r",
-          ].join(" ")}
-        >
-          <Shortlist
-            assessments={assessments}
-            selectedId={selectedId}
-            onSelect={selectCompany}
+      {screen === "dashboard" ? (
+        <main className="relative min-h-0 flex-1">
+          <ReviewRoundDashboard
+            applications={Object.values(applications)}
+            integrity={integrity}
+            runComplete={agentRunComplete}
+            onRunComplete={() => setAgentRunComplete(true)}
+            onRevealRankings={revealRankings}
           />
-        </aside>
+        </main>
+      ) : (
+        <>
+          <IntegrityStrip summary={integrity} />
 
-        <section
-          className={[
-            "relative min-h-0 min-w-0 flex-1 overflow-hidden bg-background",
-            detailOpen ? "flex flex-col" : "hidden lg:flex",
-          ].join(" ")}
-        >
-          {detailOpen ? (
-            <div
-              key={selected.applicationId}
-              className="review-detail-panel flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+          <main className="relative flex min-h-0 flex-1">
+            <aside
+              className={[
+                "flex min-h-0 flex-col border-border bg-surface",
+                detailOpen
+                  ? "hidden w-full max-w-md border-r lg:flex lg:w-[min(420px,38%)] lg:shrink-0"
+                  : "flex w-full lg:w-[min(420px,38%)] lg:shrink-0 lg:border-r",
+              ].join(" ")}
             >
-              <CompanyReview
-                assessment={selected}
-                application={application}
-                variant="panel"
-                onBack={closeDetail}
-                onPrev={
-                  selectedIndex > 0 ? () => goRelative(-1) : undefined
-                }
-                onNext={
-                  selectedIndex < assessments.length - 1
-                    ? () => goRelative(1)
-                    : undefined
-                }
+              <Shortlist
+                assessments={assessments}
+                selectedId={selectedId}
+                onSelect={selectCompany}
               />
-            </div>
-          ) : (
-            <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
-              <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">
-                Company review
-              </p>
-              <p className="mt-3 max-w-sm font-[family-name:var(--font-display)] text-2xl tracking-tight">
-                Select a ranked applicant
-              </p>
-              <p className="mt-2 max-w-sm text-[14px] leading-6 text-muted">
-                Details expand here: scores, findings, and source fields for
-                the company you pick on the left. Open Ask the Agent once a
-                company is selected.
-              </p>
-            </div>
-          )}
-        </section>
+            </aside>
 
-        {detailOpen ? (
-          <ReviewerChat
-            key={`chat-${selected.applicationId}`}
-            applicationId={selected.applicationId}
-            companyName={selected.companyName ?? selected.applicationId}
-            open={chatOpen}
-            onOpenChange={setChatOpen}
-          />
-        ) : null}
-      </main>
+            <section
+              className={[
+                "relative min-h-0 min-w-0 flex-1 overflow-hidden bg-background",
+                detailOpen ? "flex flex-col" : "hidden lg:flex",
+              ].join(" ")}
+            >
+              {detailOpen ? (
+                <div
+                  key={selected.applicationId}
+                  className="review-detail-panel flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+                >
+                  <CompanyReview
+                    assessment={selected}
+                    application={application}
+                    variant="panel"
+                    onBack={closeDetail}
+                    onPrev={
+                      selectedIndex > 0 ? () => goRelative(-1) : undefined
+                    }
+                    onNext={
+                      selectedIndex < assessments.length - 1
+                        ? () => goRelative(1)
+                        : undefined
+                    }
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
+                  <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">
+                    Company review
+                  </p>
+                  <p className="mt-3 max-w-sm font-(family-name:--font-display) text-2xl tracking-tight">
+                    Select a ranked applicant
+                  </p>
+                  <p className="mt-2 max-w-sm text-[14px] leading-6 text-muted">
+                    Details expand here: scores, findings, and source fields
+                    for the company you pick on the left. Open Ask the Agent
+                    once a company is selected.
+                  </p>
+                </div>
+              )}
+            </section>
+
+            {detailOpen ? (
+              <ReviewerChat
+                key={`chat-${selected.applicationId}`}
+                applicationId={selected.applicationId}
+                companyName={selected.companyName ?? selected.applicationId}
+                open={chatOpen}
+                onOpenChange={setChatOpen}
+              />
+            ) : null}
+          </main>
+        </>
+      )}
     </div>
   );
 }
