@@ -257,9 +257,6 @@ export function ReviewRoundDashboard({
               onRunComplete={onRunComplete}
               onRevealRankings={onRevealRankings}
             />
-            <p>
-              <span aria-hidden>●</span> Gemini explains. It never assigns points.
-            </p>
           </div>
         </aside>
       </div>

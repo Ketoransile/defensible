@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ThemeToggle } from "@/components/theme/ThemeProvider";
 import { HeroEvidenceStage } from "./HeroEvidenceStage";
+import { LandingHeader } from "./LandingHeader";
 import { Reveal } from "./Reveal";
 import styles from "./LandingPage.module.css";
 
@@ -150,7 +151,7 @@ export function LandingPage() {
         Skip to content
       </a>
 
-      <header className={styles.headerWrap}>
+      <LandingHeader>
         <div className={styles.header}>
           <Link href="/" className={styles.brand} aria-label="Defensible home">
             <BrandMark />
@@ -171,7 +172,7 @@ export function LandingPage() {
             </Link>
           </div>
         </div>
-      </header>
+      </LandingHeader>
 
       <main id="main-content">
         <section className={styles.hero}>

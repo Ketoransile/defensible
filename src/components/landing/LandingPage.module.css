@@ -8,7 +8,7 @@
   --landing-line: rgba(16, 56, 45, 0.12);
   position: relative;
   min-height: 100dvh;
-  overflow: hidden;
+  overflow-x: hidden;
   color: var(--landing-ink-deep);
   background:
     radial-gradient(circle at 7% 27%, rgba(255, 255, 255, 0.9), transparent 31%),
@@ -65,9 +65,33 @@
 }
 
 .headerWrap {
-  position: relative;
-  z-index: 30;
+  position: sticky;
+  top: 0;
+  z-index: 40;
   border-bottom: 1px solid transparent;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  transition:
+    background-color 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease,
+    backdrop-filter 280ms ease;
+}
+
+.headerScrolled {
+  border-bottom-color: color-mix(in srgb, var(--landing-ink) 10%, transparent);
+  background: color-mix(in srgb, var(--landing-cream) 62%, transparent);
+  box-shadow: 0 10px 40px color-mix(in srgb, var(--landing-ink) 6%, transparent);
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+}
+
+:global(.dark) .headerScrolled {
+  border-bottom-color: rgba(225, 244, 234, 0.1);
+  background: color-mix(in srgb, #0a1511 58%, transparent);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
 }
 
 .header {
@@ -1358,7 +1382,8 @@
   .primaryAction,
   .secondaryAction span,
   .signIn,
-  .reviewerCta {
+  .reviewerCta,
+  .headerWrap {
     transition: none;
   }
 }

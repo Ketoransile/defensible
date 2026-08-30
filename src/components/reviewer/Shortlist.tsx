@@ -390,6 +390,9 @@ export function Shortlist({
               {label}
             </Chip>
           ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
           {(
             [
               ["all", "All findings"],

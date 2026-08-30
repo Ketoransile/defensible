@@ -274,14 +274,32 @@ export function ReviewerAgentRun({
         onClick={openAndRun}
       >
         <AgentGlyph compact />
-        <span>
-          {status === "done"
-            ? "Reveal ranked shortlist"
-            : triggerVariant === "dashboard"
-              ? "Run the Agent"
-              : "Run reviewer agent"}
+        {triggerVariant === "dashboard" ? (
+          <span className={styles.triggerCopy}>
+            <strong>
+              {status === "done" ? "Open ranked shortlist" : "Run the agent"}
+            </strong>
+            <small>
+              {status === "done"
+                ? "Inspect scores, findings, and citations"
+                : "Gate, check, score, and cite every form"}
+            </small>
+          </span>
+        ) : (
+          <span>
+            {status === "done" ? "Reveal ranked shortlist" : "Run reviewer agent"}
+          </span>
+        )}
+        <span
+          className={
+            triggerVariant === "dashboard"
+              ? styles.triggerArrow
+              : styles.triggerPulse
+          }
+          aria-hidden
+        >
+          {triggerVariant === "dashboard" ? "→" : ""}
         </span>
-        <i aria-hidden />
       </button>
 
       {open ? (

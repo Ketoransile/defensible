@@ -494,24 +494,8 @@
 
 .agentAction {
   position: relative;
-  display: grid;
-  gap: 0.7rem;
   margin-top: auto;
-  padding-top: 1.2rem;
-}
-
-.agentAction > p {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  color: rgba(237, 248, 242, 0.5);
-  font-size: 0.68rem;
-}
-
-.agentAction > p span {
-  color: #8fd8b4;
-  font-size: 0.4rem;
+  padding-top: 1.15rem;
 }
 
 .roundFlow {
