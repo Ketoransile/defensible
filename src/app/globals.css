@@ -54,6 +54,18 @@
   --font-mono: var(--font-geist-mono);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -770,6 +782,102 @@ body {
   animation: detail-expand 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
+/* ── Shortlist reveal (rank bars + podium) ── */
+
+@keyframes score-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes lead-rule {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes rank-num-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.score-bar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--border) 85%, transparent);
+}
+
+.score-bar--podium,
+.score-bar--lead {
+  height: 4px;
+  background: color-mix(in srgb, var(--accent) 16%, var(--border));
+}
+
+.score-bar--inline {
+  position: relative;
+  width: min(17rem, 100%);
+  height: 5px;
+  margin-top: 0.65rem;
+  overflow: hidden;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--border) 90%, transparent);
+}
+
+.score-bar-fill {
+  height: 100%;
+  width: calc(var(--score) * 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--accent);
+  animation: score-fill 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.score-bar--row .score-bar-fill {
+  background: color-mix(in srgb, var(--accent) 72%, var(--muted));
+}
+
+.score-bar--excluded .score-bar-fill {
+  background: var(--danger);
+  opacity: 0.4;
+}
+
+.score-bar--inline .score-bar-fill {
+  border-radius: inherit;
+}
+
+.shortlist-row--lead::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: lead-rule 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  content: "";
+}
+
+.shortlist-rank--podium {
+  animation: rank-num-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-grid,
   .landing-atmosphere,
@@ -787,10 +895,21 @@ body {
   .animate-console-in,
   .animate-list-in,
   .review-detail-panel,
-  .landing-rank-row {
+  .landing-rank-row,
+  .score-bar-fill,
+  .shortlist-row--lead::before,
+  .shortlist-rank--podium {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .score-bar-fill {
+    transform: scaleX(1) !important;
+  }
+
+  .shortlist-row--lead::before {
+    transform: scaleY(1) !important;
   }
 
   .landing-hero-title {

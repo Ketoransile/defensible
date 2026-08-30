@@ -39,17 +39,7 @@ export function severityLabel(severity: Severity): string {
   return severity;
 }
 
-export function formatFieldValue(value: unknown): string {
-  if (value === undefined) return "‹path missing›";
-  if (value === null) return "null";
-  if (typeof value === "string") {
-    return value.length === 0 ? '""' : value;
-  }
-  if (typeof value === "number" || typeof value === "boolean") {
-    return String(value);
-  }
-  return JSON.stringify(value, null, 2);
-}
+export { formatReviewerValue as formatFieldValue } from "./fieldDisplay";
 
 /** Excluded last, then points desc, then confidence desc. */
 export function rankAssessments(assessments: Assessment[]): Assessment[] {

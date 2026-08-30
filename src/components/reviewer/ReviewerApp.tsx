@@ -14,13 +14,24 @@ interface ReviewerAppProps {
   reviewerName: string;
 }
 
+function firstRankedId(assessments: BatchResult["assessments"]): string | null {
+  return (
+    assessments.find((a) => a.eligibility.verdict !== "excluded")
+      ?.applicationId ??
+    assessments[0]?.applicationId ??
+    null
+  );
+}
+
 export function ReviewerApp({
   batch,
   applications,
   reviewerName,
 }: ReviewerAppProps) {
   const assessments = batch.assessments;
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(() =>
+    firstRankedId(assessments),
+  );
 
   const selectedIndex = assessments.findIndex(
     (a) => a.applicationId === selectedId,

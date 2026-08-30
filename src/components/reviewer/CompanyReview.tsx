@@ -1,23 +1,23 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { criterionById } from "@/config/criteria";
-import { getField } from "@/lib/fields";
 import type {
   Application,
   Assessment,
   CriterionScore,
   FieldPath,
-  Finding,
 } from "@/types";
 import { isScoredCriterion, isUnestablishedCriterion } from "@/types";
+import { FieldInspect } from "./FieldInspect";
+import { FindingBlock } from "./FindingBlock";
+import { checkLabel, fieldLabel } from "./fieldDisplay";
 import {
   eligibilityLabel,
-  findingTone,
-  formatFieldValue,
   formatPct,
   trackTitle,
 } from "./format";
+import { useCountUp } from "./useCountUp";
 
 interface CompanyReviewProps {
   assessment: Assessment;
@@ -64,23 +64,6 @@ function ExpandSection({
       </button>
       {open ? <div className="border-t border-border px-4 py-4">{children}</div> : null}
     </section>
-  );
-}
-
-function FindingBlock({ finding }: { finding: Finding }) {
-  return (
-    <div className="rounded-md border border-border bg-background p-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <span
-          className={`rounded border px-1.5 py-0.5 font-mono text-[10px] uppercase ${findingTone(finding.severity)}`}
-        >
-          {finding.severity}
-        </span>
-        <span className="font-mono text-[11px] text-muted">{finding.checkId}</span>
-      </div>
-      <p className="mt-2 text-[14px] font-medium">{finding.title}</p>
-      <p className="mt-1 text-[13px] leading-5 text-muted">{finding.explanation}</p>
-    </div>
   );
 }
 
@@ -154,7 +137,7 @@ function CriterionBlock({
           {score.citations.length > 0 && (
             <div>
               <p className="mb-2 font-mono text-[10px] tracking-wider text-muted uppercase">
-                Source fields — tap to view value
+                From the application — tap to read
               </p>
               <div className="flex flex-wrap gap-2">
                 {score.citations.map((path) => (
@@ -165,24 +148,19 @@ function CriterionBlock({
                       setInspectPath((prev) => (prev === path ? null : path))
                     }
                     className={[
-                      "rounded-sm border px-2.5 py-1.5 font-mono text-[12px]",
+                      "rounded-sm border px-2.5 py-1.5 text-[12px]",
                       inspectPath === path
                         ? "border-accent bg-accent-dim text-accent"
-                        : "border-border text-info",
+                        : "border-border text-foreground/80 hover:border-accent/40",
                     ].join(" ")}
                   >
-                    {path}
+                    {fieldLabel(path)}
                   </button>
                 ))}
               </div>
-              {inspectPath && (
-                <div className="mt-3 rounded-md border border-accent/30 bg-background p-3">
-                  <p className="font-mono text-[11px] text-accent">{inspectPath}</p>
-                  <pre className="mt-2 whitespace-pre-wrap break-words font-mono text-[13px] leading-5">
-                    {formatFieldValue(getField(application, inspectPath))}
-                  </pre>
-                </div>
-              )}
+              {inspectPath ? (
+                <FieldInspect path={inspectPath} application={application} />
+              ) : null}
             </div>
           )}
         </div>
@@ -201,6 +179,14 @@ export function CompanyReview({
 }: CompanyReviewProps) {
   const brief = assessment.brief;
   const panel = variant === "panel";
+  const countedPoints = useCountUp(assessment.totalPoints, { delay: 80 });
+  const scorePct =
+    assessment.maxAvailablePoints > 0
+      ? Math.min(
+          1,
+          Math.max(0, assessment.totalPoints / assessment.maxAvailablePoints),
+        )
+      : 0;
   const groups = (() => {
     const map = new Map<string, CriterionScore[]>();
     for (const score of assessment.criteria) {
@@ -276,12 +262,25 @@ export function CompanyReview({
           {assessment.companyName ?? assessment.applicationId}
         </h2>
         <div className="mt-4 flex flex-wrap items-end gap-4">
-          <p className="font-mono text-3xl tabular-nums">
-            {assessment.totalPoints}
-            <span className="text-lg text-muted">
-              /{assessment.maxAvailablePoints}
-            </span>
-          </p>
+          <div>
+            <p className="font-mono text-3xl tabular-nums">
+              <span className="sr-only">
+                {assessment.totalPoints}/{assessment.maxAvailablePoints}
+              </span>
+              <span aria-hidden>
+                {countedPoints}
+                <span className="text-lg text-muted">
+                  /{assessment.maxAvailablePoints}
+                </span>
+              </span>
+            </p>
+            <div className="score-bar score-bar--inline score-bar--lead" aria-hidden>
+              <div
+                className="score-bar-fill"
+                style={{ "--score": String(scorePct) } as CSSProperties}
+              />
+            </div>
+          </div>
           <p className="pb-1 text-[14px] text-muted">
             {formatPct(assessment.confidence)} of the grid established
           </p>
@@ -342,7 +341,7 @@ export function CompanyReview({
           summary={
             assessment.findings.length === 0
               ? "No contradictions or defects"
-              : assessment.findings.map((f) => f.checkId).join(" · ")
+              : assessment.findings.map((f) => checkLabel(f.checkId)).join(" · ")
           }
           defaultOpen={assessment.findings.length > 0}
         >
@@ -353,7 +352,11 @@ export function CompanyReview({
           ) : (
             <div className="space-y-3">
               {assessment.findings.map((f, i) => (
-                <FindingBlock key={`${f.checkId}-${i}`} finding={f} />
+                <FindingBlock
+                  key={`${f.checkId}-${i}`}
+                  finding={f}
+                  application={application}
+                />
               ))}
             </div>
           )}

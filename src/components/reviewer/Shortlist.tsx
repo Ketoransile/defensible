@@ -1,13 +1,15 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import type { Assessment, EligibilityVerdict } from "@/types";
+import { checkLabel } from "./fieldDisplay";
 import {
   eligibilityLabel,
   findingTone,
   formatPct,
   trackLabel,
 } from "./format";
+import { useCountUp } from "./useCountUp";
 
 interface ShortlistProps {
   assessments: Assessment[];
@@ -31,6 +33,144 @@ function eligibilityTone(verdict: EligibilityVerdict): string {
     case "unestablished":
       return "text-warn";
   }
+}
+
+function scoreRatio(points: number, max: number): number {
+  if (max <= 0) return 0;
+  return Math.min(1, Math.max(0, points / max));
+}
+
+function ScoreBar({
+  points,
+  max,
+  delayMs,
+  variant,
+}: {
+  points: number;
+  max: number;
+  delayMs: number;
+  variant: "lead" | "podium" | "row" | "excluded";
+}) {
+  return (
+    <div className={`score-bar score-bar--${variant}`} aria-hidden>
+      <div
+        className="score-bar-fill"
+        style={
+          {
+            "--score": String(scoreRatio(points, max)),
+            animationDelay: `${delayMs}ms`,
+          } as CSSProperties
+        }
+      />
+    </div>
+  );
+}
+
+function ShortlistRow({
+  assessment: a,
+  index,
+  selected,
+  onSelect,
+}: {
+  assessment: Assessment;
+  index: number;
+  selected: boolean;
+  onSelect: (id: string) => void;
+}) {
+  const excluded = a.eligibility.verdict === "excluded";
+  const podium = !excluded && a.rank >= 1 && a.rank <= 3;
+  const lead = podium && a.rank === 1;
+  const delay = Math.min(index, 16) * 55;
+  const points = useCountUp(a.totalPoints, { delay });
+  const barVariant = excluded ? "excluded" : lead ? "lead" : podium ? "podium" : "row";
+
+  return (
+    <li
+      className="animate-list-in"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <button
+        type="button"
+        onClick={() => onSelect(a.applicationId)}
+        aria-pressed={selected}
+        className={[
+          "group relative flex w-full items-start gap-3 text-left transition sm:px-5",
+          podium ? "px-4 py-5" : "px-4 py-3.5",
+          lead ? "shortlist-row--lead" : "",
+          selected
+            ? "bg-accent-dim/60 ring-1 ring-inset ring-accent/35"
+            : "hover:bg-surface-2/50",
+          excluded ? "opacity-75" : "",
+        ].join(" ")}
+      >
+        <span
+          className={[
+            "mt-0.5 w-10 shrink-0 tabular-nums",
+            podium ? "shortlist-rank--podium" : "",
+            lead
+              ? "font-[family-name:var(--font-display)] text-[28px] leading-none text-accent"
+              : podium
+                ? "font-[family-name:var(--font-display)] text-[22px] leading-none text-foreground"
+                : selected
+                  ? "font-mono text-[13px] text-accent"
+                  : "font-mono text-[13px] text-muted",
+          ].join(" ")}
+          style={podium ? { animationDelay: `${delay}ms` } : undefined}
+        >
+          {excluded ? "—" : podium ? a.rank : String(a.rank).padStart(2, "0")}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span
+            className={[
+              "block truncate font-semibold tracking-tight",
+              podium ? "text-[16px]" : "text-[14px]",
+            ].join(" ")}
+          >
+            {a.companyName ?? a.applicationId}
+          </span>
+          <span className="mt-0.5 line-clamp-1 text-[12px] text-muted">
+            {a.brief.headline}
+          </span>
+          <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
+            <span className={eligibilityTone(a.eligibility.verdict)}>
+              {eligibilityLabel(a.eligibility.verdict)}
+            </span>
+            <span className="text-info">{trackLabel(a)}</span>
+            {a.findings.slice(0, 1).map((f, i) => (
+              <span
+                key={`${f.checkId}-${i}`}
+                className={`rounded border px-1 py-0.5 font-mono text-[9px] ${findingTone(f.severity)}`}
+              >
+                {checkLabel(f.checkId)}
+              </span>
+            ))}
+          </span>
+        </span>
+        <span className="shrink-0 text-right">
+          <span className="block font-mono text-[15px] tabular-nums">
+            <span className="sr-only">
+              {a.totalPoints}/{a.maxAvailablePoints}
+            </span>
+            <span aria-hidden>
+              {points}
+              <span className="text-[11px] text-muted">
+                /{a.maxAvailablePoints}
+              </span>
+            </span>
+          </span>
+          <span className="font-mono text-[10px] text-muted">
+            {formatPct(a.confidence)}
+          </span>
+        </span>
+        <ScoreBar
+          points={a.totalPoints}
+          max={a.maxAvailablePoints}
+          delayMs={delay + 80}
+          variant={barVariant}
+        />
+      </button>
+    </li>
+  );
 }
 
 function Chip({
@@ -280,72 +420,15 @@ export function Shortlist({
           </div>
         ) : (
           <ol className="divide-y divide-border">
-            {filtered.map((a, index) => {
-              const excluded = a.eligibility.verdict === "excluded";
-              const active = a.applicationId === selectedId;
-              return (
-                <li
-                  key={a.applicationId}
-                  className="animate-list-in"
-                  style={{ animationDelay: `${Math.min(index, 16) * 28}ms` }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => onSelect(a.applicationId)}
-                    aria-pressed={active}
-                    className={[
-                      "group flex w-full items-start gap-3 px-4 py-3.5 text-left transition sm:px-5",
-                      active
-                        ? "bg-accent-dim/60 ring-1 ring-inset ring-accent/35"
-                        : "hover:bg-surface-2/50",
-                      excluded ? "opacity-75" : "",
-                    ].join(" ")}
-                  >
-                    <span
-                      className={[
-                        "mt-0.5 w-8 shrink-0 font-mono text-[13px] tabular-nums",
-                        active ? "text-accent" : "text-muted",
-                      ].join(" ")}
-                    >
-                      {excluded ? "—" : String(a.rank).padStart(2, "0")}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[14px] font-semibold tracking-tight">
-                        {a.companyName ?? a.applicationId}
-                      </span>
-                      <span className="mt-0.5 line-clamp-1 text-[12px] text-muted">
-                        {a.brief.headline}
-                      </span>
-                      <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
-                        <span className={eligibilityTone(a.eligibility.verdict)}>
-                          {eligibilityLabel(a.eligibility.verdict)}
-                        </span>
-                        <span className="text-info">{trackLabel(a)}</span>
-                        {a.findings.slice(0, 1).map((f, i) => (
-                          <span
-                            key={`${f.checkId}-${i}`}
-                            className={`rounded border px-1 py-0.5 font-mono text-[9px] ${findingTone(f.severity)}`}
-                          >
-                            {f.checkId}
-                          </span>
-                        ))}
-                      </span>
-                    </span>
-                    <span className="shrink-0 text-right">
-                      <span className="block font-mono text-[15px] tabular-nums">
-                        {a.totalPoints}
-                        <span className="text-[11px] text-muted">
-                          /{a.maxAvailablePoints}
-                        </span>
-                      </span>
-                      <span className="font-mono text-[10px] text-muted">
-                        {formatPct(a.confidence)}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
+            {filtered.map((a, index) => (
+              <ShortlistRow
+                key={a.applicationId}
+                assessment={a}
+                index={index}
+                selected={a.applicationId === selectedId}
+                onSelect={onSelect}
+              />
+            ))}
           </ol>
         )}
         {limit > 0 && matched.length > filtered.length && (
