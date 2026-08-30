@@ -6,6 +6,7 @@ import type { Application, BatchResult } from "@/types";
 import { logoutAction } from "@/app/actions/auth";
 import { ThemeToggle } from "@/components/theme/ThemeProvider";
 import { CompanyReview } from "./CompanyReview";
+import { ReviewerChat } from "./ReviewerChat";
 import { Shortlist } from "./Shortlist";
 
 interface ReviewerAppProps {
@@ -32,7 +33,7 @@ export function ReviewerApp({
   const [selectedId, setSelectedId] = useState<string | null>(() =>
     firstRankedId(assessments),
   );
-
+  const [chatOpen, setChatOpen] = useState(false);
   const selectedIndex = assessments.findIndex(
     (a) => a.applicationId === selectedId,
   );
@@ -43,16 +44,19 @@ export function ReviewerApp({
 
   function selectCompany(id: string) {
     setSelectedId(id);
+    setChatOpen(false);
   }
 
   function closeDetail() {
     setSelectedId(null);
+    setChatOpen(false);
   }
 
   function goRelative(delta: number) {
     const next = assessments[selectedIndex + delta];
     if (!next) return;
     setSelectedId(next.applicationId);
+    setChatOpen(false);
   }
 
   return (
@@ -85,8 +89,7 @@ export function ReviewerApp({
         </div>
       </header>
 
-      <main className="flex min-h-0 flex-1">
-        {/* Ranked list — full width on mobile until a row is opened */}
+      <main className="relative flex min-h-0 flex-1">
         <aside
           className={[
             "flex min-h-0 flex-col border-border bg-surface",
@@ -102,7 +105,6 @@ export function ReviewerApp({
           />
         </aside>
 
-        {/* Detail expands on the right with motion */}
         <section
           className={[
             "relative min-h-0 min-w-0 flex-1 overflow-hidden bg-background",
@@ -138,12 +140,23 @@ export function ReviewerApp({
                 Select a ranked applicant
               </p>
               <p className="mt-2 max-w-sm text-[14px] leading-6 text-muted">
-                Details expand here — scores, findings, and source fields for
-                the company you pick on the left.
+                Details expand here: scores, findings, and source fields for
+                the company you pick on the left. Open Ask AI once a company
+                is selected.
               </p>
             </div>
           )}
         </section>
+
+        {detailOpen ? (
+          <ReviewerChat
+            key={`chat-${selected.applicationId}`}
+            applicationId={selected.applicationId}
+            companyName={selected.companyName ?? selected.applicationId}
+            open={chatOpen}
+            onOpenChange={setChatOpen}
+          />
+        ) : null}
       </main>
     </div>
   );
